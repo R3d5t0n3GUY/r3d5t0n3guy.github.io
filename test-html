@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+    }
+
+    button {
+      border-width: 2px;
+      border-style: solid; 
+      border-color: #7f7f7f;
+      border-radius: 2px;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <input id="file-import" type='file' onchange='openFile(event)' hidden>
+  <button id="choose-file" type='button' title="No file chosen">Choose File</button>
+  <span id="fileName-span">No file chosen</span><br><hr>
+  <div id='target-div'>This text should get replaced by the contents of the selected file.</div>
+
+  <script>
+      const targetDiv = document.getElementById('target-div'), fileNameSpan = document.getElementById('fileName-span'),
+          chooseFile = document.getElementById('choose-file');
+      chooseFile.addEventListener('click', (e) => {
+        document.getElementById('file-import').click();
+      });
+      String.prototype.escapeHTML = function() {
+        let str = this.valueOf();
+        return str.replace(/[&<>"']/g, function (tag) {
+          let replacements = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+          };
+          return replacements[tag] || tag;
+        });
+      }
+      const openFile = function(event) {
+        let input = event.target, reader = new FileReader();
+        reader.onload = function(){
+          try {
+            let text = reader.result, name = input.value.slice(12);
+            fileNameSpan.innerHTML = name
+            chooseFile.title = name
+            targetDiv.title = name
+            targetDiv.innerHTML = `<pre style="line-height:100%;">${text.escapeHTML()}</pre>`  //.replace(/\n/g, "<br>")}</pre>`
+            input.value = "" //reset input field
+          } catch (err) {
+            targetDiv.removeAttribute('title');
+            targetDiv.innerHTML = `<strong style='color:red;'>Uncaught ${err.name || "Error"}: ${err.message || `${name || "File"} is not supported.`}</strong>`;
+            //window.alert(err);
+          }
+        };
+        reader.readAsText(input.files[0]);
+      };
+  </script>
+ </body>
