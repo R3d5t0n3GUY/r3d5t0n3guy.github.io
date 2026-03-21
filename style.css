@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url("https://fonts.googleapis.com/css2?family=Chakra+Petch");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+body {
+  background-color: #3f3f3f;
+  color: white;
+  font-family: 'Chakra Petch, Times New Roman';
+}

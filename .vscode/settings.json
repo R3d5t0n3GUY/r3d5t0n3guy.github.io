@@ -1,0 +1,77 @@
+{
+    "git.enableSmartCommit": true,
+    "fontViewer.characterList": [
+        "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ",
+        "1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|,<.>/?",
+        "áÁ©¢ðÐéÉíÍœŒøØµñÑóÓöÖäÄ®ß§þÞúÚåÅüÜæÆ",
+        "¡²³¤€¼½¾‘’¥×¹˝¯£¸^̛˛˘°÷×«“”»\\¶°’”çÇ˙ˇ¿"
+    ],
+    "workbench.settings.applyToAllProfiles": [
+        "fontViewer.characterList",
+        "whitespacepp.foreColorEOF",
+        "whitespacepp.textEOF",
+        "ShortcutMenuBar.beautify",
+        "ShortcutMenuBar.commentLine"
+    ],
+    "ShortcutMenuBar.openSettings": true,
+    "ShortcutMenuBar.showCommands": true,
+    "whitespacepp.textEOF": "🏁",
+    "whitespacepp.foreColorEOF": "#0080807F",
+    "ShortcutMenuBar.navigateBack": false,
+    "ShortcutMenuBar.navigateForward": false,
+    "ShortcutMenuBar.openFilesList": false,
+    "ShortcutMenuBar.toggleRenderWhitespace": true,
+    "editor.renderWhitespace": "none",
+    "ShortcutMenuBar.commentLine": true,
+    "htmlcharacterconverter.overrides": {
+        "\n": "<br>"
+    },
+    "workbench.editor.editorActionsLocation": "titleBar",
+    "mc-color.delimiters": [
+        "`",
+        "'",
+        "\"",
+    ],
+    "mc-color.prefixes": [
+        "§",
+        "&"
+    ],
+    "debug.javascript.automaticallyTunnelRemoteServer": false,
+    "powermode.enabled": true,
+    "powermode.combo.counterEnabled": "hide",
+    "powermode.combo.timerEnabled": "hide",
+    "powermode.shake.enabled": false,
+    "powermode.explosions.maxExplosions": 128,
+    "powermode.explosions.backgroundMode": "image",
+    "powermode.combo.location": "editor",
+    "powermode.presets": "exploding-rift",
+    "powermode.explosions.frequency": 1,
+    "explorer.confirmDragAndDrop": false,
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.editorAssociations": {
+        "*.gif": "gifPlayer.player"
+    },
+    "workbench.colorTheme": "2077",
+    "editor.fontFamily": "'Minecraft Extended', 'Chakra Petch', monospace",
+    "editor.fontLigatures": true,
+    "files.autoSave": "onFocusChange",
+    "theme-explorer.themeStyle": "both",
+    "theme-explorer.ignoreThemes": [
+        "GitHub Light Colorblind (Beta)",
+        "GitHub Light",
+        "GitHub Light Default",
+        "GitHub Dark Colorblind (Beta)",
+        "GitHub Dark"
+    ],
+    "vsicons.dontShowNewVersionMessage": true,
+    "git.confirmSync": false,
+    "files.saveConflictResolution": "overwriteFileOnDisk",
+    "editor.codeLensFontFamily": "editor",
+    "editor.inlayHints.fontFamily": "",
+    "editor.inlineSuggest.fontFamily": "editor",
+    "chat.editor.fontFamily": "editor",
+    "chat.fontFamily": "editor",
+    "debug.console.fontFamily": "editor",
+    "scm.inputFontFamily": "editor",
+    "notebook.markup.fontFamily": "editor",
+}
