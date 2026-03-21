@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Chakra Petch';
-  src: url("https://fonts.googleapis.com/css2?family=Chakra+Petch") format('truetype');
+  src: url("ChakraPetch.ttf") format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -20,6 +20,14 @@ button {
   cursor: pointer;
 }
 a {
-  color: #007fff;
   text-decoration: wavy;
+}
+a:link {
+  color: #007fff;
+}
+a:hover {
+  color: #00ffff;
+}
+a:visited {
+  color: #00ff7f;
 }
