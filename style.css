@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Chakra Petch';
-  src: url("https://fonts.googleapis.com/css2?family=Chakra+Petch");
+  src: url("https://fonts.googleapis.com/css2?family=Chakra+Petch") format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -8,5 +8,14 @@
 body {
   background-color: #3f3f3f;
   color: white;
-  font-family: 'Chakra Petch, Times New Roman';
+  font-family: 'Chakra Petch', 'Times New Roman';
+}
+button {
+  border-width: 2px;
+  border-style: solid; 
+  border-color: #7f7f7f;
+  border-radius: 2px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
 }

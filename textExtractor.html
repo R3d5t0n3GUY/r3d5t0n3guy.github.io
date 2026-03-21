@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-    }
-
-    button {
-      border-width: 2px;
-      border-style: solid; 
-      border-color: #7f7f7f;
-      border-radius: 2px;
-      background-color: white;
-      color: black;
-      cursor: pointer;
-    }
-  </style>
+  <link id='favIcon' rel='shortcut icon' href='img/favicon.png' type='image/x-icon' />
+  <link rel="stylesheet" src="style.css">
 </head>
 <body>
+  <a href="index.html">Return Home</a>
   <input id="file-import" type='file' onchange='openFile(event)' hidden>
   <button id="choose-file" type='button' title="No file chosen">Choose File</button>
   <span id="fileName-span">No file chosen</span><br><hr>
