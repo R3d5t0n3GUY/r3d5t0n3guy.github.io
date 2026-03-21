@@ -20,14 +20,14 @@ button {
   cursor: pointer;
 }
 a {
-  text-decoration: wavy;
+  text-decoration: wavy underline;
 }
 a:link {
   color: #007fff;
 }
-a:hover {
-  color: #00ffff;
-}
 a:visited {
   color: #00ff7f;
+}
+a:hover {
+  color: #00ffff;
 }
