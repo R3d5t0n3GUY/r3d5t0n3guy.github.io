@@ -1,3 +1,3 @@
-# redstone-guy.github.io
+# R3d5t0n3-GUY.github.io
 <img src='favicon.png' height='36px'><br>
 Public website. Houses my projects. Namely, <a href='https://r3d5t0n3guy.github.io/n-mod'>n-mod</a>
