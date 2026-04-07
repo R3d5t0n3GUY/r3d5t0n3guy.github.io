@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/howler1.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body style="background: white;"><canvas id="myCanvas" width="500" height="250" style="border: 1px solid #d3d3d3;" display="inline-block">Your browser does not support the HTML canvas tag.</canvas>
+        <script>
+            try {
+                let c = document.getElementById("myCanvas"), ctx = c.getContext("2d"), grd = ctx.createRadialGradient(16, 0, 0, 0, 0, 40), list = [
+                    [0, `c78034`],[0.04, `bd5235`],[0.08, `ab554d`],[0.12, `8f5d8f`],
+                    [0.16, `4352ab`],[0.2, `2058b3`],[0.24, `1a6fc4`],[0.28, `1b85cf`],
+                    [0.32, `2d9bd7`],[0.4, `d2d7b4`],[0.44, `e1cd87`],[0.48, `f0b955`],
+                    [0.52, `ffa050`],[0.56, `ff8269`],[0.6, `f5697d`],[0.64, `e65aaf`],
+                    [0.68, `d732d7`],[0.72, `c846e6`],[0.76, `c850fa`],[0.8, `878cf0`],
+                    [0.84, `37beeb`],[0.88, `00d2be`],[0.92, `00e19b`],[0.96, `19f5aa`],
+                    [1, `aaf5af`]
+                ], strokeNew = (x = null, y = null, fill = false) => {
+                    let contx = document.getElementById("myCanvas").getContext("2d");
+                    if (fill) contx.fill()
+                    contx.stroke();
+                    contx.beginPath();
+                    if ((x !== null) && (y !== null)) contx.moveTo(x, y)
+                }, addCirc = (x = null, y = null, rad = 0) => {
+                    let contx = document.getElementById("myCanvas").getContext("2d");
+                    if ((x !== null) && (y !== null) && rad > 0) contx.arc(x, y, rad, 0, 2 * Math.PI)
+                }
+                list.forEach(item => {grd.addColorStop(item[0], `#${item[1]}`)});
+                //grd = null //fallback test
+                ctx.translate(100, 50);
+                const size = 33;
+                ctx.fillStyle = "#f3f";
+                ctx.beginPath();
+                ctx.moveTo(5, -28)
+                ctx.lineTo(20, -40)
+                ctx.lineTo(20, -20)
+                ctx.lineWidth = 2;
+                strokeNew(-5, -27, true);
+                ctx.lineTo(-20, -40)
+                ctx.lineTo(-20, -20)
+                ctx.lineWidth = 2;
+                strokeNew(null, null, true)
+                list = [
+                    [size, 0],[size * 0.5, size * Math.sqrt(0.75)],[size * -0.5, size * Math.sqrt(0.75)],
+                    [size * -1, 0],[size * -0.5, size * Math.sqrt(0.75) * -1],[size * 0.5, size * Math.sqrt(0.75) * -1],
+                    [size, 0]
+                ];
+                list.forEach(item => {ctx.lineTo(item[0], item[1])});
+                ctx.fillStyle = grd || "#ffffff"
+                ctx.strokeStyle = "#333"
+                strokeNew(null, null, true)
+                ctx.fillStyle = "#fff"
+                addCirc(2, -6, 7)
+                strokeNew(null, null, true)
+                ctx.arc(25, -6, 7, 0.1 * Math.PI, 1.5 * Math.PI)
+                strokeNew(null, null, true)
+                ctx.arc(2, -10, 9, 1.25 * Math.PI, 1.75 * Math.PI)
+                strokeNew()
+                ctx.arc(25, -10, 9, 1.25 * Math.PI, 1.4 * Math.PI)
+                strokeNew()
+                addCirc(18, 13, 10)
+                ctx.fillStyle = "#aaa"
+                strokeNew(null, null, true)
+                addCirc(18, 13, 6)
+                ctx.fillStyle = "#555"
+                strokeNew(null, null, true)
+                addCirc(3, -6, 3)
+                strokeNew(null, null, true)
+                addCirc(26, -6, 3)
+                strokeNew(null, null, true)
+                ctx.restore()
+            } catch (err) { alert(err) }
+        </script>
+    </body>
+</html>
