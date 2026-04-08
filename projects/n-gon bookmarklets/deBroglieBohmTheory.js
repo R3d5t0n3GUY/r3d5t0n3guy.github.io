@@ -175,7 +175,7 @@ m.fieldUpgrades[8].effect = () => {
                 // (powerUp[i].name !== "ammo" || b.guns[b.activeGun].ammo !== Infinity)
             ) { //use power up if it is close enough
 
-                simulation.ephemera.push({
+              simulation.ephemera.push({
                 name: `pilot grab ${simulation.newEphemeraID()}`,
                 count: 5, //cycles before it self removes
                 PposX: powerUp[i].position.x,
@@ -184,9 +184,9 @@ m.fieldUpgrades[8].effect = () => {
                 color: powerUp[i].color,
                 do() {
                     this.count--
-                    if (this.count < 0) simulation.removeEphemera(this.name)
+                    if (this.count < 0 || this.size < 0) simulation.removeEphemera(this.name)
                     ctx.beginPath();
-                    ctx.arc(this.PposX, this.PposY, this.size * (this.count + 2) / 7, 0, 2 * Math.PI);
+                    ctx.arc(this.PposX, this.PposY, Math.max(0, this.size * (this.count + 2) / 7), 0, 2 * Math.PI);
                     ctx.fillStyle = this.color
                     ctx.fill();
                 },
