@@ -1,23 +1,3 @@
-Math.PHI = Math.sqrt(1.25) + 0.5
-
-simulation.newEphemeraID = () => {
-    let shuff = (t) => { //scrambles text
-        let a = t.split(""), n = a.length;
-        for (var i = n - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var tmp = a[i];
-            a[i] = a[j];
-            a[j] = tmp;
-        }
-        return a.join("");
-    }
-    let key = 16384 * Math.PHI * Math.pow(Math.PI, Math.E);
-    let tag = key / Math.random();
-    tag += key / Math.random();
-    tag = shuff(btoa(tag))
-    return `(id: ${simulation.ephemera.length}, hash: ${tag})`
-}
-
 m.fieldUpgrades[8].effect = () => {
     m.fieldUpgrades[8].collider = Matter.Bodies.polygon(m.pos.x, m.pos.y, 8, 35, {
         friction: 0,
@@ -176,7 +156,6 @@ m.fieldUpgrades[8].effect = () => {
             ) { //use power up if it is close enough
 
               simulation.ephemera.push({
-                name: `pilot grab ${simulation.newEphemeraID()}`,
                 count: 5, //cycles before it self removes
                 PposX: powerUp[i].position.x,
                 PposY: powerUp[i].position.y,
@@ -184,12 +163,12 @@ m.fieldUpgrades[8].effect = () => {
                 color: powerUp[i].color,
                 do() {
                     this.count--
-                    if (this.count < 0 || this.size < 0) simulation.removeEphemera(this.name)
+                    if (this.count < 0) simulation.removeEphemera(this)
                     ctx.beginPath();
-                    ctx.arc(this.PposX, this.PposY, Math.max(0, this.size * (this.count + 2) / 7), 0, 2 * Math.PI);
+                    ctx.arc(this.PposX, this.PposY, Math.max(0.01, this.size * (this.count + 2) / 7), 0, 2 * Math.PI);
                     ctx.fillStyle = this.color
                     ctx.fill();
-                },
+                    },
                 })
 
                 powerUps.onPickUp(powerUp[i]);
