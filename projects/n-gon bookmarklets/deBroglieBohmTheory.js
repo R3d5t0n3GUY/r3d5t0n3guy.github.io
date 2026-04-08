@@ -1,23 +1,20 @@
 Math.PHI = Math.sqrt(1.25) + 0.5
 
-String.prototype.shuffle = function () { //scrambles text
-  var a = this.split(""),
-    n = a.length;
-
-  for (var i = n - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i];
-    a[i] = a[j];
-    a[j] = tmp;
-  }
-  return a.join("");
-}
-
 simulation.newEphemeraID = () => {
+    let shuff = (t) => { //scrambles text
+        let a = t.split(""), n = a.length;
+        for (var i = n - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+        }
+        return a.join("");
+    }
     let key = 16384 * Math.PHI * Math.pow(Math.PI, Math.E);
     let tag = key / Math.random();
     tag += key / Math.random();
-    tag = btoa(tag).shuffle();
+    tag = shuff(btoa(tag))
     return `(id: ${simulation.ephemera.length}, hash: ${tag})`
 }
 
@@ -415,25 +412,25 @@ const deBroglieBohmTheory = {
         tech.isPilotMapIgnore = true;
         let fieldRadius = m.fieldRadius;
         m.setField(m.fieldMode); //update pilot wave function
-        requestAnimFrames(2, () => { //keep field position and radius. Not sure if it actually works
+        requestAnimationFrame(() => {requestAnimationFrame(() => { //keep field position and radius. Not sure if it actually works
           if (m.fieldMode === 8 && m.fieldOn) {
             Matter.Body.setPosition(m.fieldUpgrades[8].collider, simulation.mouseInGame);
             m.fieldPosition = simulation.mouseInGame
             m.fieldRadius = fieldRadius;
           }
-        })
+        }) })
       },
       remove() {
         tech.isPilotMapIgnore = false;
         let fieldRadius = m.fieldRadius;
         m.setField(m.fieldMode); //update pilot wave function
-        requestAnimFrames(2, () => { //keep field position and radius. Not sure if it actually works
+        requestAnimationFrame(() => { requestAnimationFrame(() => { //keep field position and radius. Not sure if it actually works
           if (m.fieldMode === 8 && m.fieldOn) {
             Matter.Body.setPosition(m.fieldUpgrades[8].collider, simulation.mouseInGame);
             m.fieldPosition = simulation.mouseInGame
             m.fieldRadius = fieldRadius;
           }
-        })
+        }) })
       }
     }
 tech.tech.splice(index, 0, deBroglieBohmTheory)
