@@ -1,1 +1,1 @@
-javascript:(function(){var f=document.createElement('script');f.src='https://r3d5t0n3guy.github.io/projects/n-gon%20bookmarklets/src/deBroglieBohmTheory.js';document.appendChild(f);})();
+javascript:(function(){var f=document.createElement('script');f.src='https://r3d5t0n3guy.github.io/projects/n-gon%20bookmarklets/src/deBroglieBohmTheory.js';document.body.appendChild(f);})();
