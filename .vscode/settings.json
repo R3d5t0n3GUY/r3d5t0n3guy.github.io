@@ -49,7 +49,10 @@
     "explorer.confirmDragAndDrop": false,
     "workbench.iconTheme": "vscode-icons",
     "workbench.editorAssociations": {
-        "*.gif": "gifPlayer.player"
+        "*.gif": "gifPlayer.player",
+        "*.sb3": "zipViewer.ZipEdit",
+        "*.jar": "zipViewer.ZipEdit",
+        "*.zip": "zipViewer.ZipEdit"
     },
     "workbench.colorTheme": "2077",
     "editor.fontFamily": "'Minecraft Extended', 'Chakra Petch', monospace",
