@@ -1,7 +1,5 @@
 #include <Wire.h> //<SoftwareWire.h>
-
 #include <hd44780.h>                       // main hd44780 header
-
 #include <hd44780ioClass/hd44780_I2Cexp.h> // i2c expander i/o class header
  //SoftwareWire init(A0, A1);
 hd44780_I2Cexp lcd; //(init);
@@ -35,14 +33,7 @@ String displayedText[3] = {
 };
 int numLines = 4; // Track actual lines used
 String currentLine = text[0], cursorDir = "down";
-int cursorIDX[2] = {
-  0,
-  0
-}, textStart[3] = {
-  0,
-  0,
-  0
-}, textEnd[3] = {
+int cursorIDX[2] = { 0, 0 }, textStart[3] = { 0, 0, 0 }, textEnd[3] = {
   text[0].length(),
   text[1].length(),
   text[2].length()
