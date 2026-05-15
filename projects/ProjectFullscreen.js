@@ -39,17 +39,17 @@
       };
     }
     enter() {
-      if (document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length > 1) {
+      if (location.pathname != '/fullscreen') {
         document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
       }
     }
     exit() {
-      if (document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length < 2) {
+      if (location.pathname == '/fullscreen') {
         document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
       }
     }
     evaluate() {
-      return document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length < 2
+      return location.pathname == '/fullscreen'
     }
   }
 
