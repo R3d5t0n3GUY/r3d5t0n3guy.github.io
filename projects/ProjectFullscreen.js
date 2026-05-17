@@ -1,6 +1,6 @@
 // Name: Project Fullscreen
 // ID: r3d5t0n3guyprojectfullscreen
-// Description: Enter and exit the built-in fullscreen
+// Description: Enter and exit TurboWarp's built-in fullscreen
 // By: R3d5t0n3_GUY
 
 (function (Scratch) {
