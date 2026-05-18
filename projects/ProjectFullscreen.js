@@ -30,23 +30,57 @@
             text: 'exit fullscreen',
           },
           {
+            opcode: 'alterFullscreen',
+            func: 'switchMode',
+            blockType: Scratch.BlockType.COMMAND,
+            text: Scratch.translate(
+              "[mode] fullscreen"
+            ),
+            arguments: {
+              mode: {
+                type: Scratch.ArgumentType.STRING,
+                menu: "fullScreenActionMenu"
+              }
+            }
+          },
+          {
             opcode: 'evaluateFullscreen',
             func: 'evaluate',
             blockType: Scratch.BlockType.BOOLEAN,
             text: 'is fullscreen?'
           },
-        ]
+        ],
+        menus: {
+            fullScreenActionMenu: {
+              items: [
+                {
+                  text: Scratch.translate('enter'),
+                  value: 'enterFullscreen'
+                },
+                {
+                  text: Scratch.translate('exit'),
+                  value: 'exitFullscreen'
+                },
+                {
+                  text: Scratch.translate('toggle'),
+                  value: 'toggleFullscreen'
+                },
+              ]
+            }
+        }
       };
     }
+    switchMode({mode}) {
+      if ((location.pathname == '/fullscreen') !== (mode === "enterFullscreen") || mode === "toggleFullscreen") this.toggle()
+    }
     enter() {
-      if (location.pathname != '/fullscreen') {
-        document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
-      }
+      if (location.pathname != '/fullscreen') this.toggle()
     }
     exit() {
-      if (location.pathname == '/fullscreen') {
-        document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
-      }
+      if (location.pathname == '/fullscreen') this.toggle()
+    }
+    toggle() {
+      document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
     }
     evaluate() {
       return location.pathname == '/fullscreen'
