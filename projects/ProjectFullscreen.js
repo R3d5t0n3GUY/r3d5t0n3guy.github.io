@@ -1,6 +1,6 @@
 // Name: Project Fullscreen
 // ID: r3d5t0n3guyprojectfullscreen
-// Description: Enter and exit TurboWarp's built-in fullscreen
+// Description: Enter and exit TurboWarp's fullscreen
 // By: R3d5t0n3_GUY
 
 (function (Scratch) {
@@ -71,19 +71,19 @@
       };
     }
     switchMode({mode}) {
-      if ((location.pathname == '/fullscreen') !== (mode === "enterFullscreen") || mode === "toggleFullscreen") this.toggle()
+      if ((this.evaluate()) === (mode === "exitFullscreen") || mode === "toggleFullscreen") this.toggle()
     }
     enter() {
-      if (location.pathname != '/fullscreen') this.toggle()
+      if (!this.evaluate()) this.toggle()
     }
     exit() {
-      if (location.pathname == '/fullscreen') this.toggle()
+      if (this.evaluate()) this.toggle()
     }
     toggle() {
-      document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].parentElement.parentElement.click()
+      document.getElementsByClassName('stage-header_stage-button-icon_3zzFK')[document.getElementsByClassName('stage-header_stage-button-icon_3zzFK').length - 1].click()
     }
     evaluate() {
-      return location.pathname == '/fullscreen'
+      return location.pathname.search(/\/fullscreen/i) > -1
     }
   }
 
