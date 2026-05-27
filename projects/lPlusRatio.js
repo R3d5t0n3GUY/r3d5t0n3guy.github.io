@@ -25,7 +25,7 @@
             ),
             arguments: {
               mathConst: {
-                type: Scratch.ArgumentType.STRING,
+                type: Scratch.ArgumentType.SRING,
                 menu: "mathConstMenu"
               }
             }
@@ -35,11 +35,11 @@
           mathConstMenu: {
             items: [
               {
-                text: "\∞",
+                text: "∞",
                 value: "Infinity"
               },
               {
-                text: "-\∞",
+                text: "-∞",
                 value: "-Infinity"
               },
               {
@@ -47,47 +47,47 @@
                 value: "NaN"
               },
               {
-                text: "\π",
+                text: "π",
                 value: "Pi"
               },
               {
-                text: "\ℯ",
+                text: "ℯ",
                 value: "Euler's number"
               },
               {
-                text: "\φ",
+                text: "φ",
                 value: "golden ratio"
               },
               {
-                text: "\ℊ",
+                text: "ℊ",
                 value: "golden angle"
               },
               {
-                text: "\β",
+                text: "β",
                 value: "Lévy's constant"
               },
               {
-                text: "\δ",
+                text: "δ",
                 value: "Erdõ-Tenenbaum-Ford constant"
               },
               {
-                text: "\μ",
+                text: "μ",
                 value: "Connective Constant for hexagonal lattice"
               },
               {
-                text: "\ρ",
+                text: "ρ",
                 value: "plastic ratio"
               },
               {
-                text: "\σ",
+                text: "σ",
                 value: "silver ratio"
               },
               {
-                text: "\τ",
+                text: "τ",
                 value: "tau"
               },
               {
-                text: "\ψ",
+                text: "ψ",
                 value: "supergolden ratio"
               },
             ]
@@ -101,16 +101,16 @@
           case "Infinity": return Infinity;
           case "-Infinity": return -Infinity;
           case "NaN": return NaN;
-          case "Pi": return Math.PI;
-          case "Euler's number": return Math.E;
+          case "Pi": return Math.acos(-1);
+          case "Euler's number": return Math.exp(1);
           case "golden ratio": return Math.sqrt(1.25) + 0.5;
           case "golden angle": return 180 * (3 - Math.sqrt(5));
-          case "Lévy's constant": return (Math.PI ** 2) / (12 * Math.LN2);
-          case "Erdõ-Tenenbaum-Ford constant": return 1 - ((1 + Math.ln(Math.ln(2))) / Math.ln(2));
-          case "Connective Constant for hexagonal lattice": return Math.sqrt(2 + Math.SQRT2);
+          case "Lévy's constant": return (Math.acos(-1) ** 2) / (12 * Math.log(2));
+          case "Erdõ-Tenenbaum-Ford constant": return 1 - ((1 + Math.log(Math.log(2))) / Math.log(2));
+          case "Connective Constant for hexagonal lattice": return Math.sqrt(2 + Math.sqrt(2));
           case "plastic ratio": return Math.cbrt(0.5 + (Math.sqrt(69) / 18)) + Math.cbrt(0.5 - (Math.sqrt(69) / 18));
-          case  "silver ratio": Math.SQRT2 + 1;
-          case "tau": return 2 * Math.PI;
+          case  "silver ratio": return Math.sqrt(2) + 1;
+          case "tau": return 2 * Math.acos(-1);
           case "supergolden ratio": return (1 + Math.cbrt((29 + (3 * Math.sqrt(93))) / 2) + Math.cbrt((29 - (3 * Math.sqrt(93))) / 2)) / 3;
           default: return;
         }
