@@ -3,7 +3,7 @@ if (tech.tech.findIndex(i => i.name === 'de Broglie-Bohm theory') < 0) {
     m.fieldUpgrades[8].collider = Matter.Bodies.polygon(m.pos.x, m.pos.y, 8, 35, {
         friction: 0,
         frictionAir: 0.12,
-        collisionFilter: { category: cat.player, mask: (tech.isPilotMapIgnore ? 0 : cat.map) }, //no collision because player is holding
+        collisionFilter: { category: cat.player, mask: cat.map }, //no collision because player is holding
         classType: "field",
         lastSpeed: 0,
     });
@@ -65,6 +65,7 @@ if (tech.tech.findIndex(i => i.name === 'de Broglie-Bohm theory') < 0) {
     m.fieldRadius = 0;
     m.drop();
     m.hold = function () {
+      m.fieldUpgrades[8].collider.collisionFilter.mask = (tech.isPilotMapIgnore ? 0 : cat.map)
       let isOn = (tech.isNoPilotCost ? !input.field : input.field)
       if (tech.isPrinter) {
         //spawn blocks if field and crouch
@@ -151,6 +152,7 @@ if (tech.tech.findIndex(i => i.name === 'de Broglie-Bohm theory') < 0) {
                 dist2 < graphicRange * graphicRange &&
                 !simulation.isChoosing &&
                 (tech.isOverHeal || powerUp[i].name !== "heal" || m.maxHealth - m.health > 0.01)
+                && !simulation.paused
                 // (powerUp[i].name !== "heal" || m.health < 0.94 * m.maxHealth)
                 // (powerUp[i].name !== "ammo" || b.guns[b.activeGun].ammo !== Infinity)
             ) { //use power up if it is close enough
@@ -239,6 +241,23 @@ if (tech.tech.findIndex(i => i.name === 'de Broglie-Bohm theory') < 0) {
                   m.fieldOn = false
                   m.fieldRadius = 0
                   break
+                }
+              }
+            }
+            
+            for (let i = 0, len = bullet.length; i < len; ++i) {
+              // console.log(bullet[i].speed)
+              if (!bullet[i].botType && bullet[i].speed < 30 && Vector.magnitude(Vector.sub(bullet[i].position, m.fieldPosition)) < m.fieldRadius && !bullet[i].isNotHoldable && bullet[i].collisionFilter.mask !== 0) {
+                const drainBlock = m.fieldUpgrades[8].drain * speedChange * bullet[i].mass * 0.000095
+                if (m.energy > drainBlock) {
+                  Matter.Body.setVelocity(bullet[i], m.fieldUpgrades[8].collider.velocity); //give block mouse velocity
+                  Matter.Body.setAngularVelocity(bullet[i], bullet[i].angularVelocity * 0.99)
+                  // m.fieldUpgrades[8].fieldMass += bullet[i].mass
+                  //blocks drift towards center of pilot wave
+                  const sub = Vector.sub(m.fieldPosition, bullet[i].position)
+                  const push = Vector.mult(Vector.normalise(sub), 0.0001 * bullet[i].mass * Vector.magnitude(sub))
+                  bullet[i].force.x += push.x
+                  bullet[i].force.y += push.y - bullet[i].mass * simulation.g //remove gravity effects
                 }
               }
             }
