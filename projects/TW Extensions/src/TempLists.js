@@ -4,7 +4,6 @@
 // Original Extensions By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
 // This Add-On By: R3d5t0n3_GUY <https://github.com/R3d5t0n3GUY>
 // License: MIT AND LGPL-3.0
-// WORK IN PROGRESS
 
 (function (Scratch) {
   "use strict";
@@ -49,13 +48,13 @@
             {
               opcode: "addToThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("add [STRING] to list [NAME]"),
+              text: Scratch.translate("add [STRING] to list [LIST]"),
               arguments: {
                 STRING: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thing",
                 },
-                NAME: {
+                LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
                 }
@@ -64,13 +63,13 @@
             {
               opcode: "deleteFromThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete [IDX] of list [NAME]"),
+              text: Scratch.translate("delete [IDX] of list [LIST]"),
               arguments: {
                 IDX: {
                   type: Scratch.ArgumentType.NUMBER,
                   defaultValue: "1",
                 },
-                NAME: {
+                LIST: {
                 type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
                 }
@@ -79,13 +78,13 @@
             {
               opcode: "forEachItem",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] in [NAME]"),
+              text: Scratch.translate("for each item value [ITEM] in [LIST]"),
               arguments: {
                 ITEM: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "name",
                 },
-                NAME: {
+                LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
                 }
@@ -94,13 +93,13 @@
             {
               opcode: "forEachNum",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item # [IDX] in [NAME]"),
+              text: Scratch.translate("for each item # [IDX] in [LIST]"),
               arguments: {
                 IDX: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "index",
                 },
-                NAME: {
+                LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
                 }
@@ -109,7 +108,7 @@
             {
               opcode: "forEachItemNum",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] # [IDX] in [NAME]"),
+              text: Scratch.translate("for each item value [ITEM] # [IDX] in [LIST]"),
               arguments: {
                 ITEM: {
                   type: Scratch.ArgumentType.STRING,
@@ -119,7 +118,7 @@
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "index",
                 },
-                NAME: {
+                LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
                 }
@@ -130,10 +129,10 @@
         {
             opcode: "setListToArray",
             blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set [NAME] to array [ARRAY]"),
+            text: Scratch.translate("set [LIST] to array [ARRAY]"),
             disableMonitor: true,
             arguments: {
-              NAME: {
+              LIST: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: "thread list"
               },
@@ -146,10 +145,10 @@
           {
             opcode: "getListAsArray",
             blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("[NAME] as array"),
+            text: Scratch.translate("[LIST] as array"),
             disableMonitor: true,
             arguments: {
-              NAME: {
+              LIST: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: "thread list"
               },
@@ -161,9 +160,9 @@
             {
               opcode: "threadListExists",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: Scratch.translate("thread list [NAME] exists?"),
+              text: Scratch.translate("thread list [LIST] exists?"),
               arguments: {
-                NAME: {
+                LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "list",
                 },
@@ -283,6 +282,36 @@
 })(Scratch);
 
 /* // A LOT of moving and editing is left... ಠ_ಠ
+
+      THREAD VARIABLES 
+
+    setThreadVariable(args, util) {
+      const thread = util.thread;
+      if (!thread.variables) {
+          thread.variables = Object.create(null);
+      }
+      thread.variables[args.VAR] = args.STRING;
+    }
+
+    changeThreadVariable(args, util) {
+      const thread = util.thread;
+      if (!thread.variables) {
+          thread.variables = Object.create(null);
+      }
+      const vars = thread.variables;
+      const prev = Scratch.Cast.toNumber(vars[args.VAR]);
+      const next = Scratch.Cast.toNumber(args.NUM);
+      vars[args.VAR] = prev + next;
+    }
+
+    getThreadVariable(args, util) {
+      const thread = util.thread;
+      if (!thread.variables) {
+          thread.variables = Object.create(null);
+      }
+      return thread.variables[args.VAR] ?? "";
+    }
+
     deleteItems(args, util) {
       const list = getVarObjectFromName(
         Scratch.Cast.toString(args.LIST),
@@ -529,6 +558,8 @@
         return true;
       }
     }
+
+    
 
     setListArray(args, util) {
       const list = getVarObjectFromName(
