@@ -4,6 +4,7 @@
 // Original Extensions By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
 // This Add-On By: R3d5t0n3_GUY <https://github.com/R3d5t0n3GUY>
 // License: MIT AND LGPL-3.0
+// WORK IN PROGRESS
 
 (function (Scratch) {
   "use strict";
@@ -222,8 +223,28 @@
 
       }
 
-      forEachItemNum() {
+      forEachItemNum(args, util) {
+        /* const list = getVarObjectFromName(
+          Scratch.Cast.toString(args.LIST),
+          util,
+          "list"
+        );
+        if (!list) return false;
+        const listLength = list.value.length;
 
+        const thread = util.thread;
+        if (!thread.variables) thread.variables = {};
+        const vars = thread.variables;
+
+        if (typeof util.stackFrame.index === "undefined") {
+          util.stackFrame.index = 0;
+        }
+
+        if (util.stackFrame.index < listLength) {
+          util.stackFrame.index++;
+          vars[args.VAR] = util.stackFrame.index;
+          return true;
+        } */
       }
 
       setListToArray() {
@@ -234,12 +255,20 @@
 
       }
 
-      threadListExists() {
-
+      threadListExists(args, util) {
+        /* const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        return Object.prototype.hasOwnProperty.call(thread.lists, args.LIST); */
       }
 
-      listThreadLists() {
-
+      listThreadLists(args, util) {
+        /* const thread = util.thread;
+        if (!thread.lists) {
+            thread.lists = Object.create(null);
+        }
+        return Object.keys(thread.lists).join(","); */
       }
 
     }
@@ -253,460 +282,7 @@
 
 })(Scratch);
 
-/* // A LOT of copy-pasting-tweaking is left... ಠ_ಠ
-
-        THREAD VARIABLES 
-
-        setThreadVariable(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        thread.variables[args.VAR] = args.STRING;
-        }
-
-        changeThreadVariable(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        const vars = thread.variables;
-        const prev = Scratch.Cast.toNumber(vars[args.VAR]);
-        const next = Scratch.Cast.toNumber(args.NUM);
-        vars[args.VAR] = prev + next;
-        }
-
-        getThreadVariable(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        return thread.variables[args.VAR] ?? "";
-        }
-
-        threadVariableExists(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        return Object.prototype.hasOwnProperty.call(thread.variables, args.VAR);
-        }
-
-        forEachThreadVariable(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        const vars = thread.variables;
-        if (!Object.prototype.hasOwnProperty.call(util.stackFrame, "index")) {
-            util.stackFrame.index = 0;
-        }
-        if (util.stackFrame.index < Number(args.NUM)) {
-            util.stackFrame.index++;
-            vars[args.VAR] = util.stackFrame.index;
-            return true;
-        }
-        }
-
-        listThreadVariables(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-            thread.variables = Object.create(null);
-        }
-        return Object.keys(thread.variables).join(",");
-        }
-
-        /* RUNTIME VARIABLES 
-
-        setRuntimeVariable(args) {
-        this.runtimeVariables[args.VAR] = args.STRING;
-        }
-
-        changeRuntimeVariable(args) {
-        const prev = Scratch.Cast.toNumber(this.runtimeVariables[args.VAR]);
-        const next = Scratch.Cast.toNumber(args.NUM);
-        this.runtimeVariables[args.VAR] = prev + next;
-        }
-
-        getRuntimeVariable(args) {
-        return this.runtimeVariables[args.VAR] ?? "";
-        }
-
-        runtimeVariableExists(args) {
-        return Object.prototype.hasOwnProperty.call(
-            this.runtimeVariables,
-            args.VAR
-        );
-        }
-
-        listRuntimeVariables(args, util) {
-        return Object.keys(this.runtimeVariables).join(",");
-        }
-
-        deleteRuntimeVariable(args) {
-        Reflect.deleteProperty(this.runtimeVariables, args.VAR);
-        }
-
-        resetRuntimeVariables() {
-        this.runtimeVariables = Object.create(null);
-  
-  
-/* (function (Scratch) {
-  "use strict";
-
-
-  class Data {
-    getInfo() {
-      return {
-        id: "lmsData",
-        name: Scratch.translate("List Tools"),
-        
-        blocks: [
-          {
-            opcode: "deleteItems",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("delete items [NUM1] to [NUM2] of [LIST]"),
-            arguments: {
-              NUM1: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: "1",
-              },
-              NUM2: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: "3",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "deleteAllOfItem",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("delete all [ITEM] in [LIST]"),
-            arguments: {
-              ITEM: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "thing",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "replaceAllOfItem",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate(
-              "replace all [ITEM1] with [ITEM2] in [LIST]"
-            ),
-            arguments: {
-              ITEM1: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "apple",
-              },
-              ITEM2: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "banana",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "repeatList",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("repeat [LIST1] [NUM] times in [LIST2]"),
-            arguments: {
-              LIST1: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              LIST2: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              NUM: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: "3",
-              },
-            },
-          },
-
-          "---",
-
-          {
-            opcode: "getListJoin",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("list [LIST] joined by [STRING]"),
-            disableMonitor: true,
-            arguments: {
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              STRING: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: ",",
-              },
-            },
-          },
-          {
-            opcode: "timesItemAppears",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("# of times [ITEM] appears in [LIST]"),
-            disableMonitor: true,
-            arguments: {
-              ITEM: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "thing",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "itemIndex",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("index # [INDEX] of item [ITEM] in [LIST]"),
-            disableMonitor: true,
-            arguments: {
-              INDEX: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: "1",
-              },
-              ITEM: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "thing",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-
-          "---",
-
-          {
-            opcode: "listIsEmpty",
-            blockType: Scratch.BlockType.BOOLEAN,
-            text: Scratch.translate("[LIST] is empty?"),
-            disableMonitor: true,
-            arguments: {
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "itemNumExists",
-            blockType: Scratch.BlockType.BOOLEAN,
-            text: Scratch.translate("item [NUM] exists in [LIST]?"),
-            disableMonitor: true,
-            arguments: {
-              NUM: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: "1",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "orderIs",
-            blockType: Scratch.BlockType.BOOLEAN,
-            text: Scratch.translate("order of [LIST] is [ORDER]?"),
-            disableMonitor: true,
-            arguments: {
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              ORDER: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "orderTypeSort",
-              },
-            },
-          },
-
-          "---",
-
-          {
-            opcode: "orderList",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set order of [LIST] to [ORDER]"),
-            disableMonitor: true,
-            arguments: {
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              ORDER: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "reversed",
-                menu: "orderType",
-              },
-            },
-          },
-          {
-            opcode: "setListToList",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set items of [LIST1] to [LIST2]"),
-            arguments: {
-              LIST1: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              LIST2: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "joinLists",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("concatenate [LIST1] onto [LIST2]"),
-            arguments: {
-              LIST1: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-              LIST2: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-
-          "---",
-
-          {
-            opcode: "forEachListItem",
-            blockType: Scratch.BlockType.LOOP,
-            text: Scratch.translate("for each item value [VAR] in [LIST]"),
-            hideFromPalette:
-              !runtime.extensionManager.isExtensionLoaded("lmsTempVars2"),
-            arguments: {
-              VAR: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "thread variable",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-          {
-            opcode: "forEachListItemNum",
-            blockType: Scratch.BlockType.LOOP,
-            text: Scratch.translate("for each item # [VAR] in [LIST]"),
-            hideFromPalette:
-              !runtime.extensionManager.isExtensionLoaded("lmsTempVars2"),
-            arguments: {
-              VAR: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "thread variable",
-              },
-              LIST: {
-                type: Scratch.ArgumentType.STRING,
-                menu: "lists",
-              },
-            },
-          },
-
-          "---",
-
-          
-        ],
-        menus: {
-          operator: {
-            acceptReporters: false,
-            items: [
-              {
-                text: "=",
-                value: "=",
-              },
-              {
-                text: ">",
-                value: ">",
-              },
-              {
-                text: "<",
-                value: "<",
-              },
-            ],
-          },
-          orderType: {
-            acceptReporters: false,
-            items: [
-              {
-                text: Scratch.translate("reversed"),
-                value: "reversed",
-              },
-              {
-                text: Scratch.translate("ascending"),
-                value: "ascending",
-              },
-              {
-                text: Scratch.translate("descending"),
-                value: "descending",
-              },
-              {
-                text: Scratch.translate("randomized"),
-                value: "randomised",
-              },
-            ],
-          },
-          orderTypeSort: {
-            acceptReporters: false,
-            items: [
-              {
-                text: Scratch.translate("ascending"),
-                value: "ascending",
-              },
-              {
-                text: Scratch.translate("descending"),
-                value: "descending",
-              },
-            ],
-          },
-          indexType: {
-            acceptReporters: false,
-            items: [
-              {
-                text: Scratch.translate("first"),
-                value: "first",
-              },
-              {
-                text: Scratch.translate("last"),
-                value: "last",
-              },
-              {
-                text: Scratch.translate("random"),
-                value: "random",
-              },
-            ],
-          },
-          lists: {
-            acceptReporters: true,
-            items: "_getLists",
-          },
-        },
-      };
-    }
-
+/* // A LOT of moving and editing is left... ಠ_ಠ
     deleteItems(args, util) {
       const list = getVarObjectFromName(
         Scratch.Cast.toString(args.LIST),
@@ -954,30 +530,6 @@
       }
     }
 
-    forEachListItemNum(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return false;
-      const listLength = list.value.length;
-
-      const thread = util.thread;
-      if (!thread.variables) thread.variables = {};
-      const vars = thread.variables;
-
-      if (typeof util.stackFrame.index === "undefined") {
-        util.stackFrame.index = 0;
-      }
-
-      if (util.stackFrame.index < listLength) {
-        util.stackFrame.index++;
-        vars[args.VAR] = util.stackFrame.index;
-        return true;
-      }
-    }
-
     setListArray(args, util) {
       const list = getVarObjectFromName(
         Scratch.Cast.toString(args.LIST),
@@ -996,7 +548,6 @@
       if (!Array.isArray(array)) return;
       const newArray = array;
       list.value = newArray;
-      list._monitorUpToDate = false;
     }
 
     getListArray(args, util) {
@@ -1008,22 +559,4 @@
       if (!list) return "";
       return JSON.stringify(list.value);
     }
-
-    _getLists() {
-      // @ts-expect-error - Blockly not typed yet
-      const lists =
-        typeof Blockly === "undefined"
-          ? []
-          : Blockly.getMainWorkspace()
-              .getVariableMap()
-              .getVariablesOfType("list")
-              .map((model) => model.name);
-      if (lists.length > 0) {
-        return lists;
-      } else {
-        return [""];
-      }
-    }
-  }
-  Scratch.extensions.register(new Data());
-})(Scratch); */
+ */
