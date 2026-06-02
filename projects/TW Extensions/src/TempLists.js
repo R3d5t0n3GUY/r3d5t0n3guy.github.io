@@ -51,10 +51,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("add [ITEM] to list [LIST]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "thing",
-                },
+                ITEM: this.fieldParamTemplate("item"),
                 LIST: this.fieldParamTemplate("list")
               },
             },
@@ -63,10 +60,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete [IDX] of list [LIST]"),
               arguments: {
-                IDX: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "1",
-                },
+                IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list")
               },
             },
@@ -75,10 +69,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete all of list [LIST]"),
               arguments: {
-                LIST: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "thread list"
-                }
+                LIST: this.fieldParamTemplate("list")
               },
             },
             {
@@ -86,14 +77,8 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("insert [ITEM] at [IDX] of list [LIST]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "thing"
-                },
-                IDX: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "1",
-                },
+                ITEM: this.fieldParamTemplate("item"),
+                IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list")
               },
             },
@@ -102,15 +87,9 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("replace item [IDX] of list [LIST] with [ITEM]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "thing"
-                },
+                ITEM: this.fieldParamTemplate("item"),
                 LIST: this.fieldParamTemplate("list"),
-                IDX: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "1",
-                }
+                IDX: this.fieldParamTemplate("index")
               },
             },
             {
@@ -118,10 +97,7 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("item [IDX] of list [LIST]"),
               arguments: {
-                IDX: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "1"
-                },
+                IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list")
               }
             },
@@ -130,10 +106,7 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("index of [ITEM] in list [LIST]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "thing"
-                },
+                ITEM: this.fieldParamTemplate("item"),
                 LIST: this.fieldParamTemplate("list")
               }
             },
@@ -150,7 +123,8 @@
               blockType: Scratch.BlockType.BOOLEAN,
               text: Scratch.translate("list [LIST] contains [ITEM] ?"),
               arguments: {
-                LIST: this.fieldParamTemplate("list")
+                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("item")
               }
             },
 
@@ -162,10 +136,7 @@
               blockType: Scratch.BlockType.LOOP,
               text: Scratch.translate("for each item value [ITEM] in [LIST]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "name",
-                },
+                ITEM: this.fieldParamTemplate("item"),
                 LIST: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "thread list"
@@ -189,10 +160,7 @@
               blockType: Scratch.BlockType.LOOP,
               text: Scratch.translate("for each item value [ITEM] # [IDX] in [LIST]"),
               arguments: {
-                ITEM: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "name",
-                },
+                ITEM: this.fieldParamTemplate("item"),
                 IDX: {
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "index",
@@ -228,7 +196,7 @@
             },
 
             "---",
-
+            label(Scratch.translate("Misc"), false),
             {
               opcode: "threadListExists",
               blockType: Scratch.BlockType.BOOLEAN,
