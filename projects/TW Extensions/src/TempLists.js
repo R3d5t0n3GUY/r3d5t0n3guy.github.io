@@ -300,7 +300,15 @@
       }
 
       threadListContains(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          return thread.lists[args.LIST].indexOf(args.ITEM) > -1
+        } else {
+          return false
+        }
       }
 
       forEachItem(args, util) {
