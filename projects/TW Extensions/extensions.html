@@ -3,18 +3,6 @@
 <head>
   <link rel='shortcut icon' href='/favicon.png' type='image/x-icon' />
   <link rel="stylesheet" href="/style.css">
-  <script>
-    let text=''
-    const links = [
-      { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
-      { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
-      { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' Temporary Variables)" },
-    ]
-    links.forEach(i => {
-      text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
-    })
-    document.getElementById('extension-list').innerHTML = text
-  </script>
 </head>
 <body>
   <a href="/index.html">Return Home</a><br>
@@ -25,4 +13,16 @@
   </p>
   <ul id="extension-list"></ul>
 </body>
+<script>
+  let text=''
+  const links = [
+    { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
+    { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
+    { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' Temporary Variables)" },
+  ]
+  links.forEach(i => {
+    text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
+  })
+  document.getElementById('extension-list').innerHTML = text
+</script>
 </html>
