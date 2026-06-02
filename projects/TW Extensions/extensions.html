@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <link rel='shortcut icon' href='/favicon.png' type='image/x-icon' />
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <a href="/index.html">Return Home</a><br>
-  <h1>TURBOWARP EXTENSIONS</h1>
-  <br>
-  <p>
-    These are the extensions I have made for <a href="https://turbowarp.org/editor" target="_blank">TurboWarp</a>.
-  </p>
-  <ul id="extension-list"></ul>
-</body>
-<script>
-  let text=''
-  const links = [
-    { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
-    { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
-    { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' Temporary Variables)" },
-  ]
-  links.forEach(i => {
-    text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
-  })
-  document.getElementById('extension-list').innerHTML = text
-</script>
+  <head>
+    <link rel='shortcut icon' href='/favicon.png' type='image/x-icon' />
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <a href="/index.html">Return Home</a><br>
+    <h1>TURBOWARP EXTENSIONS</h1>
+    <br>
+    <p>
+      These are the extensions I have made for <a href="https://turbowarp.org/editor" target="_blank">TurboWarp</a>.
+    </p>
+    <ul id="extension-list"></ul>
+    <script>
+      let text=''
+      const links = [
+        { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
+        { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
+        { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' Temporary Variables)" },
+      ]
+      links.forEach(i => {
+        text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
+      })
+      document.getElementById('extension-list').innerHTML = text
+    </script>
+  </body>
 </html>
