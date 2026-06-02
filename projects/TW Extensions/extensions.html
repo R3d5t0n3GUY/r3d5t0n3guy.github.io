@@ -3,6 +3,18 @@
 <head>
   <link rel='shortcut icon' href='/favicon.png' type='image/x-icon' />
   <link rel="stylesheet" href="/style.css">
+  <script>
+    let text=''
+    const links = [
+      { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
+      { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
+      { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' Temporary Variables)" },
+    ]
+    links.forEach(i => {
+      text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
+    })
+    document.getElementById('extension-list').innerHTML = text
+  </script>
 </head>
 <body>
   <a href="/index.html">Return Home</a><br>
@@ -11,10 +23,6 @@
   <p>
     These are the extensions I have made for <a href="https://turbowarp.org/editor" target="_blank">TurboWarp</a>.
   </p>
-  <ul>
-    <li><a href="src/ProjectFullscreen.js" target="_blank">Project Fullscreen (my first)</a></li>
-    <li><a href="src/lPlusRatio.js" target="_blank">L+ Ratio (some Math constants)</a></li>
-    <li><a href="src/TempLists.js" target="_blank">Temporary Lists (an extension for LilyMakesThings' Temporary Variables)</a></li>
-  </ul>
+  <ul id="extension-list"></ul>
 </body>
 </html>
