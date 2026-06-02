@@ -23,8 +23,7 @@
   } else if (!runtime.extensionManager.isExtensionLoaded("lmsTempVars2")) {
     throw new Error('Please install "Temporary Variables" (by LilyMakesThings) before loading this extension!')
   } else {
-    
-
+    console.error("This extension is a work in progress!")
     const getVarObjectFromName = function (name, util, type) {
       const stageTarget = runtime.getTargetForStage();
       const target = util.target;
@@ -224,80 +223,144 @@
         }
       }
 
-      addToThreadList() {
+      addToThreadList(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          thread.lists[args.LIST].push(args.ITEM)
+        } else {
+          thread.lists[args.LIST] = [args.ITEM]
+        }
+      }
+
+      deleteFromThreadList(args, util) {
 
       }
 
-      deleteFromThreadList() {
+      deleteAllOfThreadList(args, util) {
 
       }
 
-      deleteAllOfThreadList() {
+      insertIntoThreadList(args, util) {
 
       }
 
-      insertIntoThreadList() {
+      replaceItemOfThreadList(args, util) {
 
       }
 
-      replaceItemOfThreadList() {
+      itemOfThreadList(args, util) {
 
       }
 
-      itemOfThreadList() {
+      indexInThreadList(args, util) {
 
       }
 
-      indexInThreadList() {
+      lengthOfThreadList(args, util) {
 
       }
 
-      lengthOfThreadList() {
+      threadListContains(args, util) {
 
       }
 
-      threadListContains() {
+      forEachItem(args, util) {
+        const thread = util.thread;
+        if (thread.lists ? args.LIST in thread.lists : false) {
+          const list = thread.lists[args.LIST]
+          if (!list) return false;
+          const listLength = list.value.length;
+          if (!thread.variables) thread.variables = {};
+          const vars = thread.variables;
 
+          if (typeof util.stackFrame.index === "undefined") {
+            util.stackFrame.index = 0;
+          }
+
+          if (util.stackFrame.index < listLength) {
+            util.stackFrame.index++;
+            vars[args.ITEM] = list[util.stackFrame.index - 1]
+            return true;
+          }
+        } else {
+          return false
+        }
       }
 
-      forEachItem() {
+      forEachNum(args, util) {
+        const thread = util.thread;
+        if (thread.lists ? args.LIST in thread.lists : false) {
+          const list = thread.lists[args.LIST]
+          if (!list) return false;
+          const listLength = list.value.length;
+          if (!thread.variables) thread.variables = {};
+          const vars = thread.variables;
 
-      }
+          if (typeof util.stackFrame.index === "undefined") {
+            util.stackFrame.index = 0;
+          }
 
-      forEachNum() {
-
+          if (util.stackFrame.index < listLength) {
+            util.stackFrame.index++;
+            vars[args.IDX] = util.stackFrame.index;
+            return true;
+          }
+        } else {
+          return false
+        }
       }
 
       forEachItemNum(args, util) {
-        /* const list = getVarObjectFromName(
-          Scratch.Cast.toString(args.LIST),
-          util,
-          "list"
-        );
-        if (!list) return false;
-        const listLength = list.value.length;
-
         const thread = util.thread;
-        if (!thread.variables) thread.variables = {};
-        const vars = thread.variables;
+        if (thread.lists ? args.LIST in thread.lists : false) {
+          const list = thread.lists[args.LIST]
+          if (!list) return false;
+          const listLength = list.value.length;
+          if (!thread.variables) thread.variables = {};
+          const vars = thread.variables;
 
-        if (typeof util.stackFrame.index === "undefined") {
-          util.stackFrame.index = 0;
+          if (typeof util.stackFrame.index === "undefined") {
+            util.stackFrame.index = 0;
+          }
+
+          if (util.stackFrame.index < listLength) {
+            util.stackFrame.index++;
+            vars[args.IDX] = util.stackFrame.index;
+            vars[args.ITEM] = list[vars[args.IDX] - 1]
+            return true;
+          }
+        } else {
+          return false
         }
-
-        if (util.stackFrame.index < listLength) {
-          util.stackFrame.index++;
-          vars[args.VAR] = util.stackFrame.index;
-          return true;
-        } */
       }
 
-      setListToArray() {
-
+      setListToArray(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        let array;
+        try {
+          array = JSON.parse(args.ARRAY);
+        } catch (error) {
+          array = []
+        }
+        thread.lists[args.LIST] = array
       }
 
-      getListAsArray() {
-
+      getListAsArray(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          return JSON.stringify(thread.lists[args.LIST])
+        } else {
+          return ""
+        }
       }
 
       threadListExists(args, util) {
@@ -311,7 +374,7 @@
       listThreadLists(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
-            thread.lists = Object.create(null);
+          thread.lists = Object.create(null);
         }
         return Object.keys(thread.lists).join(",");
       }
