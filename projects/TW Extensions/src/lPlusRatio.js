@@ -1,7 +1,7 @@
 // Name: L+ Ratio
 // ID: r3d5t0n3guylplusratio
 // Description: Some mathematical constants because why not
-// By: R3d5t0n3_GUY
+// By: R3d5t0n3_GUY <https://github.com/R3d5t0n3GUY>
 
 (function (Scratch) {
   'use strict';
@@ -15,7 +15,7 @@
       return {
         id: 'LPlusRatio',
         name: 'L+ Ratio',
-        color1: '#1FBF5F',
+        color1:  '#59C059',
         blocks: [
           {
             opcode: 'mathConstant',
@@ -23,6 +23,7 @@
             text: Scratch.translate(
               "const [mathConst]"
             ),
+            disableMonitor: true,
             arguments: {
               mathConst: {
                 type: Scratch.ArgumentType.SRING,
