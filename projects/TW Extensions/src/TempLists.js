@@ -8,32 +8,16 @@
 (function (Scratch) {
   "use strict";
 
-  const label = (name, hidden) => ({
-    blockType: Scratch.BlockType.LABEL,
-    text: name,
-    hideFromPalette: hidden,
-  });
-
-  /* -- SETUP -- */
-  const vm = Scratch.vm;
-  const runtime = vm.runtime;
-
   if (!Scratch.extensions.unsandboxed) {
     throw new Error("This extension must run unsandboxed")
-  } else if (!runtime.extensionManager.isExtensionLoaded("lmsTempVars2")) {
+  } else if (!Scratch.vm.runtime.extensionManager.isExtensionLoaded("lmsTempVars2")) {
     throw new Error('Please install "Temporary Variables" (by LilyMakesThings) before loading this extension!')
   } else {
-    console.error("This extension is a work in progress!")
-    const getVarObjectFromName = function (name, util, type) {
-      const stageTarget = runtime.getTargetForStage();
-      const target = util.target;
-      let listObject = Object.create(null);
-
-      listObject = stageTarget.lookupVariableByNameAndType(name, type);
-      if (listObject) return listObject;
-      listObject = target.lookupVariableByNameAndType(name, type);
-      if (listObject) return listObject;
-    };
+    const label = (name, hidden) => ({
+      blockType: Scratch.BlockType.LABEL,
+      text: name,
+      hideFromPalette: hidden,
+    });
 
     class TempLists {
       getInfo() {
@@ -86,9 +70,9 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("replace item [IDX] of list [LIST] with [ITEM]"),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
+                IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list"),
-                IDX: this.fieldParamTemplate("index")
+                ITEM: this.fieldParamTemplate("item")
               },
             },
             {
@@ -236,31 +220,83 @@
       }
 
       deleteFromThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+            thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 1)
+          }
+        }
       }
 
       deleteAllOfThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        thread.lists[args.LIST] = []
       }
 
       insertIntoThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+            thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 0, args.ITEM)
+          }
+        }
       }
 
       replaceItemOfThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+            thread.lists[args.LIST] = args.ITEM
+          }
+        }
       }
 
       itemOfThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists ? (1 <= args.IDX < thread.lists[args.LIST].length + 1) : false) {
+          return thread.lists[args.LIST][args.ITEM]
+        } else {
+          return ""
+        }
       }
 
       indexInThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          return thread.lists[args.LIST].indexOf(args.ITEM) + 1
+        } else {
+          return ""
+        }
       }
 
       lengthOfThreadList(args, util) {
-
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          return thread.lists[args.LIST].length
+        } else {
+          return ""
+        }
       }
 
       threadListContains(args, util) {
@@ -272,7 +308,7 @@
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
           if (!list) return false;
-          const listLength = list.value.length;
+          const listLength = list.length;
           if (!thread.variables) thread.variables = {};
           const vars = thread.variables;
 
@@ -295,7 +331,7 @@
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
           if (!list) return false;
-          const listLength = list.value.length;
+          const listLength = list.length;
           if (!thread.variables) thread.variables = {};
           const vars = thread.variables;
 
@@ -318,7 +354,7 @@
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
           if (!list) return false;
-          const listLength = list.value.length;
+          const listLength = list.length;
           if (!thread.variables) thread.variables = {};
           const vars = thread.variables;
 
@@ -380,322 +416,9 @@
       }
 
     }
-  
-    // The expose format follows TurboWarp's convention of `ext_${extensionId}`.
-    // Expose the extension on runtime for others to use.
+    
     const extension = new TempLists();
     Scratch.vm.runtime.ext_r3d5t0n3guyTempLists = extension;
     Scratch.extensions.register(extension);
   }
 })(Scratch);
-
-/* // A LOT of moving and editing is left... ಠ_ಠ
-
-      THREAD VARIABLES 
-
-    setThreadVariable(args, util) {
-      const thread = util.thread;
-      if (!thread.variables) {
-          thread.variables = Object.create(null);
-      }
-      thread.variables[args.VAR] = args.STRING;
-    }
-
-    changeThreadVariable(args, util) {
-      const thread = util.thread;
-      if (!thread.variables) {
-          thread.variables = Object.create(null);
-      }
-      const vars = thread.variables;
-      const prev = Scratch.Cast.toNumber(vars[args.VAR]);
-      const next = Scratch.Cast.toNumber(args.NUM);
-      vars[args.VAR] = prev + next;
-    }
-
-    getThreadVariable(args, util) {
-      const thread = util.thread;
-      if (!thread.variables) {
-          thread.variables = Object.create(null);
-      }
-      return thread.variables[args.VAR] ?? "";
-    }
-
-    deleteItems(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return false;
-      const listLength = list.value.length;
-      let num1 = 0;
-      let num2 = 0;
-      if (!list) return;
-      if (args.NUM1 > args.NUM2) {
-        num1 = args.NUM2 - 1;
-        num2 = args.NUM1 - 1;
-      } else {
-        num1 = args.NUM1 - 1;
-        num2 = args.NUM2 - 1;
-      }
-      const listPart1 = list.value.slice(0, num1);
-      const listPart2 = list.value.slice(num2 + 1, listLength);
-      list.value = listPart1.concat(listPart2);
-    }
-
-    deleteAllOfItem(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return;
-      const newList = list.value.filter(function (model) {
-        return model !== args.ITEM;
-      });
-      list.value = newList;
-    }
-
-    replaceAllOfItem(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return;
-      const listLength = list.value.length;
-      const item1 = args.ITEM1;
-      const item2 = args.ITEM2;
-      let newList = [];
-      for (let i = 0; i < listLength; i++) {
-        if (list.value[i] === item1) {
-          newList.push(item2);
-        } else {
-          newList.push(list.value[i]);
-        }
-      }
-      list.value = newList;
-    }
-
-    repeatList(args, util) {
-      const list1 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST1),
-        util,
-        "list"
-      );
-      if (!list1) return;
-      const list2 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST2),
-        util,
-        "list"
-      );
-      if (!list2) return;
-      const currentVal = list1.value;
-      for (let i = 0; i < args.NUM; i++) {
-        list2.value = list2.value.concat(currentVal);
-      }
-    }
-
-    getListJoin(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return "";
-      return list.value.join(args.STRING);
-    }
-
-    timesItemAppears(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return 0;
-      return list.value.filter((model) => model == args.ITEM).length;
-    }
-
-    itemIndex(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return 0;
-      let indexes = [];
-      for (let index = 0; index < list.value.length; index++) {
-        if (list.value[index] === args.ITEM) {
-          indexes.push(index);
-        }
-      }
-
-      switch (args.INDEX) {
-        case "_first_":
-          return Scratch.Cast.toNumber(indexes[0] + 1);
-        case "_last_":
-          return Scratch.Cast.toNumber(indexes[indexes.length - 1] + 1);
-        case "_random_":
-          return Scratch.Cast.toNumber(
-            indexes[Math.floor(Math.random() * indexes.length)] + 1
-          );
-        default:
-          return Scratch.Cast.toNumber(indexes[args.INDEX - 1] + 1);
-      }
-    }
-
-    listIsEmpty(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return true;
-      if (list.value.length > 0) return false;
-      return true;
-    }
-
-    itemNumExists(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return false;
-      const listIndex = Scratch.Cast.toListIndex(
-        args.NUM,
-        list.value.length,
-        false
-      );
-      if (listIndex === Scratch.Cast.LIST_INVALID) return false;
-      return true;
-    }
-
-    orderIs(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return false;
-
-      for (let i = 0; i < list.value.length - 1; i++) {
-        const compare = Scratch.Cast.compare(list.value[i + 1], list.value[i]);
-        if (compare > 0 && args.ORDER === "descending") return false;
-        if (compare < 0 && args.ORDER === "ascending") return false;
-      }
-      return true;
-    }
-
-    orderList(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return;
-      if (args.ORDER === "reversed") {
-        list.value.reverse();
-      } else if (args.ORDER === "randomised") {
-        const randomised = list.value
-          .map((value) => ({ value, sort: Math.random() }))
-          .sort((a, b) => a.sort - b.sort)
-          .map(({ value }) => value);
-        list.value = randomised;
-      } else if (args.ORDER === "ascending") {
-        list.value.sort(Scratch.Cast.compare);
-      } else if (args.ORDER === "descending") {
-        list.value.sort(Scratch.Cast.compare).reverse();
-      }
-      list._monitorUpToDate = false;
-    }
-
-    setListToList(args, util) {
-      const list1 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST1),
-        util,
-        "list"
-      );
-      if (!list1) return;
-      const list2 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST2),
-        util,
-        "list"
-      );
-      if (!list2) return;
-      list1.value = list2.value;
-    }
-
-    joinLists(args, util) {
-      const list1 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST1),
-        util,
-        "list"
-      );
-      if (!list1) return;
-      const list2 = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST2),
-        util,
-        "list"
-      );
-      if (!list2) return;
-      list2.value = list2.value.concat(list1.value);
-    }
-
-    forEachListItem(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return false;
-      const listLength = list.value.length;
-
-      const thread = util.thread;
-      if (!thread.variables) thread.variables = {};
-      const vars = thread.variables;
-
-      if (typeof util.stackFrame.index === "undefined") {
-        util.stackFrame.index = 0;
-      }
-
-      if (util.stackFrame.index < listLength) {
-        let itemIndex = util.stackFrame.index;
-        vars[args.VAR] = list.value[itemIndex];
-        util.stackFrame.index++;
-        return true;
-      }
-    }
-
-    
-
-    setListArray(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return;
-
-      let array;
-      try {
-        array = JSON.parse(args.ARRAY);
-      } catch (error) {
-        return;
-      }
-
-      if (!Array.isArray(array)) return;
-      const newArray = array;
-      list.value = newArray;
-    }
-
-    getListArray(args, util) {
-      const list = getVarObjectFromName(
-        Scratch.Cast.toString(args.LIST),
-        util,
-        "list"
-      );
-      if (!list) return "";
-      return JSON.stringify(list.value);
-    }
- */
