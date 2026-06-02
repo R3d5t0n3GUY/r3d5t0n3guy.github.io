@@ -425,8 +425,6 @@
 
     }
     
-    const extension = new TempLists();
-    Scratch.vm.runtime.ext_r3d5t0n3guyTempLists = extension;
-    Scratch.extensions.register(extension);
+    Scratch.extensions.register(new TempLists());
   }
 })(Scratch);
