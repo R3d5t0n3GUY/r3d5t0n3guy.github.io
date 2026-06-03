@@ -264,7 +264,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists ? (1 <= args.IDX < thread.lists[args.LIST].length + 1) : false) {
-          return thread.lists[args.LIST][args.ITEM]
+          return `${thread.lists?.[args.LIST]?.[args.ITEM] || ""}`
         } else {
           return ""
         }
@@ -276,7 +276,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return thread.lists[args.LIST].indexOf(args.ITEM) + 1
+          return `${(thread.lists[args.LIST].indexOf(args.ITEM) + 1) || 0}`
         } else {
           return ""
         }
@@ -288,7 +288,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return thread.lists[args.LIST].length
+          return `${thread.lists?.[args.LIST]?.length || ""}`
         } else {
           return ""
         }
@@ -300,7 +300,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return thread.lists[args.LIST].indexOf(args.ITEM) > -1
+          return (thread.lists?.[args.LIST]?.indexOf(args.ITEM)) > -1
         } else {
           return false
         }
