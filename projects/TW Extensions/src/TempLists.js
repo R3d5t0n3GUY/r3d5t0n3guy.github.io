@@ -19,9 +19,8 @@
         return {
           id: "r3d5t0n3guyTempLists",
           name: Scratch.translate("Temporary Lists"),
-          color1: "#ff661a",
-          color2: "#f2590d",
-          color3: "#e64d00",
+          color1: "#ff4e1a",
+          color3: "#ff1d00",
           blocks: [
             this.fieldParamTemplate("label", "Basic"),
             {
