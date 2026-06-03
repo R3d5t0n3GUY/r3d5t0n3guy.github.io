@@ -77,7 +77,7 @@
         }
       }
       evaluate() {
-        if (this.locateNodeList()) {
+        if (this.checkCompatibility()) {
           return location.pathname.search(/\/fullscreen/i) > -1
         } else {
           //console.warn("HtmlError. Could not locate node containing activateFullScreen ClickEvent");

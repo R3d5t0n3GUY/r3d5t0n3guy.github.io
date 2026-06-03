@@ -13,11 +13,6 @@
   } else if (!Scratch.vm.runtime.extensionManager.isExtensionLoaded("lmsTempVars2")) {
     throw new Error('Please install "Temporary Variables" (by LilyMakesThings) before loading this extension!')
   } else {
-    const label = (name, hidden) => ({
-      blockType: Scratch.BlockType.LABEL,
-      text: name,
-      hideFromPalette: hidden,
-    });
 
     class TempLists {
       getInfo() {
@@ -28,11 +23,11 @@
           color2: "#f2590d",
           color3: "#e64d00",
           blocks: [
-            label(Scratch.translate("Basic"), false),
+            this.fieldParamTemplate("label", "Basic"),
             {
               opcode: "addToThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("add [ITEM] to list [LIST]"),
+              text: Scratch.translate("add [ITEM] to thread list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 LIST: this.fieldParamTemplate("list")
@@ -41,7 +36,7 @@
             {
               opcode: "deleteFromThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete [IDX] of list [LIST]"),
+              text: Scratch.translate("delete [IDX] of thread list [LIST]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list")
@@ -50,7 +45,7 @@
             {
               opcode: "deleteAllOfThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete all of list [LIST]"),
+              text: Scratch.translate("delete all of thread list [LIST]"),
               arguments: {
                 LIST: this.fieldParamTemplate("list")
               },
@@ -58,7 +53,7 @@
             {
               opcode: "insertIntoThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("insert [ITEM] at [IDX] of list [LIST]"),
+              text: Scratch.translate("insert [ITEM] at [IDX] of thread list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 IDX: this.fieldParamTemplate("index"),
@@ -68,7 +63,7 @@
             {
               opcode: "replaceItemOfThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("replace item [IDX] of list [LIST] with [ITEM]"),
+              text: Scratch.translate("replace item [IDX] of thread list [LIST] with [ITEM]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list"),
@@ -78,7 +73,7 @@
             {
               opcode: "itemOfThreadList",
               blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("item [IDX] of list [LIST]"),
+              text: Scratch.translate("item [IDX] of thread list [LIST]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
                 LIST: this.fieldParamTemplate("list")
@@ -87,7 +82,7 @@
             {
               opcode: "indexInThreadList",
               blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("index of [ITEM] in list [LIST]"),
+              text: Scratch.translate("index of [ITEM] in thread list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 LIST: this.fieldParamTemplate("list")
@@ -96,7 +91,7 @@
             {
               opcode: "lengthOfThreadList",
               blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("length of list [LIST]"),
+              text: Scratch.translate("length of thread list [LIST]"),
               arguments: {
                 LIST: this.fieldParamTemplate("list")
               }
@@ -104,7 +99,7 @@
             {
               opcode: "threadListContains",
               blockType: Scratch.BlockType.BOOLEAN,
-              text: Scratch.translate("list [LIST] contains [ITEM] ?"),
+              text: Scratch.translate("thread list [LIST] contains [ITEM] ?"),
               arguments: {
                 LIST: this.fieldParamTemplate("list"),
                 ITEM: this.fieldParamTemplate("item")
@@ -113,11 +108,11 @@
 
             "---",
 
-            label(Scratch.translate("Iteration loops"), false),
+            this.fieldParamTemplate("label", "Iteration loops"),
             {
               opcode: "forEachItem",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] in [LIST]"),
+              text: Scratch.translate("for each item value [ITEM] in thread list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 LIST: {
@@ -129,7 +124,7 @@
             {
               opcode: "forEachNum",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item # [IDX] in [LIST]"),
+              text: Scratch.translate("for each item # [IDX] in thread list [LIST]"),
               arguments: {
                 IDX: {
                   type: Scratch.ArgumentType.STRING,
@@ -141,7 +136,7 @@
             {
               opcode: "forEachItemNum",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] # [IDX] in [LIST]"),
+              text: Scratch.translate("for each item value [ITEM] # [IDX] in thread list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 IDX: {
@@ -154,11 +149,11 @@
             
             "---",
 
-            label(Scratch.translate("JSON"), false),
+            this.fieldParamTemplate("label", "JSON"),
             {
               opcode: "setListToArray",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [LIST] to array [ARRAY]"),
+              text: Scratch.translate("set thread list [LIST] to array [ARRAY]"),
               disableMonitor: true,
               arguments: {
                 LIST: this.fieldParamTemplate("list"),
@@ -171,7 +166,7 @@
             {
               opcode: "getListAsArray",
               blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("[LIST] as array"),
+              text: Scratch.translate("thread list [LIST] as array"),
               disableMonitor: true,
               arguments: {
                 LIST: this.fieldParamTemplate("list")
@@ -179,7 +174,7 @@
             },
 
             "---",
-            label(Scratch.translate("Misc"), false),
+            this.fieldParamTemplate("label", "Misc"),
             {
               opcode: "threadListExists",
               blockType: Scratch.BlockType.BOOLEAN,
@@ -198,11 +193,12 @@
         };
       }
 
-      fieldParamTemplate(argType) {
+      fieldParamTemplate(argType, text) {
         switch (argType) {
-          case "list": return { type: Scratch.ArgumentType.STRING, defaultValue: "thread list" };
-          case "item": return { type: Scratch.ArgumentType.STRING, defaultValue: "thing" };
+          case "list": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("list") };
+          case "item": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("thing") };
           case "index": return { type: Scratch.ArgumentType.NUMBER, defaultValue: "1" };
+          case "label": return { blockType: Scratch.BlockType.LABEL, text: Scratch.translate(text), hideFromPalette: false }
           default: return {};
         }
       }
