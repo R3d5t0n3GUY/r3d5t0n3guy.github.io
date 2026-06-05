@@ -1,9 +1,13 @@
 // Name: Temporary Lists
 // ID: r3d5t0n3guyTempLists
-// Description: Addon for Lily's "Temporary Variables" that adds thread lists
-// Original Extensions By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
-// This Add-On By: R3d5t0n3_GUY <https://github.com/R3d5t0n3GUY>
+// Description: Addon for Lily's "Temporary Variables" and "List Tools" that adds thread lists
+// By: R3d5t0n3_GUY <https://github.com/R3d5t0n3GUY>
 // License: MIT AND LGPL-3.0
+
+// REFERENCES:
+// "Temporary Variables" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
+// "Temporary Variables" By: Mio <https://scratch.mit.edu/users/0znzw/>
+// "List Tools" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
 
 (function (Scratch) {
   "use strict";
@@ -11,6 +15,19 @@
   if (!Scratch.extensions.unsandboxed) {
     throw new Error("This extension must run unsandboxed")
   } else {
+    /* -- SETUP -- */
+    const vm = Scratch.vm;
+    const runtime = vm.runtime;
+    const getVarObjectFromName = function (name, util, type) {
+      const stageTarget = runtime.getTargetForStage();
+      const target = util.target;
+      let listObject = Object.create(null);
+
+      listObject = stageTarget.lookupVariableByNameAndType(name, type);
+      if (listObject) return listObject;
+      listObject = target.lookupVariableByNameAndType(name, type);
+      if (listObject) return listObject;
+    };
 
     class TemporaryLists {
       getInfo() {
@@ -102,6 +119,60 @@
                 ITEM: this.fieldParamTemplate("item")
               }
             },
+
+            "---",
+            this.fieldParamTemplate("label", "Advanced"),
+
+            {
+              opcode: "deleteItemsFromThreadList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("delete items [IDX1] to [IDX2] from thread list [LIST]"),
+              arguments: {
+                IDX1: {
+                  type: Scratch.ArgumentType.NUMBER,
+                  defaultValue: "1"
+                },
+                IDX2: {
+                  type: Scratch.ArgumentType.NUMBER,
+                  defaultValue: "3"
+                },
+                LIST: this.fieldParamTemplate("list")
+              }
+            },
+            {
+              opcode: "deleteAllInstancesFromThreadList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("delete all instances of [ITEM] in thread list [LIST]"),
+              arguments: {
+                ITEM: this.fieldParamTemplate("item"),
+                LIST: this.fieldParamTemplate("list")
+              }
+            },
+            {
+              opcode: "replaceAllInstancesInThreadList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("replace all [ITEM1] with [ITEM2] thread list [LIST]"),
+              arguments: {
+                ITEM1: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: "apple"
+                },
+                ITEM2: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: "banana"
+                },
+                LIST: this.fieldParamTemplate("list")
+              }
+            },
+            {
+              opcode: "setThreadListToList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("set thread list [LIST] to [LISTS]"),
+              arguments: {
+                LIST: this.fieldParamTemplate("list"),
+                LISTS: this.fieldParamTemplate("lists")
+              }
+            },
             
             (this.isDependencyNotLoaded() ? undefined : "---"),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
@@ -147,8 +218,7 @@
             },
             
             "---",
-
-            this.fieldParamTemplate("label", "JSON"),
+            this.fieldParamTemplate("label", "Misc"),
             {
               opcode: "setListToArray",
               blockType: Scratch.BlockType.COMMAND,
@@ -171,9 +241,6 @@
                 LIST: this.fieldParamTemplate("list")
               },
             },
-
-            "---",
-            this.fieldParamTemplate("label", "Misc"),
             {
               opcode: "threadListExists",
               blockType: Scratch.BlockType.BOOLEAN,
@@ -189,23 +256,47 @@
               disableMonitor: true,
             },
           ].filter(i => i),
+          menus: {
+            lists: { acceptReporters: true, items: "_getLists" },
+          }
         };
       }
+      
+      
+      /*--------FUNCTIONS--------*/
 
+      // EXTENSION CONSTRUCTION
       isDependencyNotLoaded() {
         return !(Scratch?.vm?.runtime?.extensionManager?.isExtensionLoaded("lmsTempVars2") || false)
       }
-
       fieldParamTemplate(argType, text, hidden = false) {
         switch (argType) {
           case "list": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("list") };
           case "item": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("thing") };
           case "index": return { type: Scratch.ArgumentType.NUMBER, defaultValue: "1" };
-          case "label": return { blockType: Scratch.BlockType.LABEL, text: Scratch.translate(text), hideFromPalette: hidden }
+          case "label": return { blockType: Scratch.BlockType.LABEL, text: Scratch.translate(text), hideFromPalette: hidden };
+          case "lists": return { type: Scratch.ArgumentType.STRING, menu: "lists" };
           default: return {};
         }
       }
+      _getLists() {
+        // @ts-expect-error - Blockly not typed yet
+        const lists =
+          typeof Blockly === "undefined"
+            ? []
+            : Blockly.getMainWorkspace()
+                .getVariableMap()
+                .getVariablesOfType("list")
+                .map((model) => model.name);
+        if (lists.length > 0) {
+          return lists;
+        } else {
+          return [""];
+        }
+      }
 
+
+      // BASIC
       addToThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -217,7 +308,6 @@
           thread.lists[args.LIST] = [args.ITEM]
         }
       }
-
       deleteFromThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -227,9 +317,10 @@
           if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
             thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 1)
           }
+        } else {
+          thread.lists[args.LIST] = []
         }
       }
-
       deleteAllOfThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -237,7 +328,6 @@
         }
         thread.lists[args.LIST] = []
       }
-
       insertIntoThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -247,9 +337,10 @@
           if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
             thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 0, args.ITEM)
           }
+        } else {
+          thread.lists[args.LIST] = []
         }
       }
-
       replaceItemOfThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -259,9 +350,10 @@
           if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
             thread.lists[args.LIST] = args.ITEM
           }
+        } else {
+          thread.lists[args.LIST] = []
         }
       }
-
       itemOfThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -273,7 +365,6 @@
           return ""
         }
       }
-
       indexInThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -285,7 +376,6 @@
           return ""
         }
       }
-
       lengthOfThreadList(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -297,7 +387,6 @@
           return ""
         }
       }
-
       threadListContains(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -310,76 +399,129 @@
         }
       }
 
+
+      // ADVANCED
+      deleteItemsFromThreadList(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          if (1 <= args.IDX1 < thread.lists[args.LIST].length + 1) {
+            if (1 <= args.IDX2 < thread.lists[args.LIST].length + 1) {
+              let START = Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2)),
+                LEN = Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2)) - START
+              thread.lists[args.LIST].splice(START - 1, LEN + 1)
+            }
+          }
+        } else {
+          thread.lists[args.LIST] = []
+        }
+      }
+      deleteAllInstancesFromThreadList(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          thread.lists[args.LIST] = thread.lists[args.LIST].filter(i => i !== args.ITEM)
+        } else {
+          thread.lists[args.LIST] = []
+        }
+      }
+      replaceAllInstancesInThreadList(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        if (args.LIST in thread.lists) {
+          thread.lists[args.LIST] = thread.lists[args.LIST].map(i => (i === args.ITEM1 ? args.ITEM2 : i))
+        } else {
+          thread.lists[args.LIST] = []
+        }
+      }
+      setThreadListToList(args, util) {
+        const thread = util.thread;
+        if (!thread.lists) {
+          thread.lists = Object.create(null);
+        }
+        const list = getVarObjectFromName(
+          Scratch.Cast.toString(args.LISTS),
+          util,
+          "list"
+        )
+        thread.lists[args.LIST] = list.value
+      }
+
+
+      // ITERATION LOOPS
       forEachItem(args, util) {
         const thread = util.thread;
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
-          if (!list) return false;
-          const listLength = list.length;
-          if (!thread.variables) thread.variables = {};
-          const vars = thread.variables;
+          if (list) {
+            const listLength = list.length;
+            if (!thread.variables) thread.variables = {};
+            const vars = thread.variables;
 
-          if (typeof util.stackFrame.index === "undefined") {
-            util.stackFrame.index = 0;
-          }
+            if (typeof util.stackFrame.index === "undefined") {
+              util.stackFrame.index = 0;
+            }
 
-          if (util.stackFrame.index < listLength) {
-            util.stackFrame.index++;
-            vars[args.ITEM] = list[util.stackFrame.index - 1]
-            return true;
+            if (util.stackFrame.index < listLength) {
+              util.stackFrame.index++;
+              vars[args.ITEM] = list[util.stackFrame.index - 1]
+              return true;
+            }
           }
-        } else {
-          return false
         }
       }
-
       forEachNum(args, util) {
         const thread = util.thread;
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
-          if (!list) return false;
-          const listLength = list.length;
-          if (!thread.variables) thread.variables = {};
-          const vars = thread.variables;
+          if (list) {
+            const listLength = list.length;
+            if (!thread.variables) thread.variables = {};
+            const vars = thread.variables;
 
-          if (typeof util.stackFrame.index === "undefined") {
-            util.stackFrame.index = 0;
-          }
+            if (typeof util.stackFrame.index === "undefined") {
+              util.stackFrame.index = 0;
+            }
 
-          if (util.stackFrame.index < listLength) {
-            util.stackFrame.index++;
-            vars[args.IDX] = util.stackFrame.index;
-            return true;
+            if (util.stackFrame.index < listLength) {
+              util.stackFrame.index++;
+              vars[args.IDX] = util.stackFrame.index;
+              return true;
+            }
           }
-        } else {
-          return false
         }
       }
-
       forEachItemNum(args, util) {
         const thread = util.thread;
         if (thread.lists ? args.LIST in thread.lists : false) {
           const list = thread.lists[args.LIST]
-          if (!list) return false;
-          const listLength = list.length;
-          if (!thread.variables) thread.variables = {};
-          const vars = thread.variables;
+          if (list) {
+            const listLength = list.length;
+            if (!thread.variables) thread.variables = {};
+            const vars = thread.variables;
 
-          if (typeof util.stackFrame.index === "undefined") {
-            util.stackFrame.index = 0;
-          }
+            if (typeof util.stackFrame.index === "undefined") {
+              util.stackFrame.index = 0;
+            }
 
-          if (util.stackFrame.index < listLength) {
-            util.stackFrame.index++;
-            vars[args.IDX] = util.stackFrame.index;
-            vars[args.ITEM] = list[vars[args.IDX] - 1]
-            return true;
+            if (util.stackFrame.index < listLength) {
+              util.stackFrame.index++;
+              vars[args.IDX] = util.stackFrame.index;
+              vars[args.ITEM] = list[vars[args.IDX] - 1]
+              return true;
+            }
           }
-        } else {
-          return false
         }
       }
 
+
+      // MISC
       setListToArray(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -393,7 +535,6 @@
         }
         thread.lists[args.LIST] = array
       }
-
       getListAsArray(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -405,7 +546,6 @@
           return ""
         }
       }
-
       threadListExists(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
@@ -413,7 +553,6 @@
         }
         return Object.prototype.hasOwnProperty.call(thread.lists, args.LIST);
       }
-
       listThreadLists(args, util) {
         const thread = util.thread;
         if (!thread.lists) {
