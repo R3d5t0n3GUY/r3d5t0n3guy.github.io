@@ -10,11 +10,9 @@
 
   if (!Scratch.extensions.unsandboxed) {
     throw new Error("This extension must run unsandboxed")
-  } else if (!Scratch.vm.runtime.extensionManager.isExtensionLoaded("lmsTempVars2")) {
-    throw new Error('Please install "Temporary Variables" (by LilyMakesThings) before loading this extension!')
   } else {
 
-    class TempLists {
+    class TemporaryLists {
       getInfo() {
         return {
           id: "r3d5t0n3guyTempLists",
@@ -104,14 +102,14 @@
                 ITEM: this.fieldParamTemplate("item")
               }
             },
-
-            "---",
-
-            this.fieldParamTemplate("label", "Iteration loops"),
+            
+            (this.isDependencyNotLoaded() ? undefined : "---"),
+            this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
             {
               opcode: "forEachItem",
               blockType: Scratch.BlockType.LOOP,
               text: Scratch.translate("for each item value [ITEM] in thread list [LIST]"),
+              hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 LIST: {
@@ -124,6 +122,7 @@
               opcode: "forEachNum",
               blockType: Scratch.BlockType.LOOP,
               text: Scratch.translate("for each item # [IDX] in thread list [LIST]"),
+              hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 IDX: {
                   type: Scratch.ArgumentType.STRING,
@@ -136,6 +135,7 @@
               opcode: "forEachItemNum",
               blockType: Scratch.BlockType.LOOP,
               text: Scratch.translate("for each item value [ITEM] # [IDX] in thread list [LIST]"),
+              hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 ITEM: this.fieldParamTemplate("item"),
                 IDX: {
@@ -188,16 +188,20 @@
               text: Scratch.translate("active thread lists"),
               disableMonitor: true,
             },
-          ],
+          ].filter(i => i),
         };
       }
 
-      fieldParamTemplate(argType, text) {
+      isDependencyNotLoaded() {
+        return !(Scratch?.vm?.runtime?.extensionManager?.isExtensionLoaded("lmsTempVars2") || false)
+      }
+
+      fieldParamTemplate(argType, text, hidden = false) {
         switch (argType) {
           case "list": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("list") };
           case "item": return { type: Scratch.ArgumentType.STRING, defaultValue: Scratch.translate("thing") };
           case "index": return { type: Scratch.ArgumentType.NUMBER, defaultValue: "1" };
-          case "label": return { blockType: Scratch.BlockType.LABEL, text: Scratch.translate(text), hideFromPalette: false }
+          case "label": return { blockType: Scratch.BlockType.LABEL, text: Scratch.translate(text), hideFromPalette: hidden }
           default: return {};
         }
       }
@@ -419,7 +423,8 @@
       }
 
     }
-    
-    Scratch.extensions.register(new TempLists());
+    const TempLists = new TemporaryLists();
+    if (TempLists.isDependencyNotLoaded()) console.warn('Install "Temporary Variables" (by LilyMakesThings) to access iteration loops')
+    Scratch.extensions.register(TempLists);
   }
 })(Scratch);
