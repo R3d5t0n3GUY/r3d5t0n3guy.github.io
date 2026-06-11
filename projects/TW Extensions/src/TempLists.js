@@ -291,17 +291,14 @@
         }
       }
       _getLists() {
-        // @ts-expect-error - Blockly not typed yet
-        const lists =
-          typeof Blockly === "undefined"
-            ? []
-            : Blockly.getMainWorkspace()
-                .getVariableMap()
-                .getVariablesOfType("list")
-                .map((model) => model.name);
-        if (lists.length > 0) {
-          return lists;
-        } else {
+        try {
+          const lists = (typeof Blockly === "undefined" ? [] : Blockly.getMainWorkspace().getVariableMap().getVariablesOfType("list").map((model) => model.name));
+          if (lists.length > 0) {
+            return lists;
+          } else {
+            return [""];
+          }
+        } catch (e) {
           return [""];
         }
       }
@@ -348,7 +345,7 @@
             thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 0, args.ITEM);
           }
         } else {
-          thread.lists[args.LIST] = [];
+          thread.lists[args.LIST] = [args.ITEM];
         }
       }
       replaceItemOfThreadList(args, util) {
@@ -361,7 +358,7 @@
             thread.lists[args.LIST][args.IDX - 1] = args.ITEM;
           }
         } else {
-          thread.lists[args.LIST] = [];
+          thread.lists[args.LIST] = [args.ITEM];
         }
       }
       itemOfThreadList(args, util) {
@@ -455,7 +452,7 @@
           thread.lists = Object.create(null);
         }
         const list = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
-        thread.lists[args.LIST] = list.value;
+        thread.lists[args.LIST] = (list?.value || []);
       }
 
       // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Mio) TO YOUR PROJECT IF YOU WANT THESE)
@@ -533,7 +530,7 @@
         let array;
         try {
           array = JSON.parse(args.ARRAY);
-        } catch (error) {
+        } catch (e) {
           array = [];
         }
         thread.lists[args.LIST] = array;
@@ -544,7 +541,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return JSON.stringify(thread.lists[args.LIST]);
+          return JSON.stringify(thread.lists?.[args.LIST] || []);
         } else {
           return "";
         }
@@ -565,8 +562,9 @@
       }
     }
     const TempLists = new TemporaryLists();
-    if (TempLists.isDependencyNotLoaded())
+    if (TempLists.isDependencyNotLoaded()) {
       console.warn('Install "Temporary Variables" (by LilyMakesThings) to access iteration loops');
+    }
     Scratch.extensions.register(TempLists);
   }
 })(Scratch);
