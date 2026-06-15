@@ -138,7 +138,7 @@
             {
               opcode: "replaceAllInstancesInThreadList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("replace all [ITEM1] with [ITEM2] thread list [LIST]"),
+              text: Scratch.translate("replace all [ITEM1] with [ITEM2] in thread list [LIST]"),
               arguments: {
                 ITEM1: {
                   type: Scratch.ArgumentType.STRING,
@@ -321,7 +321,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+          if ((1 <= args.IDX) && (args.IDX < thread.lists[args.LIST].length + 1)) {
             thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 1);
           }
         } else {
@@ -341,7 +341,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+          if ((1 <= args.IDX) && (args.IDX < thread.lists[args.LIST].length + 1)) {
             thread.lists[args.LIST].splice(Math.floor(args.IDX - 1), 0, args.ITEM);
           }
         } else {
@@ -354,7 +354,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          if (1 <= args.IDX < thread.lists[args.LIST].length + 1) {
+          if ((1 <= args.IDX) && (args.IDX < thread.lists[args.LIST].length + 1)) {
             thread.lists[args.LIST][args.IDX - 1] = args.ITEM;
           }
         } else {
@@ -366,8 +366,8 @@
         if (!thread.lists) {
           thread.lists = Object.create(null);
         }
-        if (args.LIST in thread.lists ? 1 <= args.IDX < thread.lists[args.LIST].length + 1 : false) {
-          return `${thread.lists?.[args.LIST]?.[args.IDX - 1] || ""}`;
+        if (args.LIST in thread.lists ? ((1 <= args.IDX) && (args.IDX < thread.lists[args.LIST].length + 1)) : false) {
+          return thread.lists?.[args.LIST]?.[args.IDX - 1] || "";
         } else {
           return "";
         }
@@ -378,7 +378,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return `${thread.lists[args.LIST].indexOf(args.ITEM) + 1 || 0}`;
+          return thread.lists[args.LIST].indexOf(args.ITEM) + 1 || 0;
         } else {
           return "";
         }
@@ -389,7 +389,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return `${thread.lists?.[args.LIST]?.length || ""}`;
+          return thread.lists?.[args.LIST]?.length || "";
         } else {
           return "";
         }
@@ -413,8 +413,8 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          if (1 <= args.IDX1 < thread.lists[args.LIST].length + 1) {
-            if (1 <= args.IDX2 < thread.lists[args.LIST].length + 1) {
+          if ((1 <= args.IDX1) && (args.IDX1 < thread.lists[args.LIST].length + 1)) {
+            if ((1 <= args.IDX2) && (args.IDX2 < thread.lists[args.LIST].length + 1)) {
               let START = Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2)),
                 LEN = Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2)) - START;
               thread.lists[args.LIST].splice(START - 1, LEN + 1);
@@ -452,7 +452,7 @@
           thread.lists = Object.create(null);
         }
         const list = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
-        thread.lists[args.LIST] = (list?.value || []);
+        thread.lists[args.LIST] = [...(list?.value || [])];
       }
 
       // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Mio) TO YOUR PROJECT IF YOU WANT THESE)
@@ -529,7 +529,7 @@
         }
         let array;
         try {
-          array = JSON.parse(args.ARRAY);
+          array = Object.values(JSON.parse(args.ARRAY));
         } catch (e) {
           array = [];
         }
@@ -541,7 +541,7 @@
           thread.lists = Object.create(null);
         }
         if (args.LIST in thread.lists) {
-          return JSON.stringify(thread.lists?.[args.LIST] || []);
+          return JSON.stringify(Object.values(thread.lists?.[args.LIST] || []));
         } else {
           return "";
         }
