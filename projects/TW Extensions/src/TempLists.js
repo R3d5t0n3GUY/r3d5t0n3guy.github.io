@@ -161,7 +161,7 @@
               },
             },
 
-            this.isDependencyNotLoaded() ? undefined : "---",
+            this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
             {
               opcode: "forEachItem",
@@ -250,16 +250,15 @@
 
       // EXTENSION CONSTRUCTION
       getListObjectFromName(name, util) {
-        const vm = Scratch.vm;
-        const runtime = vm.runtime;
+        const runtime = Scratch.vm.runtime;
         const stageTarget = runtime.getTargetForStage();
         const target = util.target;
         let listObject = Object.create(null);
 
-        listObject = stageTarget.lookupVariableByNameAndType(name, "list");
+        listObject = stageTarget?.lookupVariableByNameAndType(name, "list");
         if (listObject) return listObject;
-        listObject = target.lookupVariableByNameAndType(name, "list");
-        if (listObject) return listObject;
+        listObject = target?.lookupVariableByNameAndType(name, "list");
+        return (listObject ? listObject : Object.create(null))
       }
       isDependencyNotLoaded() {
         return !(Scratch?.vm?.runtime?.extensionManager?.isExtensionLoaded("lmsTempVars2") || false);
@@ -286,15 +285,17 @@
             };
           case "lists":
             return { type: Scratch.ArgumentType.STRING, menu: "lists" };
+          case "separator":
+            return (hidden ? null : "---");
           default:
             return {};
         }
       }
       _getLists() {
         try {
-          const lists = (typeof Blockly === "undefined" ? [] : Blockly.getMainWorkspace().getVariableMap().getVariablesOfType("list").map((model) => model.name));
+          const lists = (typeof Blockly === "undefined" ? [] : (Blockly?.getMainWorkspace()?.getVariableMap()?.getVariablesOfType("list") || []).map((model) => (model?.name || model)));
           if (lists.length > 0) {
-            return lists;
+            return (Array.isArray(lists) ? lists : [""]);
           } else {
             return [""];
           }
