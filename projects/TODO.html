@@ -29,7 +29,7 @@
                 text += "</ul>\n"
               } else if (typeof(i) === 'object') {
                 Object.keys(i).forEach((j, k) => {
-                  text += `<li>${i}<ul>`
+                  text += `<li>${j}<ul>`
                   iter(Object.values(i)[k])
                   text += "</li>\n"
                 })
