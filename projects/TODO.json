@@ -1,14 +1,13 @@
 [
   {
     "TurboWarp Extension stuff": [
-      "Add Runtime and Scope environments for *Temporary Lists*",
-      "Fix some bugs in *Temporary Lists* when used in *Ghandi* (a Scratch mod)",
+      "Fix some bugs in <em>Temporary Lists</em> when used in <em>Ghandi</em> (a Scratch mod)",
       "Some code optimizations"
     ]
   },
   {
     "n-mod": [
-      "*(See the todo list hosted on the n-mod repository and in-game)*"
+      "<em>(See the todo list hosted on the n-mod repository and in-game)<em>"
     ]
   },
   {
@@ -21,40 +20,41 @@
           {
             "Would like to make the following mods:": [
               {
-                "*Quark* x *Oh The Biomes We've Gone* addon:": [
-                  "Adds the *OTBWG* woodtypes for existing Vanilla blocks in much the same manner as *Quark*, so as to fill in the gaps missing from *OTBWG* (so Witch Hazel chests, Sakura ladders, Rainbow Eucalyptus vertical slabs, etc.)"
+                "<em>Quark</em> x <em>Oh The Biomes We've Gone</em> addon:": [
+                  "Adds the <em>OTBWG</em> woodtypes for existing Vanilla blocks in much the same manner as <em>Quark</em>, so as to fill in the gaps missing from <em>OTBWG</em> (so Witch Hazel chests, Sakura ladders, Rainbow Eucalyptus vertical slabs, etc.)"
                 ]
               },
               {
-                "*Goety* x *Create*: Adds": [
-                  "*Create*-based contraptions that allow better automation and storage of *Goety*'s Soul Energy, including a Portable Spirit Interface that allows transfer between containers (chiefly, extraction from Attack Mode Deployers, and depositing to a sort of Spirit Totem container that allows one to, in the manner of *Create*, load one's Totem Of Roots with Soul Energy)",
+                "<em>Goety</em> x <em>Create</em> addon. Adds": [
+                  "<em>Create</em>-based contraptions that allow better automation and storage of <em>Goety</em>'s Soul Energy, including a Portable Spirit Interface that allows transfer between containers (chiefly, extraction from Attack Mode Deployers, and depositing to a sort of Spirit Totem container that allows one to, in the manner of <em>Create</em>, load one's Totem Of Roots with Soul Energy)",
                   {
-                    "A Spirit Wrench that, on top of having the functionality of *Create*'s wrench, can quick-break Soul-Energy-related components (so Dark Altars, Pedestals, Cursed Cage, Sculk Devourer, etc), use Soul Energy to function as a Debug Stick (except for properties like Redstone Power and Waterlogging), and is immune to heat.": [
+                    "A Spirit Wrench that, on top of having the functionality of <em>Create</em>'s wrench, can quick-break Soul-Energy-related components (so Dark Altars, Pedestals, Cursed Cage, Sculk Devourer, etc), use Soul Energy to function as a Debug Stick (except for properties like Redstone Power and Waterlogging), and is immune to heat.": [
                       {
-                        "*Bygone Forge Ritual* with *Create*'s wrench as the Altar Offering,": [
+                        "<em>Bygone Forge Ritual</em> with <em>Create</em>'s wrench as the Altar Offering,": [
                           {
-                            "using the following ingredients in the pedestals: (*italicized* items are modded. Note that this recipe is WIP)": [
+                            "using the following ingredients in the pedestals: (<em>italicized</em> items are modded. Note that this recipe is WIP)": [
                               "Netherite Ingot (x3)",
-                              "*Cursed Metal Ingot* (x2)",
-                              "*Concentrated Emerald* (x1)",
-                              "*Small Cogwheel* (x2)",
-                              "*Large Cogwheel* (x1)",
-                              "*Sturdy Sheet* (x2)",
-                              "*Brass Nugget* (x2)",
-                              "*Spirit Fabric* (x1)",
-                              "*Precision Mechanism* (x1)",
-                              "*Rotation Focus* (x1)"
+                              "<em>Cursed Metal Ingot</em> (x2)",
+                              "<em>Concentrated Emerald</em> (x1)",
+                              "<em>Small Cogwheel</em> (x2)",
+                              "<em>Large Cogwheel</em> (x1)",
+                              "<em>Sturdy Sheet</em> (x2)",
+                              "<em>Brass Nugget</em> (x2)",
+                              "<em>Spirit Fabric</em> (x1)",
+                              "<em>Precision Mechanism</em> (x1)",
+                              "<em>Rotation Focus</em> (x1)"
                             ]
                           },
                           "and uses 80 Soul Energy over 16 seconds"
                         ]
                       }
                     ]
-                  }
+                  },
+                  "Pondering for the ritual types"
                 ]
               },
               {
-                "*Voided End* (name WIP): A modded port of the *Echoing Void* DLC from *Minecraft Dungeons*. Adds:": [
+                "<em>Voided End<em> (name WIP): A modded port of the <em>Echoing Void<em> DLC from <em>Minecraft Dungeons<em>. Adds:": [
                   "Most Blocks seen in the DLC",
                   "Watchlings, Snarelings and Blastlings (collectively referred to as Enderlings. All will have to be neutral in behavior, so the player won't be pummelled into the void by Blastlings while bridging out between End Islands)",
                   {
@@ -106,7 +106,7 @@
                             ]
                           },
                           "Only Endermites ever spawn here. They tend to spawn and pathfind around the pools and piles of Void, as opposed to in them, despite being immune.",
-                          "When it rains in the Overworld, it rains here also, but like the liquid, Void rain is dangerous, however to a lesser degree. So it's best to shelter from it when this happens." 
+                          "When it rains in the Overworld, it rains here also, but like the liquid, Void rain apples a rising damage multiplier. So it's best to shelter from it when this happens." 
                         ]
                       }
                     ]
