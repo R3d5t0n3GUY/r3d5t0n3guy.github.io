@@ -509,6 +509,7 @@
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           if (list.length > 0 && !this.isDependencyNotLoaded()) {
+            const thread = util.thread
             const listLength = list.length;
             if (!thread.variables) thread.variables = {};
             const vars = thread.variables;
@@ -529,6 +530,7 @@
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           if (list.length && !this.isDependencyNotLoaded()) {
+            const thread = util.thread
             const listLength = list.length;
             if (!thread.variables) thread.variables = {};
             const vars = thread.variables;
@@ -549,6 +551,7 @@
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           if (list.length > 0 && !this.isDependencyNotLoaded()) {
+            const thread = util.thread
             const listLength = list.length;
             if (!thread.variables) thread.variables = {};
             const vars = thread.variables;
@@ -571,11 +574,11 @@
       setListToArray(args, util) {
         let list = this.getListEnvironment(args, util), array;
         try {
-          array = Object.values(JSON.parse(args.ARRAY));
+          array = Object.values(JSON.parse(args.ARRAY)).flat(Infinity);
         } catch (e) {
           array = [];
         }
-        list = array;
+        list.splice(0, list.length, ...array)
       }
       getListAsArray(args, util) {
         if (this.isListInEnvironment(args, util)) {
@@ -587,7 +590,7 @@
       }
       listTempLists(args, util) {
         let t = this
-        return Object.keys(((s) => {
+        return JSON.stringify(Object.keys(((s) => {
           switch (s) {
             case "0": return (() => {
               const thread = util.thread;
@@ -599,7 +602,7 @@
             case "1": return t.runtimeLists;
             default: return null;
           }
-        })(args.SCOPE) || []).join(",")
+        })(args.SCOPE) || []).flat(Infinity));
       }
     }
     const TempLists = new TemporaryLists();
