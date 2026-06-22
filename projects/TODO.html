@@ -37,8 +37,9 @@
                 text += `<li>${i}</li>\n`
               }
             }
+            iter(todoList)
             text += "</ul>"
-            targetDIV.innerHTML=text
+            targetDIV.innerHTML = text
           }
         } catch (err) {
           console.warn(`Uncaught ${err.name || "HttpError"} loading todo list: ${err.message}`);
