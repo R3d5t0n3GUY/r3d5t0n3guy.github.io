@@ -16,7 +16,7 @@
       const targetDIV = document.getElementById('todo-list')
       async function fetchTODO(params) {
         try { 
-          const res = await fetch('TODO.json')
+          const res = await fetch('https://r3d5t0n3guy.github.io/projects/TODO.json')
           if (!res.ok) {
             throw res.status;
           } else {
