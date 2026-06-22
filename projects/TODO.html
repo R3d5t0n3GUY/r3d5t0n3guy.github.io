@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="shortcut-icon" href="/favicon.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon"/>
     <link rel="stylesheet" href="/style.css"/>
     <title>Personal TODO list - R3d5t0n3_GUY</title>
   </head>
@@ -18,11 +18,27 @@
         try { 
           const res = await fetch('TODO.json')
           if (!res.ok) {
-            throw res.status;
+            throw { message: res.status };
           } else {
             const todoText = await res.text();
             const todoList = JSON.parse(todoText)
-            console.log(todoList)
+            let text = "<ul>"
+            const iter = (i) => {
+              if (Array.isArray(i)) {
+                i.forEach(j, iter)
+                text += "</ul>\n"
+              } else if (typeof(i) === 'object') {
+                Object.keys(i).forEach((j, k) => {
+                  text += `<li>${i}<ul>`
+                  iter(Object.values(i)[k])
+                  text += "</li>\n"
+                })
+              } else {
+                text += `<li>${i}</li>\n`
+              }
+            }
+            text += "</ul>"
+            targetDIV.innerHTML=text
           }
         } catch (err) {
           console.warn(`Uncaught ${err.name || "HttpError"} loading todo list: ${err.message}`);
