@@ -102,11 +102,49 @@
                             "Scattered everywhere are pools of Void Liquid, a cold, dark, organic-corroding hazard. It also occurs as piles of semisolid Void Blocks and Flames, which exhibit the same properties:": [
                               "Like in the DLC, any entity not native to the End Dimension coming into contact with this substance receives a rising damage multiplier that can be removed by receiving damage from a non-environmental source, or by waiting for the effect to wear off.",
                               "Maintaining contact with this substance gradually increases this damage multiplier, hurting the targeted entity periodically while diong so, again, provided that they're not native to the End or otherwise Void-immune.",
-                              "This is because the Void liquid and blocks gradually corrode organic matter from foreign realms. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected."
+                              "This is because the Void liquid and blocks gradually corrode organic matter from foreign dimensions. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected."
                             ]
                           },
                           "Only Endermites ever spawn here. They tend to spawn and pathfind around the Void liquid pools, as opposed to in them, despite being immune.",
                           "When it rains in the Overworld, it rains here also, but like the liquid, Void rain applies a rising damage multiplier. So it's best to shelter from it when this happens." 
+                        ]
+                      },
+                      {
+                        "Voided Caves": [
+                          "End Basalt, another Cobblestone subsitute, generates both here and in the Valleys.",
+                          "It's called <em>Voided</em> for a reason: More Void Liquid and Blocks. Tread with caution.",
+                          "Fortune Matrices grow Fortune Crystals similarly to Budding Amethyst. Requires Stone+ Pickaxes to acquire. The Crystals make an equipment tier above Iron but below Diamond.",
+                          "Only Endermites spawn here."
+                        ]
+                      },
+                      {
+                        "Mud Caves": [
+                          "Similar cave equivalent to Mud Springs.",
+                          "Only Watchlings spawn here."
+                        ]
+                      },
+                      {
+                        "Barren Caves": [
+                          "You will only find End Stone and Green End rock here, as well as the occasional End Grass or Chorus Flower.",
+                          "Only Endermen spawn here."
+                        ]
+                      },
+                      {
+                        "Chorus Caves": [
+                          "Similar cave equivalent to Chorus Forests, but with bushes instead of trees.",
+                          "Only Blastlings spawn here."
+                        ]
+                      },
+                      {
+                        "Lush End Caves": [
+                          "Similar cave equivalent to End Gardens, but with bushes instead of trees.",
+                          "Only Snarelings spawn here."
+                        ]
+                      },
+                      {
+                        "Marshy Caves": [
+                          "Similar cave equivalent to Moonstone Marshes.",
+                          "Only Endermen and Snarelings spawn here, and in fewer numbers than in End Barrens"
                         ]
                       }
                     ]
