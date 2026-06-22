@@ -105,8 +105,8 @@
                               "This is because the Void liquid and blocks gradually corrode organic matter from foreign realms. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected."
                             ]
                           },
-                          "Only Endermites ever spawn here. They tend to spawn and pathfind around the pools and piles of Void, as opposed to in them, despite being immune.",
-                          "When it rains in the Overworld, it rains here also, but like the liquid, Void rain apples a rising damage multiplier. So it's best to shelter from it when this happens." 
+                          "Only Endermites ever spawn here. They tend to spawn and pathfind around the Void liquid pools, as opposed to in them, despite being immune.",
+                          "When it rains in the Overworld, it rains here also, but like the liquid, Void rain applies a rising damage multiplier. So it's best to shelter from it when this happens." 
                         ]
                       }
                     ]
