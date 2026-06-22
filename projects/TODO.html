@@ -25,7 +25,7 @@
             let text = "<ul>"
             const iter = (i) => {
               if (Array.isArray(i)) {
-                i.forEach(j, iter)
+                i.forEach(iter)
                 text += "</ul>\n"
               } else if (typeof(i) === 'object') {
                 Object.keys(i).forEach((j, k) => {
