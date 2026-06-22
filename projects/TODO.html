@@ -34,7 +34,11 @@
                   text += "</li>\n"
                 })
               } else {
-                text += `<li>${i}</li>\n`
+                text += `<li>${
+                  i.replace(/\/(\*)|(\*)(.*?)\2/g, (m, e, o, c) => e ? '*' : `<em>${c}</em>`)
+                  .replace(/\/(\^)|(\^)(.*?)\2/g, (m, e, o, c) => e ? '^' : `<strong>${c}</strong>`)
+                  .replace(/\/(\_)|(\_)(.*?)\2/g, (m, e, o, c) => e ? '_' : `<ins>${c}</ins>`)
+                }</li>\n`
               }
             }
             iter(todoList)
