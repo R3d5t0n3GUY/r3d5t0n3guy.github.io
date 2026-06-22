@@ -58,7 +58,7 @@
                   "Most Blocks seen in the DLC",
                   "Watchlings, Snarelings and Blastlings (collectively referred to as Enderlings. All will have to be neutral in behavior, so the player won't be pummelled into the void by Blastlings while bridging out between End Islands)",
                   {
-                    "Biomes utilizing the blocks added by this mod: (in each biome, Enderlings and Endermen can spawn, prioritizing Endermen especially in the Vanilla biomes, unless stated otherwise)": [
+                    "Biomes utilizing the blocks added by this mod: (in each biome, as well as in the Vanilla End biomes, Enderlings and Endermen can spawn, prioritizing Endermen especially in the Vanilla biomes, unless stated otherwise)": [
                       {
                         "End Gardens": [
                           "Yelllow Foliage and Fauna. Houses End Spruce trees, which grow with yellow leaves and light bluish wood.",
