@@ -1,0 +1,122 @@
+[
+  {
+    "TurboWarp Extension stuff": [
+      "Add Runtime and Scope environments for *Temporary Lists*",
+      "Fix some bugs in *Temporary Lists* when used in *Ghandi* (a Scratch mod)",
+      "Some code optimizations"
+    ]
+  },
+  {
+    "n-mod": [
+      "*(See the todo list hosted on the n-mod repository and in-game)*"
+    ]
+  },
+  {
+    "Other projects": [
+      "These are things that I want to get started on, but can't as a result of needing a better computer than my Chromebook to do these on.",
+      {
+        "Minecraft Modding": [
+          "Better coding and modeling environment than GitHub/VScode (maybe MCreator...?)",
+          "Better OS and more storage",
+          {
+            "Would like to make the following mods:": [
+              {
+                "*Quark* x *Oh The Biomes We've Gone* addon:": [
+                  "Adds the *OTBWG* woodtypes for existing Vanilla blocks in much the same manner as *Quark*, so as to fill in the gaps missing from *OTBWG* (so Witch Hazel chests, Sakura ladders, Rainbow Eucalyptus vertical slabs, etc.)"
+                ]
+              },
+              {
+                "*Goety* x *Create*: Adds": [
+                  "*Create*-based contraptions that allow better automation and storage of *Goety*'s Soul Energy, including a Portable Spirit Interface that allows transfer between containers (chiefly, extraction from Attack Mode Deployers, and depositing to a sort of Spirit Totem container that allows one to, in the manner of *Create*, load one's Totem Of Roots with Soul Energy)",
+                  {
+                    "A Spirit Wrench that, on top of having the functionality of *Create*'s wrench, can quick-break Soul-Energy-related components (so Dark Altars, Pedestals, Cursed Cage, Sculk Devourer, etc), use Soul Energy to function as a Debug Stick (except for properties like Redstone Power and Waterlogging), and is immune to heat.": [
+                      {
+                        "*Bygone Forge Ritual* with *Create*'s wrench as the Altar Offering,": [
+                          {
+                            "using the following ingredients in the pedestals: (*italicized* items are modded. Note that this recipe is WIP)": [
+                              "Netherite Ingot (x3)",
+                              "*Cursed Metal Ingot* (x2)",
+                              "*Concentrated Emerald* (x1)",
+                              "*Small Cogwheel* (x2)",
+                              "*Large Cogwheel* (x1)",
+                              "*Sturdy Sheet* (x2)",
+                              "*Brass Nugget* (x2)",
+                              "*Spirit Fabric* (x1)",
+                              "*Precision Mechanism* (x1)",
+                              "*Rotation Focus* (x1)"
+                            ]
+                          },
+                          "and uses 80 Soul Energy over 16 seconds"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "*Voided End* (name WIP): A modded port of the *Echoing Void* DLC from *Minecraft Dungeons*. Adds:": [
+                  "Most Blocks seen in the DLC",
+                  "Watchlings, Snarelings and Blastlings (collectively referred to as Enderlings. All will have to be neutral in behavior, so the player won't be pummelled into the void by Blastlings while bridging out between End Islands)",
+                  {
+                    "Biomes utilizing the blocks added by this mod: (in each biome, Enderlings and Endermen can spawn, prioritizing Endermen especially in the Vanilla biomes, unless stated otherwise)": [
+                      {
+                        "End Gardens": [
+                          "Yelllow Foliage and Fauna. Houses End Spruce trees, which grow with yellow leaves and light bluish wood.",
+                          "Snarelings spawn frequently here."
+                        ]
+                      },
+                      {
+                        "Chorus Forest": [
+                          "A strange biome where Chorus Plants and Chorus wood trees generate. The trees grow with purple wood and white leaves, whereas the plants are seen elsewhere in the End Highlands.",
+                          "Watch your step, since Gloomstalls tend to grow with the trees.",
+                          "Gloomstalls can be harvested to obtain their fruit, a source of food equivalent to chorus fruit, but without teleportation.",
+                          "But get too close, and the Gloomstalls will drop their fruit, which releases harmful gas clouds.",
+                          "Blastlings spawn frequently here."
+                        ]
+                      },
+                      {
+                        "Moonstone Marshes": [
+                          "Whitish rock, known as Moonstone, borders large pools of water, on the fringes of which grows Aloe Vera.",
+                          "Green End Rock is also common here. When it rains in the Overworld, it rains here also.",
+                          "Water and rain are colored vibrant lime green, to reflect this in the DLC.",
+                          "Endermen spawn less frequently here than Snarelings, the former being hydrophobic while the latter not."
+                        ]
+                      },
+                      {
+                        "Mud Springs": [
+                          "End Mud is a grayish liquid, which can be seen bubbling in small volcanic pools. It's mostly harmless, but can still cause one submerged for too long to drown.",
+                          "Aloe Vera can be used either as food, which restores the same hunger and saturation as kelp, or for brewing potions that instantly extinguish any entity caught on fire.",
+                          "Watchlings spawn frequently here."
+                        ]
+                      },
+                      {
+                        "Banded Mountains": [
+                          "Actually more like hills instead of mountains, since traversing this biome would otherwise be more of a pain.",
+                          " A variety of Green End Rock and End Stone variants generate here. Both Green End Rock and Moonstone can be used as Cobblestone subsitutes in crafting.",
+                          "These hills can have certain cave biomes generating, more frequently than in the End Midlands and Highlands."
+                        ]
+                      },
+                      {
+                        "Voided Valleys": [
+                          {
+                            "Scattered everywhere are pools of Void Liquid, a cold, dark, organic-corroding hazard. It also occurs as piles of semisolid Void Blocks and Flames, which exhibit the same properties:": [
+                              "Like in the DLC, any entity not native to the End Dimension coming into contact with this substance receives a rising damage multiplier that can be removed by receiving damage from a non-environmental source, or by waiting for the effect to wear off.",
+                              "Maintaining contact with this substance gradually increases this damage multiplier, hurting the targeted entity periodically while diong so, again, provided that they're not native to the End or otherwise Void-immune.",
+                              "This is because the Void liquid and blocks gradually corrode organic matter from foreign realms. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected."
+                            ]
+                          },
+                          "Only Endermites ever spawn here. They tend to spawn and pathfind around the pools and piles of Void, as opposed to in them, despite being immune.",
+                          "When it rains in the Overworld, it rains here also, but like the liquid, Void rain is dangerous, however to a lesser degree. So it's best to shelter from it when this happens." 
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

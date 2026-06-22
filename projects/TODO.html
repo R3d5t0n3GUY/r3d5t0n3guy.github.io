@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="shortcut-icon" href="/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="/style.css"/>
+    <title>Personal TODO list - R3d5t0n3_GUY</title>
+  </head>
+  <body>
+    <a href="/index.html">Return Home</a><br>
+    <h1>My Personal TODO List</h1>
+    <p>
+      These are some things I would like to get working on, whether they're new projects, or things that need doing in existing ones.
+    </p>
+    <div id="todo-list"></div>
+    <script>
+      const targetDIV = document.getElementById('todo-list')
+      async function fetchTODO(params) {
+        try { 
+          const res = await fetch('TODO.json')
+          if (!res.ok) {
+            throw res.status;
+          } else {
+            const todoText = await res.text();
+            const todoList = JSON.parse(todoText)
+            console.log(todoList)
+          }
+        } catch (err) {
+          console.warn(`Uncaught ${err.name || "HttpError"} loading todo list: ${err.message}`);
+          document.getElementById('todo-list').innerHTML = `<strong style='color:red'>Uncaught ${err.name || "HttpError"} loading todo list:</strong> <ins>${err.message || "Failed Fetch"}</ins>`;
+        }
+      }
+    </script>
+  </body>
+</html>
