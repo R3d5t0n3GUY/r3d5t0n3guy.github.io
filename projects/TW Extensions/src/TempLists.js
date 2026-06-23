@@ -394,17 +394,12 @@
           }
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [];
+          list.splice(0, list.length)
         }
       }
       deleteAllOfTempList(args, util) {
-        if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          list.splice(0, list.length)
-        } else {
-          let list = this.getListEnvironment(args, util)
-          list = [];
-        }
+        let list = this.getListEnvironment(args, util)
+        list.splice(0, list.length)
       }
       insertIntoTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
@@ -414,7 +409,7 @@
           }
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [args.ITEM];
+          list.push(args.ITEM);
         }
       }
       replaceItemOfTempList(args, util) {
@@ -424,6 +419,7 @@
             list[args.IDX - 1] = args.ITEM;
           }
         } else {
+          let list = this.getListEnvironment(args, util)
           list = [args.ITEM];
         }
       }
@@ -450,7 +446,7 @@
       lengthOfTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          return list.length || "";
+          return list.length ?? "";
         } else {
           return "";
         }
@@ -477,7 +473,7 @@
           }
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [];
+          list.splice(0, list.length)
         }
       }
       deleteAllInstancesFromTempList(args, util) {
@@ -486,7 +482,7 @@
           list = list.filter((i) => i !== args.ITEM);
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [];
+          list.splice(0, list.length)
         }
       }
       replaceAllInstancesInTempList(args, util) {
@@ -495,7 +491,7 @@
           list = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [];
+          list.splice(0, list.length)
         }
       }
       setTempListToList(args, util) {
@@ -529,7 +525,7 @@
       forEachNum(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          if (list.length && !this.isDependencyNotLoaded()) {
+          if ((list.length ?? 0) > 0 && !this.isDependencyNotLoaded()) {
             const thread = util.thread
             const listLength = list.length;
             if (!thread.variables) thread.variables = {};
