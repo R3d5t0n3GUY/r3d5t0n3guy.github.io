@@ -240,7 +240,7 @@
                 LIST: this.fieldParamTemplate("list"),
                 ARRAY: {
                   type: Scratch.ArgumentType.STRING,
-                  defaultValue: '["apple","banana"]',
+                  defaultValue: '["apple","banana"]', //["apple","banana", ["cranberry", "durian", ["elderberry"]]] //test array flattening
                 },
               },
             },
@@ -313,23 +313,24 @@
               if (!(this.isListInEnvironment(args, util))) thread.lists[args.LIST] = [];
               return thread.lists[args.LIST]
             })();
-          case "1": return (() => {
+          case "1": return (() => { //RUNTIME
             if (!(this.isListInEnvironment(args, util))) this.runtimeLists[args.LIST] = [];
             return this.runtimeLists[args.LIST]
-          })(); //RUNTIME
+          })();
           default: return [];
         }
       }
       isListInEnvironment(args, util) {
         switch (args.SCOPE) {
-          case "0": return (() => {
+          case "0": return (() => { //THREAD
             const thread = util.thread;
             if (!thread.lists) {
               thread.lists = Object.create(null);
             }
             return args.LIST in thread.lists
           })();
-          case "1": return args.LIST in this.runtimeLists
+          case "1": return args.LIST in this.runtimeLists; //RUNTIME
+          default: return "";
         }
       }
       isDependencyNotLoaded() {
@@ -409,7 +410,7 @@
           }
         } else {
           let list = this.getListEnvironment(args, util)
-          list.push(args.ITEM);
+          list.splice(0, list.length, args.ITEM);
         }
       }
       replaceItemOfTempList(args, util) {
@@ -420,14 +421,14 @@
           }
         } else {
           let list = this.getListEnvironment(args, util)
-          list = [args.ITEM];
+          list.splice(0, list.length, args.ITEM);
         }
       }
       itemOfTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           if ((1 <= args.IDX) && (args.IDX < list.length + 1)) {
-            return list[args.IDX - 1] || "";
+            return list[args.IDX - 1] ?? "";
           } else {
             return ""
           }
@@ -497,7 +498,7 @@
       setTempListToList(args, util) {
         let list1 = this.getListEnvironment(args, util)
         const list2 = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
-        list1 = [...(list2?.value || [])];
+        list1.splice(0, list1.length, ...(list2?.value || []));
       }
 
       // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Mio) TO YOUR PROJECT IF YOU WANT THESE)
@@ -598,7 +599,7 @@
             case "1": return t.runtimeLists;
             default: return null;
           }
-        })(args.SCOPE) || []).flat(Infinity));
+        })(args.SCOPE) ?? []).flat(Infinity));
       }
     }
     const TempLists = new TemporaryLists();
