@@ -55,7 +55,7 @@
               },
               {
                 "<em>Voided End</em> (name WIP): A modded port of the <em>Echoing Void</em> DLC from <em>Minecraft Dungeons</em>. Adds:": [
-                  "Most Blocks seen in the DLC",
+                  "Most Blocks seen in the DLC. To get an idea of what they would look like, see <a href='https://minecraft.wiki/w/Dungeons:List_of_prefab_textures#Echoing_Void'>here</a>.",
                   "Watchlings, Snarelings and Blastlings (collectively referred to as Enderlings. All will have to be neutral in behavior, so the player won't be pummelled into the void by Blastlings while bridging out between End Islands)",
                   {
                     "Biomes utilizing the blocks added by this mod: (in each biome, as well as in the Vanilla End biomes, Enderlings and Endermen can spawn, prioritizing Endermen especially in the Vanilla biomes, unless stated otherwise)": [
@@ -75,8 +75,15 @@
                         ]
                       },
                       {
+                        "Grassy barrens": [
+                          "A variety of small grasses generate here, but is otherwise mostly End Stone variants, aside from the occasional Chorus plant.",
+                          "Endermen spawn frequently here."
+                        ]
+                      },
+                      {
                         "Moonstone Marshes": [
                           "Whitish rock, known as Moonstone, borders large pools of water, on the fringes of which grows Aloe Vera.",
+                          "Aloe Vera can be used either as food, which restores the same hunger and saturation as kelp, or for brewing potions that instantly extinguish any entity caught on fire.",
                           "Green End Rock is also common here. When it rains in the Overworld, it rains here also.",
                           "Water and rain are colored vibrant lime green, to reflect this in the DLC.",
                           "Endermen spawn less frequently here than Snarelings, the former being hydrophobic while the latter not."
@@ -85,13 +92,12 @@
                       {
                         "Mud Springs": [
                           "End Mud is a grayish liquid, which can be seen bubbling in small volcanic pools. It's mostly harmless, but can still cause one submerged for too long to drown.",
-                          "Aloe Vera can be used either as food, which restores the same hunger and saturation as kelp, or for brewing potions that instantly extinguish any entity caught on fire.",
                           "Watchlings spawn frequently here."
                         ]
                       },
                       {
                         "Banded Mountains": [
-                          "Actually more like hills instead of mountains, since traversing this biome would otherwise be more of a pain.",
+                          "Actually more like hills instead of mountains, since traversing this biome without Elytra would otherwise be more of a pain.",
                           " A variety of Green End Rock and End Stone variants generate here. Both Green End Rock and Moonstone can be used as Cobblestone subsitutes in crafting.",
                           "These hills can have certain cave biomes generating, more frequently than in the End Midlands and Highlands."
                         ]
@@ -100,9 +106,12 @@
                         "Voided Valleys": [
                           {
                             "Scattered everywhere are pools of Void Liquid, a cold, dark, organic-corroding hazard. It also occurs as piles of semisolid Void Blocks and Flames, which exhibit the same properties:": [
-                              "Like in the DLC, any entity not native to the End Dimension coming into contact with this substance receives a rising damage multiplier that can be removed by receiving damage from a non-environmental source, or by waiting for the effect to wear off.",
+                              "Like in the DLC, any entity not native to the End Dimension coming into contact with this substance receives a rising damage multiplier that can be removed either receiving damage from a non-environmental source, or by waiting for the effect to wear off.",
                               "Maintaining contact with this substance gradually increases this damage multiplier, hurting the targeted entity periodically while diong so, again, provided that they're not native to the End or otherwise Void-immune.",
-                              "This is because the Void liquid and blocks gradually corrode organic matter from foreign dimensions. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected."
+                              {
+                                "This is because the Void liquid and blocks gradually corrode organic matter from foreign dimensions. So Endermen, Endermites, the Ender Dragon, Enderlings, and Shulkers are not affected.":
+                                  "(Although in the case of Shulkers, they won't come in contact with Void, since it's not a valid block for them to attach to, so they'll just teleport onto a solid surface anyway)"
+                              }
                             ]
                           },
                           "Only Endermites ever spawn here. They tend to spawn and pathfind around the Void liquid pools, as opposed to in them, despite being immune.",
@@ -146,7 +155,8 @@
                       {
                         "Marshy Caves": [
                           "Similar cave equivalent to Moonstone Marshes.",
-                          "Only Endermen and Snarelings spawn here, and in fewer numbers than in End Barrens"
+                          "Only Endermen and Snarelings spawn here, and in fewer numbers than in End Barrens",
+                          "I'm unsure if I will add this"
                         ]
                       }
                     ]
