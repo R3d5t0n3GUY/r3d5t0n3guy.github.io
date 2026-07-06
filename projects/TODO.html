@@ -14,7 +14,7 @@
     <div id="todo-list"></div>
     <script>
       const targetDIV = document.getElementById('todo-list')
-      async function fetchTODO(params) {
+      async function fetchTODO() {
         try { 
           const res = await fetch('TODO.json')
           if (!res.ok) {
