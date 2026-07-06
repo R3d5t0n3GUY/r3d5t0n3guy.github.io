@@ -2,7 +2,7 @@
 // ID: r3d5t0n3guyTempLists
 // Description: Addon for Lily's "Temporary Variables" and "List Tools" that adds thread and runtime lists.
 // By: R3d5t0n3_GUY <https://scratch.mit.edu/users/R3dstone_engineerer>
-// Original: LilyMakesThings and Mio
+// Original: LilyMakesThings and Miyo
 // License: MIT AND LGPL-3.0
 
 // REFERENCES:
@@ -240,7 +240,7 @@
                 LIST: this.fieldParamTemplate("list"),
                 ARRAY: {
                   type: Scratch.ArgumentType.STRING,
-                  defaultValue: '["apple","banana"]', //["apple","banana", ["cranberry", "durian", ["elderberry"]]] //test array flattening
+                  defaultValue: '["apple","banana"]', //'["apple","banana", ["cranberry", "durian", ["elderberry"]]]' //test array flattening
                 },
               },
             },
@@ -465,13 +465,8 @@
       deleteItemsFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          if ((1 <= args.IDX1) && (args.IDX1 < list.length + 1)) {
-            if ((1 <= args.IDX2) && (args.IDX2 < list.length + 1)) {
-              let START = Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2)),
-                LEN = Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2)) - START;
-              list.splice(START - 1, LEN + 1);
-            }
-          }
+          let START = Math.max(1, Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2))), END = Math.min(list.length, Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2))), LEN = END - START;
+          list.splice(START - 1, LEN + 1);
         } else {
           let list = this.getListEnvironment(args, util)
           list.splice(0, list.length)
