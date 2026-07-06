@@ -20,11 +20,6 @@
           {
             "Would like to make the following mods:": [
               {
-                "<em>Quark</em> x <em>Oh The Biomes We've Gone</em> addon:": [
-                  "Adds the <em>OTBWG</em> woodtypes for existing Vanilla blocks in much the same manner as <em>Quark</em>, so as to fill in the gaps missing from <em>OTBWG</em> (so Witch Hazel chests, Sakura ladders, Rainbow Eucalyptus vertical slabs, etc.)"
-                ]
-              },
-              {
                 "<em>Goety</em> x <em>Create</em> addon. Adds": [
                   "<em>Create</em>-based contraptions that allow better automation and storage of <em>Goety</em>'s Soul Energy, including a Portable Spirit Interface that allows transfer between containers (chiefly, extraction from Attack Mode Deployers, and depositing to a sort of Spirit Totem container that allows one to, in the manner of <em>Create</em>, load one's Totem Of Roots with Soul Energy)",
                   {
