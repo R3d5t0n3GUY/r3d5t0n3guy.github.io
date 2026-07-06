@@ -6,7 +6,7 @@
 // License: MIT AND LGPL-3.0
 
 // REFERENCES:
-// "Temporary Variables" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>, Mio <https://scratch.mit.edu/users/0znzw/>
+// "Temporary Variables" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>, Miyo <https://scratch.mit.edu/users/0znzw/>
 // "List Tools" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
 
 (function (Scratch) {
@@ -503,7 +503,7 @@
         list1.splice(0, list1.length, ...(list2?.value || []));
       }
 
-      // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Mio) TO YOUR PROJECT IF YOU WANT THESE)
+      // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Miyo) TO YOUR PROJECT IF YOU WANT THESE)
       forEachItem(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
