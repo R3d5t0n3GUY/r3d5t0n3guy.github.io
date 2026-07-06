@@ -480,7 +480,8 @@
       deleteAllInstancesFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          list = list.filter((i) => i !== args.ITEM);
+          const filtered = list.filter((i) => i !== args.ITEM);
+          list.splice(0, list.length, ...filtered);
         } else {
           let list = this.getListEnvironment(args, util)
           list.splice(0, list.length)
@@ -489,7 +490,8 @@
       replaceAllInstancesInTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          list = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
+          const filtered = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
+          list.splice(0, list.length, ...filtered);
         } else {
           let list = this.getListEnvironment(args, util)
           list.splice(0, list.length)
@@ -595,7 +597,7 @@
                 thread.lists = Object.create(null);
               }
               return thread.lists
-            });
+            })();
             case "1": return t.runtimeLists;
             default: return null;
           }
