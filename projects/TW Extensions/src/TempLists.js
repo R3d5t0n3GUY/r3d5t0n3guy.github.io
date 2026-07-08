@@ -465,8 +465,9 @@
       deleteItemsFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          let START = Math.max(1, Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2))), END = Math.min(list.length, Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2))), LEN = END - START;
-          list.splice(START - 1, LEN + 1);
+          let START = Math.max(1, Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2))), END = Math.min(list.length, Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2)));
+          let bound1 = (args.IDX1 >= 1) && (list.length + 1 > args.IDX1), bound2 = (args.IDX2 >= 1) && (list.length + 1 > args.IDX2)
+          if (bound1 && bound2) list.splice(START - 1, END - START + 1);
         } else {
           let list = this.getListEnvironment(args, util)
           list.splice(0, list.length)
@@ -475,7 +476,7 @@
       deleteAllInstancesFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          const filtered = list.filter((i) => i !== args.ITEM);
+          let filtered = list.filter((i) => i !== args.ITEM);
           list.splice(0, list.length, ...filtered);
         } else {
           let list = this.getListEnvironment(args, util)
@@ -485,7 +486,7 @@
       replaceAllInstancesInTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          const filtered = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
+          let filtered = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
           list.splice(0, list.length, ...filtered);
         } else {
           let list = this.getListEnvironment(args, util)
