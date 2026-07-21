@@ -624,7 +624,17 @@
               }
               return thread.lists
             })();
-            case "1": return t.runtimeLists;
+            case "1": return ((t) => {
+              const id = util.target.id;
+              if (!t.scopedLists) {
+                t.scopedLists = Object.create(null)
+              }
+              if (!t.scopedLists[id]) {
+                t.scopedLists[id] = Object.create(null);
+              }
+              return t.scopedLists?.[id]
+            })(this);
+            case "2": return t.runtimeLists;
             default: return null;
           }
         })(args.SCOPE) ?? []).flat(Infinity));
