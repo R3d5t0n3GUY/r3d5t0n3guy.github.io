@@ -18,13 +18,14 @@
     
     class TemporaryLists {
       constructor () {
+        this.scopedLists = Object.create(null);
         this.runtimeLists = Object.create(null);
 
         Scratch.vm.runtime.on("PROJECT_START", () => {
-          this.resetRuntimeLists()
+          this.resetTemporaryLists()
         });
         Scratch.vm.runtime.on("PROJECT_STOP_ALL", () => {
-          this.resetRuntimeLists()
+          this.resetTemporaryLists()
         });
       }
       
@@ -278,7 +279,8 @@
               acceptReporters: false,
               items: [
                 { text: "thread", value: "0" },
-                { text: "runtime", value: "1" }
+                { text: "scoped", value: "1" },
+                { text: "runtime", value: "2" }
               ]
             },
             lists: { acceptReporters: true, items: "_getLists" },
@@ -289,8 +291,15 @@
       /*--------FUNCTIONS--------*/
 
       // EXTENSION CONSTRUCTION
+      resetTemporaryLists() {
+        this.resetRuntimeLists();
+        this.resetScopedLists();
+      }
       resetRuntimeLists() {
         this.runtimeLists = Object.create(null)
+      }
+      resetScopedLists() {
+        this.scopedLists = Object.create(null);
       }
       getListObjectFromName(name, util) {
         const runtime = Scratch.vm.runtime;
@@ -313,7 +322,18 @@
               if (!(this.isListInEnvironment(args, util))) thread.lists[args.LIST] = [];
               return thread.lists[args.LIST]
             })();
-          case "1": return (() => { //RUNTIME
+          case "1": return (() => { //SCOPED
+              const id = util.target.id;
+              if (!this.scopedLists) {
+                this.scopedLists = Object.create(null)
+              }
+              if (!this.scopedLists[id]) {
+                this.scopedLists[id] = Object.create(null);
+              }
+              if (!(this.isListInEnvironment(args, util))) this.scopedLists[id][args.LIST] = [];
+              return this.scopedLists[id][args.LIST]
+          })();
+          case "2": return (() => { //RUNTIME
             if (!(this.isListInEnvironment(args, util))) this.runtimeLists[args.LIST] = [];
             return this.runtimeLists[args.LIST]
           })();
@@ -329,7 +349,17 @@
             }
             return args.LIST in thread.lists
           })();
-          case "1": return args.LIST in this.runtimeLists; //RUNTIME
+          case "1": return (() => { //SCOPED
+              const id = util.target.id;
+              if (!this.scopedLists) {
+                this.scopedLists = Object.create(null)
+              }
+              if (!this.scopedLists[id]) {
+                this.scopedLists[id] = Object.create(null);
+              }
+              return args.LIST in this.scopedLists[id]
+          })();
+          case "2": return args.LIST in this.runtimeLists; //RUNTIME
           default: return "";
         }
       }
