@@ -18,14 +18,13 @@
     
     class TemporaryLists {
       constructor () {
-        this.scopedLists = Object.create(null);
-        this.runtimeLists = Object.create(null);
+        this.resetTemporaryLists();
 
         Scratch.vm.runtime.on("PROJECT_START", () => {
-          this.resetTemporaryLists()
+          this.resetTemporaryLists();
         });
         Scratch.vm.runtime.on("PROJECT_STOP_ALL", () => {
-          this.resetTemporaryLists()
+          this.resetTemporaryLists();
         });
       }
       
@@ -310,7 +309,7 @@
         listObject = stageTarget?.lookupVariableByNameAndType(name, "list");
         if (listObject) return listObject;
         listObject = target?.lookupVariableByNameAndType(name, "list");
-        return (listObject ? listObject : Object.create(null))
+        return (listObject ?? Object.create(null))
       }
       getListEnvironment(args, util) {
         switch (args.SCOPE) {
@@ -325,7 +324,7 @@
           case "1": return (() => { //SCOPED
               const id = util.target.id;
               if (!this.scopedLists) {
-                this.scopedLists = Object.create(null)
+                this.resetScopedLists();
               }
               if (!this.scopedLists[id]) {
                 this.scopedLists[id] = Object.create(null);
@@ -352,7 +351,7 @@
           case "1": return (() => { //SCOPED
               const id = util.target.id;
               if (!this.scopedLists) {
-                this.scopedLists = Object.create(null)
+                this.resetScopedLists();
               }
               if (!this.scopedLists[id]) {
                 this.scopedLists[id] = Object.create(null);
@@ -627,7 +626,7 @@
             case "1": return ((t) => {
               const id = util.target.id;
               if (!t.scopedLists) {
-                t.scopedLists = Object.create(null)
+                t.resetScopedLists()
               }
               if (!t.scopedLists[id]) {
                 t.scopedLists[id] = Object.create(null);
