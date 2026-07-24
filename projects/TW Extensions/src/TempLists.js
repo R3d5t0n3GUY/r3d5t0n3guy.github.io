@@ -175,14 +175,21 @@
               },
             },
             {
-              opcode: "setTempListToList",
+              opcode: "setTempList1ToTempList2",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE] list [LIST] to [LISTS]"),
+              text: Scratch.translate("set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-                LISTS: this.fieldParamTemplate("lists"),
-              },
+                SCOPE1: this.fieldParamTemplate("scope"),
+                SCOPE2: this.fieldParamTemplate("scope"),
+                LIST1: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: Scratch.translate("list1"),
+                },
+                LIST2: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: Scratch.translate("list2"),
+                },
+              }
             },
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
@@ -231,7 +238,17 @@
             "---",
             this.fieldParamTemplate("label", "Misc"),
             {
-              opcode: "setListToArray",
+              opcode: "setTempListToList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("set [SCOPE] list [LIST] to [LISTS]"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("scope"),
+                LIST: this.fieldParamTemplate("list"),
+                LISTS: this.fieldParamTemplate("lists"),
+              },
+            },
+            {
+              opcode: "setTempListToArray",
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("set [SCOPE] list [LIST] to array [ARRAY]"),
               disableMonitor: true,
@@ -245,7 +262,7 @@
               },
             },
             {
-              opcode: "getListAsArray",
+              opcode: "getTempListAsArray",
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("[SCOPE] list [LIST] as array"),
               disableMonitor: true,
@@ -255,7 +272,7 @@
               },
             },
             {
-              opcode: "isListInEnvironment",
+              opcode: "tempListExists",
               blockType: Scratch.BlockType.BOOLEAN,
               text: Scratch.translate("[SCOPE] list [LIST] exists?"),
               arguments: {
@@ -311,15 +328,15 @@
         listObject = target?.lookupVariableByNameAndType(name, "list");
         return (listObject ?? Object.create(null))
       }
-      getListEnvironment(args, util) {
-        switch (args.SCOPE) {
+      getListEnvironment(args, util, scope = "SCOPE", name = "LIST") {
+        switch (args[scope]) {
           case "0": return (() => { //THREAD
               const thread = util.thread;
               if (!thread.lists) {
                 thread.lists = Object.create(null);
               }
-              if (!(this.isListInEnvironment(args, util))) thread.lists[args.LIST] = [];
-              return thread.lists[args.LIST]
+              if (!(this.isListInEnvironment(args, util, scope, name))) thread.lists[args[name]] = [];
+              return thread.lists[args[name]]
             })();
           case "1": return (() => { //SCOPED
               const id = util.target.id;
@@ -329,24 +346,24 @@
               if (!this.scopedLists[id]) {
                 this.scopedLists[id] = Object.create(null);
               }
-              if (!(this.isListInEnvironment(args, util))) this.scopedLists[id][args.LIST] = [];
-              return this.scopedLists[id][args.LIST]
+              if (!(this.isListInEnvironment(args, util, scope, name))) this.scopedLists[id][args[name]] = [];
+              return this.scopedLists[id][args[name]]
           })();
           case "2": return (() => { //RUNTIME
-            if (!(this.isListInEnvironment(args, util))) this.runtimeLists[args.LIST] = [];
-            return this.runtimeLists[args.LIST]
+            if (!(this.isListInEnvironment(args, util, scope, name))) this.runtimeLists[args[name]] = [];
+            return this.runtimeLists[args[name]]
           })();
           default: return [];
         }
       }
-      isListInEnvironment(args, util) {
-        switch (args.SCOPE) {
+      isListInEnvironment(args, util, scope = "SCOPE", name = "LIST") {
+        switch (args[scope]) {
           case "0": return (() => { //THREAD
             const thread = util.thread;
             if (!thread.lists) {
               thread.lists = Object.create(null);
             }
-            return args.LIST in thread.lists
+            return args[name] in thread.lists
           })();
           case "1": return (() => { //SCOPED
               const id = util.target.id;
@@ -356,9 +373,9 @@
               if (!this.scopedLists[id]) {
                 this.scopedLists[id] = Object.create(null);
               }
-              return args.LIST in this.scopedLists[id]
+              return args[name] in this.scopedLists[id]
           })();
-          case "2": return args.LIST in this.runtimeLists; //RUNTIME
+          case "2": return args[name] in this.runtimeLists; //RUNTIME
           default: return "";
         }
       }
@@ -522,10 +539,14 @@
           list.splice(0, list.length)
         }
       }
-      setTempListToList(args, util) {
-        let list1 = this.getListEnvironment(args, util)
-        const list2 = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
-        list1.splice(0, list1.length, ...(list2?.value || []));
+      setTempList1ToTempList2(args, util) {
+        let list1 = this.getListEnvironment(args, util, "SCOPE1", "LIST1");
+        if (this.isListInEnvironment(args, util, "SCOPE2", "LIST2")) {
+          let list2 = this.getListEnvironment(args, util, "SCOPE2", "LIST2");
+          list1.splice(0, list1.length, ...list2);
+        } else {
+          list1.splice(0, list1.length);
+        }
       }
 
       // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Miyo) TO YOUR PROJECT IF YOU WANT THESE)
@@ -595,7 +616,12 @@
       }
 
       // MISC
-      setListToArray(args, util) {
+      setTempListToList(args, util) {
+        let list1 = this.getListEnvironment(args, util)
+        const list2 = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
+        list1.splice(0, list1.length, ...(list2?.value || []));
+      }
+      setTempListToArray(args, util) {
         let list = this.getListEnvironment(args, util), array;
         try {
           array = Object.values(JSON.parse(args.ARRAY)).flat(Infinity);
@@ -604,13 +630,16 @@
         }
         list.splice(0, list.length, ...array)
       }
-      getListAsArray(args, util) {
+      getTempListAsArray(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           return JSON.stringify(list || []);
         } else {
           return "";
         }
+      }
+      tempListExists(args, util) {
+        return this.isListInEnvironment(args, util, "SCOPE", "LIST")
       }
       listTempLists(args, util) {
         let t = this
