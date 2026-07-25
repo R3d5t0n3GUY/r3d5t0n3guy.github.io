@@ -15,7 +15,6 @@
   if (!Scratch.extensions.unsandboxed) {
     throw new Error("This extension must run unsandboxed");
   } else {
-    
     class TemporaryLists {
       constructor () {
         this.resetTemporaryLists();
@@ -194,6 +193,18 @@
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
+            /* 
+              {
+                opcode: "threadVar",
+                blockType: Scratch.BlockType.REPORTER,
+                text: Scratch.translate("thread variable [VAR]"),
+                disableMonitor: true,
+                allowDropAnywhere: true,
+                arguments: {
+                  VAR: this.fieldParamTemplate("item")
+                }
+              },
+            */
             {
               opcode: "forEachItem",
               blockType: Scratch.BlockType.LOOP,
@@ -328,7 +339,9 @@
         listObject = target?.lookupVariableByNameAndType(name, "list");
         return (listObject ?? Object.create(null))
       }
-      getListEnvironment(args, util, scope = "SCOPE", name = "LIST") {
+      getListEnvironment(args, util, scope, name) {
+        scope ??= "SCOPE"
+        name ??= "LIST"
         switch (args[scope]) {
           case "0": return (() => { //THREAD
               const thread = util.thread;
@@ -356,7 +369,9 @@
           default: return [];
         }
       }
-      isListInEnvironment(args, util, scope = "SCOPE", name = "LIST") {
+      isListInEnvironment(args, util, scope, name) {
+        scope ??= "SCOPE"
+        name ??= "LIST"
         switch (args[scope]) {
           case "0": return (() => { //THREAD
             const thread = util.thread;
@@ -549,7 +564,16 @@
         }
       }
 
-      // ITERATION LOOPS (ADD "Temporary Variables" (by LilyMakesThings and Miyo) TO YOUR PROJECT IF YOU WANT THESE)
+      // ITERATION LOOPS
+    /*
+      threadVar(args, util) {
+        const thread = util.thread;
+        if (!thread.variables) {
+          thread.variables = Object.create(null);
+        }
+        return thread.variables[args.VAR] ?? "";
+      }
+    */
       forEachItem(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
@@ -574,7 +598,7 @@
       forEachNum(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          if ((list.length ?? 0) > 0 && !this.isDependencyNotLoaded()) {
+          if (list.length > 0 && !this.isDependencyNotLoaded()) {
             const thread = util.thread
             const listLength = list.length;
             if (!thread.variables) thread.variables = {};
@@ -639,12 +663,11 @@
         }
       }
       tempListExists(args, util) {
-        return this.isListInEnvironment(args, util, "SCOPE", "LIST")
+        return this.isListInEnvironment(args, util)
       }
       listTempLists(args, util) {
-        let t = this
-        return JSON.stringify(Object.keys(((s) => {
-          switch (s) {
+        return JSON.stringify(Object.keys((() => {
+          switch (args.SCOPE) {
             case "0": return (() => {
               const thread = util.thread;
               if (!thread.lists) {
@@ -652,20 +675,20 @@
               }
               return thread.lists
             })();
-            case "1": return ((t) => {
+            case "1": return (() => {
               const id = util.target.id;
-              if (!t.scopedLists) {
-                t.resetScopedLists()
+              if (!this.scopedLists) {
+                this.resetScopedLists()
               }
-              if (!t.scopedLists[id]) {
-                t.scopedLists[id] = Object.create(null);
+              if (!this.scopedLists[id]) {
+                this.scopedLists[id] = Object.create(null);
               }
-              return t.scopedLists?.[id]
-            })(this);
-            case "2": return t.runtimeLists;
+              return this.scopedLists?.[id]
+            })();
+            case "2": return this.runtimeLists;
             default: return null;
           }
-        })(args.SCOPE) ?? []).flat(Infinity));
+        })() ?? []).flat(Infinity));
       }
     }
     const TempLists = new TemporaryLists();
