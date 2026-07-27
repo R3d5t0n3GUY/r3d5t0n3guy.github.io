@@ -28,11 +28,11 @@
                 i.forEach(iter)
                 text += "</ul>\n"
               } else if (typeof(i) === 'object') {
-                Object.keys(i).forEach((j, k) => {
+                for (let j in i) {
                   text += `<li>${j}<ul>`
-                  iter(Object.values(i)[k])
+                  iter(i[j])
                   text += "</li>\n"
-                })
+                }
               } else {
                 text += `<li>${i}</li>\n`
               }
