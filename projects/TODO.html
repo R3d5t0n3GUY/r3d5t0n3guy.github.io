@@ -26,12 +26,11 @@
             const iter = (i) => {
               if (Array.isArray(i)) {
                 i.forEach(iter)
-                text += "</ul>\n"
               } else if (typeof(i) === 'object') {
                 for (let j in i) {
                   text += `<li>${j}<ul>`
                   iter(i[j])
-                  text += "</li>\n"
+                  text += "</ul></li>\n"
                 }
               } else {
                 text += `<li>${i}</li>\n`

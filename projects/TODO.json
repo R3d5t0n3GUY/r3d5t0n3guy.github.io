@@ -1,8 +1,7 @@
 [
   {
     "TurboWarp Extension stuff": [
-      "Fix some bugs in <em>Temporary Lists</em>",
-      "Some code optimizations"
+      "Some tweaks to <em>Temporary Lists</em>"
     ]
   },
   {
@@ -54,7 +53,7 @@
                   "Watchlings, Snarelings and Blastlings (collectively referred to as Enderlings. All will have to be neutral in behavior, so the player won't be pummelled into the void by Blastlings while bridging out between End Islands)",
                   {
                     "Biomes utilizing the blocks added by this mod: (in each biome, as well as in the Vanilla End biomes outside the central End Island and Void Ring, Enderlings and Endermen can spawn, prioritizing Endermen especially in the Vanilla biomes, unless stated otherwise)": {
-                      "Surface biomes, which can me seen when bridging from island to island:":[
+                      "Surface biomes, which can be seen when bridging from island to island:":[
                         {
                           "End Gardens": [
                             "Yelllow Foliage and Fauna. Houses End Spruce trees, which grow with yellow leaves and light bluish wood.",
