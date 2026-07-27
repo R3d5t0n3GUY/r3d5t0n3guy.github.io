@@ -174,21 +174,21 @@
               },
             },
             {
-              opcode: "setTempList1ToTempList2",
+              opcode: "deleteTempList",
               blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]"),
+              text: Scratch.translate("delete [SCOPE] list [LIST]"),
               arguments: {
-                SCOPE1: this.fieldParamTemplate("scope"),
-                SCOPE2: this.fieldParamTemplate("scope"),
-                LIST1: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: Scratch.translate("list1"),
-                },
-                LIST2: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: Scratch.translate("list2"),
-                },
-              }
+                SCOPE: this.fieldParamTemplate("scope"),
+                LIST: this.fieldParamTemplate("list"),
+              },
+            },
+            {
+              opcode: "deleteAllTempLists",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("delete all [SCOPE] lists"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("scope"),
+              },
             },
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
@@ -249,6 +249,23 @@
             "---",
             this.fieldParamTemplate("label", "Misc"),
             {
+              opcode: "setTempList1ToTempList2",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]"),
+              arguments: {
+                SCOPE1: this.fieldParamTemplate("scope"),
+                SCOPE2: this.fieldParamTemplate("scope"),
+                LIST1: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: Scratch.translate("list1"),
+                },
+                LIST2: {
+                  type: Scratch.ArgumentType.STRING,
+                  defaultValue: Scratch.translate("list2"),
+                },
+              }
+            },
+            {
               opcode: "setTempListToList",
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("set [SCOPE] list [LIST] to [LISTS]"),
@@ -289,23 +306,6 @@
               arguments: {
                 SCOPE: this.fieldParamTemplate("scope"),
                 LIST: this.fieldParamTemplate("list"),
-              },
-            },
-            {
-              opcode: "deleteTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete [SCOPE] list [LIST]"),
-              arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-              },
-            },
-            {
-              opcode: "deleteAllTempLists",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete all [SCOPE] lists"),
-              arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
               },
             },
             {
@@ -579,16 +579,41 @@
           list.splice(0, list.length)
         }
       }
-      setTempList1ToTempList2(args, util) {
-        let list1 = this.getListEnvironment(args, util, "SCOPE1", "LIST1");
-        if (this.isListInEnvironment(args, util, "SCOPE2", "LIST2")) {
-          let list2 = this.getListEnvironment(args, util, "SCOPE2", "LIST2");
-          list1.splice(0, list1.length, ...list2);
-        } else {
-          list1.splice(0, list1.length);
+      deleteTempList(args, util) {
+        if (this.isListInEnvironment(args, util)) {
+          switch (args.SCOPE) {
+            case "0": //THREAD
+              const thread = util.thread;
+              delete thread.lists[args.LIST]
+              break;
+            case "1": //SCOPED
+              const id = util.target.id;
+              delete this.scopedLists[id];
+              break;
+            case "2": //RUNTIME
+              delete this.runtimeLists[args.LIST];
+              break;
+            default: break;
+          }
         }
       }
-
+      deleteAllTempLists(args, util) {
+        switch (args.SCOPE) {
+          case "0": //THREAD
+            const thread = util.thread;
+            delete thread.lists
+            break;
+          case "1": //SCOPED
+            const id = util.target.id;
+            delete this.scopedLists;
+            break;
+          case "2": //RUNTIME
+            delete this.runtimeLists;
+            break;
+          default: break;
+        }
+      }
+      
       // ITERATION LOOPS
     /* //was considering adding this, but decided against it, since, FROM THE BEGINNING, this extension was meant as an addon to 'Temporary Variables'
       threadVar(args, util) {
@@ -665,6 +690,15 @@
       }
 
       // MISC
+      setTempList1ToTempList2(args, util) {
+        let list1 = this.getListEnvironment(args, util, "SCOPE1", "LIST1");
+        if (this.isListInEnvironment(args, util, "SCOPE2", "LIST2")) {
+          let list2 = this.getListEnvironment(args, util, "SCOPE2", "LIST2");
+          list1.splice(0, list1.length, ...list2);
+        } else {
+          list1.splice(0, list1.length);
+        }
+      }
       setTempListToList(args, util) {
         let list1 = this.getListEnvironment(args, util)
         const list2 = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
@@ -689,40 +723,6 @@
       }
       tempListExists(args, util) { //mismatching inputs between a block and its opcoded function are ignored by TW -_-
         return this.isListInEnvironment(args, util)
-      }
-      deleteTempList(args, util) {
-        if (this.isListInEnvironment(args, util)) {
-          switch (args.SCOPE) {
-            case "0": //THREAD
-              const thread = util.thread;
-              delete thread.lists[args.LIST]
-              break;
-            case "1": //SCOPED
-              const id = util.target.id;
-              delete this.scopedLists[id];
-              break;
-            case "2": //RUNTIME
-              delete this.runtimeLists[args.LIST];
-              break;
-            default: break;
-          }
-        }
-      }
-      deleteAllTempLists(args, util) {
-        switch (args.SCOPE) {
-          case "0": //THREAD
-            const thread = util.thread;
-            delete thread.lists
-            break;
-          case "1": //SCOPED
-            const id = util.target.id;
-            delete this.scopedLists;
-            break;
-          case "2": //RUNTIME
-            delete this.runtimeLists;
-            break;
-          default: break;
-        }
       }
       listTempLists(args, util) {
         return JSON.stringify(Object.keys((() => {
