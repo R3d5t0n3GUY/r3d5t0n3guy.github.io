@@ -193,7 +193,7 @@
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
-            /* 
+            /* //was considering adding this, but decided against it, since, FROM THE BEGINNING, this extension was meant as an addon to 'Temporary Variables'
               {
                 opcode: "threadVar",
                 blockType: Scratch.BlockType.REPORTER,
@@ -283,12 +283,29 @@
               },
             },
             {
-              opcode: "tempListExists",
+              opcode: "tempListExists", //can't just use 'isListInEnvironment' here
               blockType: Scratch.BlockType.BOOLEAN,
               text: Scratch.translate("[SCOPE] list [LIST] exists?"),
               arguments: {
                 SCOPE: this.fieldParamTemplate("scope"),
                 LIST: this.fieldParamTemplate("list"),
+              },
+            },
+            {
+              opcode: "deleteTempList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("delete [SCOPE] list [LIST]"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("scope"),
+                LIST: this.fieldParamTemplate("list"),
+              },
+            },
+            {
+              opcode: "deleteAllTempLists",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("delete all [SCOPE] lists"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("scope"),
               },
             },
             {
@@ -363,6 +380,9 @@
               return this.scopedLists[id][args[name]]
           })();
           case "2": return (() => { //RUNTIME
+            if (!this.runtimeLists) {
+              this.resetRuntimeLists();
+            }
             if (!(this.isListInEnvironment(args, util, scope, name))) this.runtimeLists[args[name]] = [];
             return this.runtimeLists[args[name]]
           })();
@@ -390,7 +410,12 @@
               }
               return args[name] in this.scopedLists[id]
           })();
-          case "2": return args[name] in this.runtimeLists; //RUNTIME
+          case "2": return (() => { //RUNTIME
+            if (!this.runtimeLists) {
+              this.resetRuntimeLists();
+            }
+            return args[name] in this.runtimeLists;
+          })();
           default: return "";
         }
       }
@@ -565,7 +590,7 @@
       }
 
       // ITERATION LOOPS
-    /*
+    /* //was considering adding this, but decided against it, since, FROM THE BEGINNING, this extension was meant as an addon to 'Temporary Variables'
       threadVar(args, util) {
         const thread = util.thread;
         if (!thread.variables) {
@@ -662,8 +687,42 @@
           return "";
         }
       }
-      tempListExists(args, util) {
+      tempListExists(args, util) { //mismatching inputs between a block and its opcoded function are ignored by TW -_-
         return this.isListInEnvironment(args, util)
+      }
+      deleteTempList(args, util) {
+        if (this.isListInEnvironment(args, util)) {
+          switch (args.SCOPE) {
+            case "0": //THREAD
+              const thread = util.thread;
+              delete thread.lists[args.LIST]
+              break;
+            case "1": //SCOPED
+              const id = util.target.id;
+              delete this.scopedLists[id];
+              break;
+            case "2": //RUNTIME
+              delete this.runtimeLists[args.LIST];
+              break;
+            default: break;
+          }
+        }
+      }
+      deleteAllTempLists(args, util) {
+        switch (args.SCOPE) {
+          case "0": //THREAD
+            const thread = util.thread;
+            delete thread.lists
+            break;
+          case "1": //SCOPED
+            const id = util.target.id;
+            delete this.scopedLists;
+            break;
+          case "2": //RUNTIME
+            delete this.runtimeLists;
+            break;
+          default: break;
+        }
       }
       listTempLists(args, util) {
         return JSON.stringify(Object.keys((() => {
