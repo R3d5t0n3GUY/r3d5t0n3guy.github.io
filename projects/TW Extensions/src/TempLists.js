@@ -206,18 +206,6 @@
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
-            /* //was considering adding this, but decided against it, since, FROM THE BEGINNING, this extension was meant as an addon to 'Temporary Variables'
-              {
-                opcode: "threadVar",
-                blockType: Scratch.BlockType.REPORTER,
-                text: Scratch.translate("thread variable [VAR]"),
-                disableMonitor: true,
-                allowDropAnywhere: true,
-                arguments: {
-                  VAR: this.fieldParamTemplate("item")
-                }
-              },
-            */
             {
               opcode: "forEachItem",
               blockType: Scratch.BlockType.LOOP,
@@ -298,7 +286,7 @@
                 LIST: this.fieldParamTemplate("list"),
                 ARRAY: {
                   type: Scratch.ArgumentType.STRING,
-                  defaultValue: '["apple","banana"]', //'["apple","banana", ["cranberry", "durian", ["elderberry"]]]' //test array flattening
+                  defaultValue: '["apple","banana", ["cranberry", "durian", ["elderberry"]]]' //test array flattening
                 },
               },
             },
@@ -683,15 +671,6 @@
       }
       
       // ITERATION LOOPS
-    /* //was considering adding this, but decided against it, since, FROM THE BEGINNING, this extension was meant as an addon to 'Temporary Variables'
-      threadVar(args, util) {
-        const thread = util.thread;
-        if (!thread.variables) {
-          thread.variables = Object.create(null);
-        }
-        return thread.variables[args.VAR] ?? "";
-      }
-    */
       forEachItem(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
