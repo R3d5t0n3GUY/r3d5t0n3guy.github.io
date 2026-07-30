@@ -174,6 +174,19 @@
               },
             },
             {
+              opcode: "sortTempList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("sort [SCOPE] list [LIST] by [METHOD]"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("scope"),
+                LIST: this.fieldParamTemplate("list"),
+                METHOD: {
+                  type: Scratch.ArgumentType.STRING,
+                  menu: "sortMethod"
+                }
+              }
+            },
+            {
               opcode: "deleteTempList",
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete [SCOPE] list [LIST]"),
@@ -322,9 +335,19 @@
             scope: {
               acceptReporters: false,
               items: [
-                { text: "thread", value: "0" },
-                { text: "scoped", value: "1" },
-                { text: "runtime", value: "2" }
+                { text: Scratch.translate("thread"), value: "0" },
+                { text: Scratch.translate("scoped"), value: "1" },
+                { text: Scratch.translate("runtime"), value: "2" }
+              ]
+            },
+            sortMethod: {
+              items: [
+                { text: Scratch.translate("ascending order"), value: "A-Z" },
+                { text: Scratch.translate("descending order"), value: "Z-A" },
+                { text: Scratch.translate("increasing frequency"), value: "rarest first" },
+                { text: Scratch.translate("decreasing frequency"), value: "popular first" },
+                { text: Scratch.translate("reverse order"), value: "reverse" },
+                { text: Scratch.translate("randomicity"), value: "shuffle" },
               ]
             },
             lists: { acceptReporters: true, items: "_getLists" },
@@ -578,6 +601,51 @@
           let list = this.getListEnvironment(args, util)
           list.splice(0, list.length)
         }
+      }
+      sortTempList(args, util) {
+       if (this.isListInEnvironment) {
+        let list = this.getListEnvironment(args, util)
+        let newList = list.valueOf()
+        let freqs = {}
+        switch (args.METHOD) {
+          case "A-Z": 
+            newList.sort();
+            break;
+          case "Z-A":
+            newList.sort();
+            newList.reverse();
+            break;
+          case "rarest first":
+            for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
+            newList.sort((a,b) => {
+              if (freqs[a] !== freqs[b]) {
+                return freqs[a] - freqs[b];
+              }
+              return a.localeCompare(b);
+            });
+            break;
+          case "popular first":
+            for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
+            newList.sort((a,b) => {
+              if (freqs[b] !== freqs[a]) {
+                return freqs[b] - freqs[a];
+              }
+              return a.localeCompare(b);
+            });
+            break;
+          case "reverse":
+            newList.reverse()
+            break;
+          case "shuffle":
+            for (let i = newList.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [newList[i], newList[j]] = [newList[j], newList[i]];
+            };
+            break;
+          default: break;
+        }
+        list.splice(0, list.length, ...newList);
+       } 
       }
       deleteTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
