@@ -367,9 +367,7 @@
         listObject = target?.lookupVariableByNameAndType(name, "list");
         return (listObject ?? Object.create(null))
       }
-      getListEnvironment(args, util, scope, name) {
-        scope ??= "SCOPE"
-        name ??= "LIST"
+      getListEnvironment(args, util, scope = "SCOPE", name = "LIST") {
         switch (args[scope]) {
           case "0": return (() => { //THREAD
               const thread = util.thread;
@@ -400,9 +398,7 @@
           default: return [];
         }
       }
-      isListInEnvironment(args, util, scope, name) {
-        scope ??= "SCOPE"
-        name ??= "LIST"
+      isListInEnvironment(args, util, scope = "SCOPE", name = "LIST") {
         switch (args[scope]) {
           case "0": return (() => { //THREAD
             const thread = util.thread;
@@ -644,7 +640,7 @@
               break;
             case "1": //SCOPED
               const id = util.target.id;
-              delete this.scopedLists[id];
+              delete this.scopedLists[id][args.LIST];
               break;
             case "2": //RUNTIME
               delete this.runtimeLists[args.LIST];
@@ -661,7 +657,7 @@
             break;
           case "1": //SCOPED
             const id = util.target.id;
-            delete this.scopedLists;
+            delete this.scopedLists[id];
             break;
           case "2": //RUNTIME
             delete this.runtimeLists;
