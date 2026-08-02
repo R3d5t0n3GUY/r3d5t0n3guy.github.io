@@ -1,6 +1,6 @@
 // Name: Temporary Lists
 // ID: r3d5t0n3guyTempLists
-// Description: Addon for Lily's "Temporary Variables" and "List Tools" that adds thread and runtime lists.
+// Description: Addon for Lily's "Temporary Variables" and "List Tools" that adds temporary lists for various scopes.
 // By: R3d5t0n3_GUY <https://scratch.mit.edu/users/R3dstone_engineerer>
 // Original: LilyMakesThings and Miyo
 // License: MIT AND LGPL-3.0
@@ -733,24 +733,22 @@
       listTempLists(args, util) {
         return JSON.stringify(Object.keys((() => {
           switch (args.SCOPE) {
-            case "0": return (() => {
+            case "0": //THREAD
               const thread = util.thread;
               if (!thread.lists) {
                 thread.lists = Object.create(null);
               }
-              return thread.lists
-            })();
-            case "1": return (() => {
+              return thread.lists;
+            case "1": //SCOPED
               const id = util.target.id;
               if (!this.scopedLists) {
-                this.resetScopedLists()
+                this.resetScopedLists();
               }
               if (!this.scopedLists[id]) {
                 this.scopedLists[id] = Object.create(null);
               }
-              return this.scopedLists?.[id]
-            })();
-            case "2": return this.runtimeLists;
+              return this.scopedLists?.[id];
+            case "2": return this.runtimeLists; //RUNTIME
             default: return null;
           }
         })() ?? []).flat(Infinity));
