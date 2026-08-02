@@ -40,9 +40,9 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("add [ITEM] to [SCOPE] list [LIST]"),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -51,8 +51,8 @@
               text: Scratch.translate("delete [IDX] of [SCOPE] list [LIST]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -60,8 +60,8 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete all of [SCOPE] list [LIST]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -69,10 +69,10 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("insert [ITEM] at [IDX] of [SCOPE] list [LIST]"),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
                 IDX: this.fieldParamTemplate("index"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -81,9 +81,9 @@
               text: Scratch.translate("replace item [IDX] of [SCOPE] list [LIST] with [ITEM]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-                ITEM: this.fieldParamTemplate("item"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
               },
             },
             {
@@ -92,8 +92,8 @@
               text: Scratch.translate("item [IDX] of [SCOPE] list [LIST]"),
               arguments: {
                 IDX: this.fieldParamTemplate("index"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -101,9 +101,9 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("index of [ITEM] in [SCOPE] list [LIST]"),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -111,8 +111,8 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("length of [SCOPE] list [LIST]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -120,9 +120,9 @@
               blockType: Scratch.BlockType.BOOLEAN,
               text: Scratch.translate("[SCOPE] list [LIST] contains [ITEM] ?"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-                ITEM: this.fieldParamTemplate("item"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
               },
             },
 
@@ -134,16 +134,10 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete items [IDX1] to [IDX2] from [SCOPE] list [LIST]"),
               arguments: {
-                IDX1: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "1",
-                },
-                IDX2: {
-                  type: Scratch.ArgumentType.NUMBER,
-                  defaultValue: "3",
-                },
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                IDX1: this.fieldParamTemplate("index", 1),
+                IDX2: this.fieldParamTemplate("index", 3),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -151,9 +145,9 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete all instances of [ITEM] in [SCOPE] list [LIST]"),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -169,8 +163,8 @@
                   type: Scratch.ArgumentType.STRING,
                   defaultValue: "banana",
                 },
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -178,8 +172,8 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("sort [SCOPE] list [LIST] by [METHOD]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
                 METHOD: {
                   type: Scratch.ArgumentType.STRING,
                   menu: "sortMethod"
@@ -191,8 +185,8 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete [SCOPE] list [LIST]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -200,7 +194,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete all [SCOPE] lists"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
               },
             },
 
@@ -212,9 +206,9 @@
               text: Scratch.translate("for each item value [ITEM] in [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -223,12 +217,9 @@
               text: Scratch.translate("for each item # [IDX] in [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
-                IDX: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "index",
-                },
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                IDX: this.fieldParamTemplate("string", "index"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -237,13 +228,10 @@
               text: Scratch.translate("for each item value [ITEM] # [IDX] in [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
-                ITEM: this.fieldParamTemplate("item"),
-                IDX: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "index",
-                },
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                ITEM: this.fieldParamTemplate("string", "thing"),
+                IDX: this.fieldParamTemplate("string", "index"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
 
@@ -254,16 +242,10 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]"),
               arguments: {
-                SCOPE1: this.fieldParamTemplate("scope"),
-                SCOPE2: this.fieldParamTemplate("scope"),
-                LIST1: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: Scratch.translate("list1"),
-                },
-                LIST2: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: Scratch.translate("list2"),
-                },
+                SCOPE1: this.fieldParamTemplate("menu", "scope"),
+                SCOPE2: this.fieldParamTemplate("menu", "scope"),
+                LIST1: this.fieldParamTemplate("string", "list1"),
+                LIST2: this.fieldParamTemplate("string", "list2"),
               }
             },
             {
@@ -271,9 +253,9 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("set [SCOPE] list [LIST] to [LISTS]"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-                LISTS: this.fieldParamTemplate("lists"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                LISTS: this.fieldParamTemplate("menu", "lists"),
               },
             },
             {
@@ -282,12 +264,9 @@
               text: Scratch.translate("set [SCOPE] list [LIST] to array [ARRAY]"),
               disableMonitor: true,
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
-                ARRAY: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: '["apple","banana", ["cranberry", "durian", ["elderberry"]]]' //test array flattening
-                },
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                ARRAY: this.fieldParamTemplate("string", '["apple","banana", ["cranberry", "durian", ["elderberry"]]]'),
               },
             },
             {
@@ -296,8 +275,8 @@
               text: Scratch.translate("[SCOPE] list [LIST] as array"),
               disableMonitor: true,
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -305,8 +284,8 @@
               blockType: Scratch.BlockType.BOOLEAN,
               text: Scratch.translate("[SCOPE] list [LIST] exists?"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
-                LIST: this.fieldParamTemplate("list"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
               },
             },
             {
@@ -314,7 +293,7 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("active [SCOPE] lists"),
               arguments: {
-                SCOPE: this.fieldParamTemplate("scope"),
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
               },
               disableMonitor: true,
             },
@@ -369,93 +348,77 @@
       }
       getListEnvironment(args, util, scope = "SCOPE", name = "LIST") {
         switch (args[scope]) {
-          case "0": return (() => { //THREAD
-              const thread = util.thread;
-              if (!thread.lists) {
-                thread.lists = Object.create(null);
-              }
-              if (!(this.isListInEnvironment(args, util, scope, name))) thread.lists[args[name]] = [];
-              return thread.lists[args[name]]
-            })();
-          case "1": return (() => { //SCOPED
-              const id = util.target.id;
-              if (!this.scopedLists) {
-                this.resetScopedLists();
-              }
-              if (!this.scopedLists[id]) {
-                this.scopedLists[id] = Object.create(null);
-              }
-              if (!(this.isListInEnvironment(args, util, scope, name))) this.scopedLists[id][args[name]] = [];
-              return this.scopedLists[id][args[name]]
-          })();
-          case "2": return (() => { //RUNTIME
+          case "0": //THREAD
+            const thread = util.thread;
+            if (!thread.lists) {
+              thread.lists = Object.create(null);
+            }
+            if (!(this.isListInEnvironment(args, util, scope, name))) thread.lists[args[name]] = [];
+            return thread.lists[args[name]];
+          case "1": //SCOPED
+            const id = util.target.id;
+            if (!this.scopedLists) {
+              this.resetScopedLists();
+            }
+            if (!this.scopedLists[id]) {
+              this.scopedLists[id] = Object.create(null);
+            }
+            if (!(this.isListInEnvironment(args, util, scope, name))) this.scopedLists[id][args[name]] = [];
+            return this.scopedLists[id][args[name]];
+          case "2": //RUNTIME
             if (!this.runtimeLists) {
               this.resetRuntimeLists();
             }
             if (!(this.isListInEnvironment(args, util, scope, name))) this.runtimeLists[args[name]] = [];
-            return this.runtimeLists[args[name]]
-          })();
+            return this.runtimeLists[args[name]];
           default: return [];
         }
       }
       isListInEnvironment(args, util, scope = "SCOPE", name = "LIST") {
         switch (args[scope]) {
-          case "0": return (() => { //THREAD
+          case "0": //THREAD
             const thread = util.thread;
             if (!thread.lists) {
               thread.lists = Object.create(null);
             }
-            return args[name] in thread.lists
-          })();
-          case "1": return (() => { //SCOPED
-              const id = util.target.id;
-              if (!this.scopedLists) {
-                this.resetScopedLists();
-              }
-              if (!this.scopedLists[id]) {
-                this.scopedLists[id] = Object.create(null);
-              }
-              return args[name] in this.scopedLists[id]
-          })();
-          case "2": return (() => { //RUNTIME
+            return args[name] in thread.lists;
+          case "1": //SCOPED
+            const id = util.target.id;
+            if (!this.scopedLists) {
+              this.resetScopedLists();
+            }
+            if (!this.scopedLists[id]) {
+              this.scopedLists[id] = Object.create(null);
+            }
+            return args[name] in this.scopedLists[id];
+          case "2": //RUNTIME
             if (!this.runtimeLists) {
               this.resetRuntimeLists();
             }
             return args[name] in this.runtimeLists;
-          })();
           default: return "";
         }
       }
       isDependencyNotLoaded() {
         return !(Scratch?.vm?.runtime?.extensionManager?.isExtensionLoaded("lmsTempVars2") || false);
       }
-      fieldParamTemplate(argType, text, hidden = false) {
+      fieldParamTemplate(argType, text, hidden = false, translate = true) {
         switch (argType) {
-          case "scope":
+          case "string":
             return {
               type: Scratch.ArgumentType.STRING,
-              menu: "scope"
-            };
-          case "list":
-            return {
-              type: Scratch.ArgumentType.STRING,
-              defaultValue: Scratch.translate("list"),
-            };
-          case "item":
-            return {
-              type: Scratch.ArgumentType.STRING,
-              defaultValue: Scratch.translate("thing"),
+              defaultValue: (translate ? Scratch.translate(text) : text),
             };
           case "index":
-            return { type: Scratch.ArgumentType.NUMBER, defaultValue: "1" };
+            return { type: Scratch.ArgumentType.NUMBER, defaultValue: text };
           case "label":
             return {
               blockType: Scratch.BlockType.LABEL,
               text: Scratch.translate(text),
               hideFromPalette: hidden,
             };
-          case "lists":
-            return { type: Scratch.ArgumentType.STRING, menu: "lists" };
+          case "menu":
+            return { type: Scratch.ArgumentType.STRING, menu: text };
           case "separator":
             return (hidden ? null : "---");
           default:
