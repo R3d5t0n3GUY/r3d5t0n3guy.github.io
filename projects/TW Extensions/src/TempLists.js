@@ -2,12 +2,13 @@
 // ID: r3d5t0n3guyTempLists
 // Description: Addon for Lily's "Temporary Variables" and "List Tools" that adds temporary lists for various scopes.
 // By: R3d5t0n3_GUY <https://scratch.mit.edu/users/R3dstone_engineerer>
-// Original: LilyMakesThings and Miyo
+// Original: LilyMakesThings, Miyo, SharkPool
 // License: MIT AND LGPL-3.0
 
 // REFERENCES:
 // "Temporary Variables" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>, Miyo <https://scratch.mit.edu/users/0znzw/>
 // "List Tools" By: LilyMakesThings <https://scratch.mit.edu/users/LilyMakesThings/>
+// "Extra Controls" By: SharkPool
 
 (function (Scratch) {
   "use strict";
@@ -225,6 +226,16 @@
                 LIST: this.fieldParamTemplate("string", "list"),
               },
             },
+            {
+              opcode: "breakOutOfLoop",
+              blockType: Scratch.BlockType.COMMAND,
+              isTerminal: true,
+              text: Scratch.translate("break out of loop [ICON]"),
+              hideFromPalette: this.isDependencyNotLoaded(),
+              arguments: {
+                ICON: this.fieldParamTemplate("image", "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0yMy4zIDExYy0uMy42LS45IDEtMS41IDFoLTEuNmMtLjEgMS4zLS41IDIuNS0xLjEgMy42LS45IDEuNy0yLjMgMy4yLTQuMSA0LjEtMS43LjktMy42IDEuMi01LjUuOS0xLjgtLjMtMy41LTEuMS00LjktMi4zLS43LS43LS43LTEuOSAwLTIuNi42LS42IDEuNi0uNyAyLjMtLjJIN2MuOS42IDEuOS45IDIuOS45czEuOS0uMyAyLjctLjljMS4xLS44IDEuOC0yLjEgMS44LTMuNWgtMS41Yy0uOSAwLTEuNy0uNy0xLjctMS43IDAtLjQuMi0uOS41LTEuMmw0LjQtNC40Yy43LS42IDEuNy0uNiAyLjQgMEwyMyA5LjJjLjUuNS42IDEuMi4zIDEuOHoiIHN0eWxlPSJmaWxsOiMwMDAzIi8+PHBhdGggZD0iTTIxLjggMTFoLTIuNmMwIDEuNS0uMyAyLjktMSA0LjItLjggMS42LTIuMSAyLjgtMy43IDMuNi0xLjUuOC0zLjMgMS4xLTQuOS44LTEuNi0uMi0zLjItMS00LjQtMi4xLS40LS4zLS40LS45LS4xLTEuMi4zLS40LjktLjQgMS4yLS4xIDEgLjcgMi4yIDEuMSAzLjQgMS4xczIuMy0uMyAzLjMtMWMuOS0uNiAxLjYtMS41IDItMi42LjMtLjkuNC0xLjguMi0yLjhoLTIuNGMtLjQgMC0uNy0uMy0uNy0uNyAwLS4yLjEtLjMuMi0uNGw0LjQtNC40Yy4zLS4zLjctLjMuOSAwTDIyIDkuOGMuMy4zLjQuNi4zLjlzLS4zLjMtLjUuM3oiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4="),
+              }
+            },
 
             "---",
             this.fieldParamTemplate("label", "Misc"),
@@ -402,6 +413,8 @@
             };
           case "index":
             return { type: Scratch.ArgumentType.NUMBER, defaultValue: text };
+          case "image":
+            return { type: Scratch.ArgumentType.IMAGE, dataURI: text };
           case "label":
             return {
               blockType: Scratch.BlockType.LABEL,
@@ -683,6 +696,33 @@
               return true;
             }
           }
+        }
+      }
+      breakOutOfLoop(args, util) { //Credit for this goes to SharkPool
+        const thread = util.thread;
+        const wasCompiled = thread.isCompiled.valueOf();
+        try {
+          thread.isCompiled = false; //fallback in case compiler breaks this
+          const stackFrames = thread.stackFrames, frameCount = stackFrames.length;
+          let loopBlock = null, stackIndex = -1;
+          for (let i = frameCount - 1; i >= 0; i--) { //locate parent loop in surrounding block environment
+            if (i < 0) break;
+            if (!stackFrames[i].isLoop) continue;
+            loopBlock = stackFrames[i].op.id;
+            stackIndex = i;
+            break;
+          }
+          const frameData =  (loopBlock ? { block: loopBlock, index: stackIndex } : false);
+          if (!frameData) return; //block does nothing if not used in a loop
+          const block = frameData.block;
+          const afterLoop = thread.blockContainer.getBlock(frameData.block).next;
+          while(thread.stack.at(-1) !== frameData.block) thread.popStack();
+          thread.popStack();
+          if (afterLoop) thread.pushStack(afterLoop);
+        } catch (e) { //last resort in case all previous failsafes failed
+          console.warn(e)
+        } finally {
+          thread.isCompiled = wasCompiled;
         }
       }
 
