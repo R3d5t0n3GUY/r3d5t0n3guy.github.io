@@ -50,7 +50,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("delete [IDX] of [SCOPE] list [LIST]"),
               arguments: {
-                IDX: this.fieldParamTemplate("index"),
+                IDX: this.fieldParamTemplate("index", 1),
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
               },
@@ -70,7 +70,7 @@
               text: Scratch.translate("insert [ITEM] at [IDX] of [SCOPE] list [LIST]"),
               arguments: {
                 ITEM: this.fieldParamTemplate("string", "thing"),
-                IDX: this.fieldParamTemplate("index"),
+                IDX: this.fieldParamTemplate("index", 1),
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
               },
@@ -80,7 +80,7 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("replace item [IDX] of [SCOPE] list [LIST] with [ITEM]"),
               arguments: {
-                IDX: this.fieldParamTemplate("index"),
+                IDX: this.fieldParamTemplate("index", 1),
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
                 ITEM: this.fieldParamTemplate("string", "thing"),
@@ -91,7 +91,7 @@
               blockType: Scratch.BlockType.REPORTER,
               text: Scratch.translate("item [IDX] of [SCOPE] list [LIST]"),
               arguments: {
-                IDX: this.fieldParamTemplate("index"),
+                IDX: this.fieldParamTemplate("index", 1),
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
               },
@@ -155,14 +155,8 @@
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("replace all [ITEM1] with [ITEM2] in [SCOPE] list [LIST]"),
               arguments: {
-                ITEM1: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "apple",
-                },
-                ITEM2: {
-                  type: Scratch.ArgumentType.STRING,
-                  defaultValue: "banana",
-                },
+                ITEM1: this.fieldParamTemplate("string", "apple"),
+                ITEM2: this.fieldParamTemplate("string", "banana"),
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
               },
@@ -174,10 +168,7 @@
               arguments: {
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
-                METHOD: {
-                  type: Scratch.ArgumentType.STRING,
-                  menu: "sortMethod"
-                }
+                METHOD: this.fieldParamTemplate("menu", "sortMethod")
               }
             },
             {
