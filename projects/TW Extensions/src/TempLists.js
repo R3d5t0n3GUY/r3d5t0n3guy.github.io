@@ -418,7 +418,7 @@
           case "label":
             return {
               blockType: Scratch.BlockType.LABEL,
-              text: Scratch.translate(text),
+              text: (translate ? Scratch.translate(text) : text),
               hideFromPalette: hidden,
             };
           case "menu":
