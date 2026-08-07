@@ -26,6 +26,10 @@
         Scratch.vm.runtime.on("PROJECT_STOP_ALL", () => {
           this.resetTemporaryLists();
         });
+        Scratch.vm.runtime.on("targetWasRemoved", (target) => {
+          const id = target.id;
+          delete this.scopedLists[id]
+        })
       }
       
       getInfo() {
