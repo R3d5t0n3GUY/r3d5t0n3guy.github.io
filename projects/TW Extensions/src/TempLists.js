@@ -699,30 +699,32 @@
         }
       }
       breakOutOfLoop(args, util) { //Credit for this goes to SharkPool
-        const thread = util.thread;
-        const wasCompiled = thread.isCompiled.valueOf();
-        try {
-          thread.isCompiled = false; //fallback in case compiler breaks this
-          const stackFrames = thread.stackFrames, frameCount = stackFrames.length;
-          let loopBlock = null, stackIndex = -1;
-          for (let i = frameCount - 1; i >= 0; i--) { //locate parent loop in surrounding block environment
-            if (i < 0) break;
-            if (!stackFrames[i].isLoop) continue;
-            loopBlock = stackFrames[i].op.id;
-            stackIndex = i;
-            break;
+        if (!this.isDependencyNotLoaded()){
+          const thread = util.thread;
+          const wasCompiled = thread.isCompiled.valueOf();
+          try {
+            thread.isCompiled = false; //fallback in case compiler breaks this
+            const stackFrames = thread.stackFrames, frameCount = stackFrames.length;
+            let loopBlock = null, stackIndex = -1;
+            for (let i = frameCount - 1; i >= 0; i--) { //locate parent loop in surrounding block environment
+              if (i < 0) break;
+              if (!stackFrames[i].isLoop) continue;
+              loopBlock = stackFrames[i].op.id;
+              stackIndex = i;
+              break;
+            }
+            const frameData =  (loopBlock ? { block: loopBlock, index: stackIndex } : false);
+            if (!frameData) return; //block does nothing if not used in a loop
+            const block = frameData.block;
+            const afterLoop = thread.blockContainer.getBlock(frameData.block).next;
+            while(thread.stack.at(-1) !== frameData.block) thread.popStack();
+            thread.popStack();
+            if (afterLoop) thread.pushStack(afterLoop);
+          } catch (e) { //last resort in case all previous failsafes failed
+            console.warn(e)
+          } finally {
+            thread.isCompiled = wasCompiled;
           }
-          const frameData =  (loopBlock ? { block: loopBlock, index: stackIndex } : false);
-          if (!frameData) return; //block does nothing if not used in a loop
-          const block = frameData.block;
-          const afterLoop = thread.blockContainer.getBlock(frameData.block).next;
-          while(thread.stack.at(-1) !== frameData.block) thread.popStack();
-          thread.popStack();
-          if (afterLoop) thread.pushStack(afterLoop);
-        } catch (e) { //last resort in case all previous failsafes failed
-          console.warn(e)
-        } finally {
-          thread.isCompiled = wasCompiled;
         }
       }
 
