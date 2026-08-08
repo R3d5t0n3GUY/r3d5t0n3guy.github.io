@@ -453,9 +453,9 @@
       }
       deleteFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if ((1 <= args.IDX) && (args.IDX < list.length + 1)) {
-            list.splice(Math.floor(args.IDX - 1), 1);
+          let list = this.getListEnvironment(args, util), i = Scratch.Cast.toNumber(args.IDX);
+          if ((1 <= i) && (i < list.length + 1)) {
+            list.splice(Math.floor(i - 1), 1);
           }
         } else {
           let list = this.getListEnvironment(args, util)
@@ -468,9 +468,9 @@
       }
       insertIntoTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if ((1 <= args.IDX) && (args.IDX < list.length + 1)) {
-            list.splice(Math.floor(args.IDX - 1), 0, args.ITEM);
+          let list = this.getListEnvironment(args, util), i = Scratch.Cast.toNumber(args.IDX);
+          if ((1 <= i) && (i < list.length + 1)) {
+            list.splice(Math.floor(i - 1), 0, args.ITEM);
           }
         } else {
           let list = this.getListEnvironment(args, util)
@@ -479,9 +479,9 @@
       }
       replaceItemOfTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if ((1 <= args.IDX) && (args.IDX < list.length + 1)) {
-            list[args.IDX - 1] = args.ITEM;
+          let list = this.getListEnvironment(args, util), i = Scratch.Cast.toNumber(args.IDX);
+          if ((1 <= i) && (i < list.length + 1)) {
+            list[i - 1] = args.ITEM;
           }
         } else {
           let list = this.getListEnvironment(args, util)
@@ -490,9 +490,9 @@
       }
       itemOfTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if ((1 <= args.IDX) && (args.IDX < list.length + 1)) {
-            return list[args.IDX - 1] ?? "";
+          let list = this.getListEnvironment(args, util), i = Scratch.Cast.toNumber(args.IDX);
+          if ((1 <= i) && (i < list.length + 1)) {
+            return list?.[i - 1] ?? "";
           } else {
             return ""
           }
@@ -529,8 +529,9 @@
       deleteItemsFromTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
-          let START = Math.max(1, Math.min(Math.floor(args.IDX1), Math.floor(args.IDX2))), END = Math.min(list.length, Math.max(Math.floor(args.IDX1), Math.floor(args.IDX2)));
-          let bound1 = (args.IDX1 >= 1) && (list.length + 1 > args.IDX1), bound2 = (args.IDX2 >= 1) && (list.length + 1 > args.IDX2)
+          let l = [args.IDX1, args.IDX2].valueOf(), [i, j] = l.map(k => { return Scratch.Cast.toNumber(k) });
+          let START = Math.max(1, Math.min(Math.floor(i), Math.floor(j))), END = Math.min(list.length, Math.max(Math.floor(i), Math.floor(j)));
+          let bound1 = (i >= 1) && (list.length + 1 > i), bound2 = (j >= 1) && (list.length + 1 > j)
           if (bound1 && bound2) list.splice(START - 1, END - START + 1);
         } else {
           let list = this.getListEnvironment(args, util)
