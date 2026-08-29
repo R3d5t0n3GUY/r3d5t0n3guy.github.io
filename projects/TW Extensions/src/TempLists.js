@@ -197,9 +197,9 @@
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
             {
-              opcode: "forEachItem",
+              opcode: "forOfLoop",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] in [SCOPE] list [LIST]"),
+              text: Scratch.translate("for each value [ITEM] of [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 ITEM: this.fieldParamTemplate("string", "thing"),
@@ -208,9 +208,9 @@
               },
             },
             {
-              opcode: "forEachNum",
+              opcode: "forInLoop",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item # [IDX] in [SCOPE] list [LIST]"),
+              text: Scratch.translate("for each # [IDX] in [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 IDX: this.fieldParamTemplate("string", "index"),
@@ -219,9 +219,9 @@
               },
             },
             {
-              opcode: "forEachItemNum",
+              opcode: "forEachLoop",
               blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each item value [ITEM] # [IDX] in [SCOPE] list [LIST]"),
+              text: Scratch.translate("for each value [ITEM] # [IDX] in [SCOPE] list [LIST]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
                 ITEM: this.fieldParamTemplate("string", "thing"),
@@ -231,12 +231,13 @@
               },
             },
             {
-              opcode: "breakOutOfLoop",
+              opcode: "loopFlowControl",
               blockType: Scratch.BlockType.COMMAND,
               isTerminal: true,
-              text: Scratch.translate("break out of loop [ICON]"),
+              text: Scratch.translate("[MODE] [ICON]"),
               hideFromPalette: this.isDependencyNotLoaded(),
               arguments: {
+                MODE: this.fieldParamTemplate("menu", "loopFlowControl"),
                 ICON: this.fieldParamTemplate("image", "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0yMy4zIDExYy0uMy42LS45IDEtMS41IDFoLTEuNmMtLjEgMS4zLS41IDIuNS0xLjEgMy42LS45IDEuNy0yLjMgMy4yLTQuMSA0LjEtMS43LjktMy42IDEuMi01LjUuOS0xLjgtLjMtMy41LTEuMS00LjktMi4zLS43LS43LS43LTEuOSAwLTIuNi42LS42IDEuNi0uNyAyLjMtLjJIN2MuOS42IDEuOS45IDIuOS45czEuOS0uMyAyLjctLjljMS4xLS44IDEuOC0yLjEgMS44LTMuNWgtMS41Yy0uOSAwLTEuNy0uNy0xLjctMS43IDAtLjQuMi0uOS41LTEuMmw0LjQtNC40Yy43LS42IDEuNy0uNiAyLjQgMEwyMyA5LjJjLjUuNS42IDEuMi4zIDEuOHoiIHN0eWxlPSJmaWxsOiMwMDAzIi8+PHBhdGggZD0iTTIxLjggMTFoLTIuNmMwIDEuNS0uMyAyLjktMSA0LjItLjggMS42LTIuMSAyLjgtMy43IDMuNi0xLjUuOC0zLjMgMS4xLTQuOS44LTEuNi0uMi0zLjItMS00LjQtMi4xLS40LS4zLS40LS45LS4xLTEuMi4zLS40LjktLjQgMS4yLS4xIDEgLjcgMi4yIDEuMSAzLjQgMS4xczIuMy0uMyAzLjMtMWMuOS0uNiAxLjYtMS41IDItMi42LjMtLjkuNC0xLjguMi0yLjhoLTIuNGMtLjQgMC0uNy0uMy0uNy0uNyAwLS4yLjEtLjMuMi0uNGw0LjQtNC40Yy4zLS4zLjctLjMuOSAwTDIyIDkuOGMuMy4zLjQuNi4zLjlzLS4zLjMtLjUuM3oiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4="),
               }
             },
@@ -305,6 +306,13 @@
             },
           ].filter((i) => i),
           menus: {
+            loopFlowControl: {
+              acceptReporters: false,
+              items: [
+                { text: Scratch.translate("break out of current loop"), value: "break" },
+                { text: Scratch.translate("continue to next iteration"), value: "continue" }
+              ]
+            },
             scope: {
               acceptReporters: false,
               items: [
@@ -639,7 +647,19 @@
       }
       
       // ITERATION LOOPS
-      forEachItem(args, util) {
+      forOfLoop(args, util) {
+        return this.iterateOverTempList(args, util, "forOf");
+      }
+
+      forInLoop(args, util) {
+        return this.iterateOverTempList(args, util, "forIn");
+      }
+
+      forEachLoop(args, util) {
+        return this.iterateOverTempList(args, util, "forEach");
+      }
+
+      iterateOverTempList(args, util, mode) {
         if (this.isListInEnvironment(args, util)) {
           let list = this.getListEnvironment(args, util)
           if (list.length > 0 && !this.isDependencyNotLoaded()) {
@@ -654,57 +674,15 @@
 
             if (util.stackFrame.index < listLength) {
               util.stackFrame.index++;
-              vars[args.ITEM] = list[util.stackFrame.index - 1];
+              if (mode !== "forOf") vars[args.IDX] = util.stackFrame.index;
+              if (mode !== "forIn") vars[args.ITEM] = list[vars[args.IDX] - 1];
               return true;
             }
           }
         }
       }
-      forEachNum(args, util) {
-        if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if (list.length > 0 && !this.isDependencyNotLoaded()) {
-            const thread = util.thread
-            const listLength = list.length;
-            if (!thread.variables) thread.variables = {};
-            const vars = thread.variables;
-
-            if (typeof util.stackFrame.index === "undefined") {
-              util.stackFrame.index = 0;
-            }
-
-            if (util.stackFrame.index < listLength) {
-              util.stackFrame.index++;
-              vars[args.IDX] = util.stackFrame.index;
-              return true;
-            }
-          }
-        }
-      }
-      forEachItemNum(args, util) {
-        if (this.isListInEnvironment(args, util)) {
-          let list = this.getListEnvironment(args, util)
-          if (list.length > 0 && !this.isDependencyNotLoaded()) {
-            const thread = util.thread
-            const listLength = list.length;
-            if (!thread.variables) thread.variables = {};
-            const vars = thread.variables;
-
-            if (typeof util.stackFrame.index === "undefined") {
-              util.stackFrame.index = 0;
-            }
-
-            if (util.stackFrame.index < listLength) {
-              util.stackFrame.index++;
-              vars[args.IDX] = util.stackFrame.index;
-              vars[args.ITEM] = list[vars[args.IDX] - 1];
-              return true;
-            }
-          }
-        }
-      }
-      breakOutOfLoop(args, util) { //Credit for this goes to SharkPool
-        if (!this.isDependencyNotLoaded()){
+      loopFlowControl(args, util) { //Credit for this goes to SharkPool
+        if (!this.isDependencyNotLoaded()) {
           const thread = util.thread;
           const wasCompiled = thread.isCompiled.valueOf();
           try {
@@ -722,9 +700,18 @@
             if (!frameData) return; //block does nothing if not used in a loop
             const block = frameData.block;
             const afterLoop = thread.blockContainer.getBlock(frameData.block).next;
-            while(thread.stack.at(-1) !== frameData.block) thread.popStack();
-            thread.popStack();
-            if (afterLoop) thread.pushStack(afterLoop);
+            switch (args.MODE) {
+              case "break":
+                while(thread.stack.at(-1) !== frameData.block) thread.popStack();
+                thread.popStack();
+                if (afterLoop) thread.pushStack(afterLoop);
+                break;
+              case "continue":
+                while (thread.stack[0] && thread.stack.at(-1) !== frameData.block) thread.popStack();
+                thread.status = thread.constructor.STATUS_YIELD;
+                break;
+              default: break;
+            }
           } catch (e) { //last resort in case all previous failsafes failed
             console.warn(e)
           } finally {
