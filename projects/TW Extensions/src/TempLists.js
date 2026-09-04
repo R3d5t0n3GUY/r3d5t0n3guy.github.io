@@ -351,11 +351,9 @@
       }
       getListObjectFromName(name, util) {
         const runtime = Scratch.vm.runtime;
-        const stageTarget = runtime.getTargetForStage();
+        let stageTarget = runtime.getTargetForStage();
         const target = util.target;
-        let listObject = Object.create(null);
-
-        listObject = stageTarget?.lookupVariableByNameAndType(name, "list");
+        let listObject = stageTarget?.lookupVariableByNameAndType(name, "list") ?? null;
         if (listObject) return listObject;
         listObject = target?.lookupVariableByNameAndType(name, "list");
         return (listObject ?? Object.create(null))
@@ -466,8 +464,7 @@
             list.splice(Math.floor(i - 1), 1);
           }
         } else {
-          let list = this.getListEnvironment(args, util)
-          list.splice(0, list.length)
+          this.deleteAllOfTempList(args, util)
         }
       }
       deleteAllOfTempList(args, util) {
@@ -542,8 +539,7 @@
           let bound1 = (i >= 1) && (list.length + 1 > i), bound2 = (j >= 1) && (list.length + 1 > j)
           if (bound1 && bound2) list.splice(START - 1, END - START + 1);
         } else {
-          let list = this.getListEnvironment(args, util)
-          list.splice(0, list.length)
+          this.deleteAllOfTempList(args, util)
         }
       }
       deleteAllInstancesFromTempList(args, util) {
@@ -552,8 +548,7 @@
           let filtered = list.filter((i) => i !== args.ITEM);
           list.splice(0, list.length, ...filtered);
         } else {
-          let list = this.getListEnvironment(args, util)
-          list.splice(0, list.length)
+          this.deleteAllOfTempList(args, util)
         }
       }
       replaceAllInstancesInTempList(args, util) {
@@ -562,8 +557,7 @@
           let filtered = list.map((i) => i === args.ITEM1 ? args.ITEM2 : i);
           list.splice(0, list.length, ...filtered);
         } else {
-          let list = this.getListEnvironment(args, util)
-          list.splice(0, list.length)
+          this.deleteAllOfTempList(args, util)
         }
       }
       sortTempList(args, util) {
@@ -585,7 +579,7 @@
               if (freqs[a] !== freqs[b]) {
                 return freqs[a] - freqs[b];
               }
-              return a.localeCompare(b);
+              return (`${a}`).localeCompare(`${b}`);
             });
             break;
           case "popular first":
@@ -594,7 +588,7 @@
               if (freqs[b] !== freqs[a]) {
                 return freqs[b] - freqs[a];
               }
-              return a.localeCompare(b);
+              return (`${a}`).localeCompare(`${b}`);
             });
             break;
           case "reverse":
@@ -609,7 +603,7 @@
           default: break;
         }
         list.splice(0, list.length, ...newList);
-       } 
+       }
       }
       deleteTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
@@ -675,7 +669,7 @@
             if (util.stackFrame.index < listLength) {
               util.stackFrame.index++;
               if (mode !== "forOf") vars[args.IDX] = util.stackFrame.index;
-              if (mode !== "forIn") vars[args.ITEM] = list[vars[args.IDX] - 1];
+              if (mode !== "forIn") vars[args.ITEM] = list[util.stackFrame.index - 1];
               return true;
             }
           }
@@ -700,17 +694,15 @@
             if (!frameData) return; //block does nothing if not used in a loop
             const block = frameData.block;
             const afterLoop = thread.blockContainer.getBlock(frameData.block).next;
-            switch (args.MODE) {
-              case "break":
-                while(thread.stack.at(-1) !== frameData.block) thread.popStack();
+            if (args.MODE === "continue") {
+              while (thread.stack[0] && thread.stack.at(-1) !== frameData.block) {
                 thread.popStack();
-                if (afterLoop) thread.pushStack(afterLoop);
-                break;
-              case "continue":
-                while (thread.stack[0] && thread.stack.at(-1) !== frameData.block) thread.popStack();
-                thread.status = thread.constructor.STATUS_YIELD;
-                break;
-              default: break;
+              }
+              thread.status = thread.constructor.STATUS_YIELD;
+            } else {
+              while(thread.stack.at(-1) !== frameData.block) thread.popStack();
+              thread.popStack();
+              if (afterLoop) thread.pushStack(afterLoop);
             }
           } catch (e) { //last resort in case all previous failsafes failed
             console.warn(e)
