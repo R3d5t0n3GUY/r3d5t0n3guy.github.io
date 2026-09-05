@@ -395,7 +395,7 @@ if (tech.tech.findIndex(i => i.name === 'de Broglie-Bohm theory') < 0) {
   tech.tech[index].requires = "pilot wave, not degenerate matter, de Broglie-Bohm theory"
   const deBroglieBohmTheory = {
     name: "de Broglie-Bohm theory",
-    description: `<strong>pilot wave</strong> can travel through <strong>anything</strong> for<br><strong>2x</strong> the <strong class='color-f'>energy</strong> cost`,
+    description: `<strong>pilot wave</strong> can travel through <strong>anything</strong> for<br><strong>2x</strong> the <strong class='color-energy'>energy</strong> cost`,
     isFieldTech: true,
     maxCount: 1,
     count: 0,
