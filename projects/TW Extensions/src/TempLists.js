@@ -27,6 +27,9 @@
           this.resetTemporaryLists();
         });
         Scratch.vm.runtime.on("targetWasRemoved", (target) => {
+          if (!this.scopedLists) {
+            this.resetScopedLists();
+          }
           const id = target.id;
           delete this.scopedLists[id]
         })
@@ -744,8 +747,8 @@
           return "";
         }
       }
-      tempListExists(args, util) { //mismatching inputs between a block and its opcoded function are ignored by TW -_-
-        return this.isListInEnvironment(args, util)
+      tempListExists(args, util) { //opcode functions with default input values, or more than two inputs, are ignored by TW in getInfo() -_-
+        return this.isListInEnvironment(args, util);
       }
       listTempLists(args, util) {
         return JSON.stringify(Object.keys((() => {
@@ -772,9 +775,11 @@
       }
     }
     const TempLists = new TemporaryLists();
-    if (TempLists.isDependencyNotLoaded()) {
-      console.warn('Install "Temporary Variables" (by LilyMakesThings) to access iteration loops');
-    }
     Scratch.extensions.register(TempLists);
+    requestAnimationFrame(() => {
+      if (TempLists.isDependencyNotLoaded()) {
+        console.warn('Install "Temporary Variables" (by LilyMakesThings) to access iteration loops');
+      }
+    });
   }
 })(Scratch);
