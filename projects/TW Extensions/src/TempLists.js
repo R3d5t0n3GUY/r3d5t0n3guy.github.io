@@ -269,6 +269,27 @@
               },
             },
             {
+              opcode: "splitStringToTempList",
+              blockType: Scratch.BlockType.COMMAND,
+              text: Scratch.translate("set [SCOPE] list [LIST] to [STRING] split by [DELIMITER]"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                STRING: this.fieldParamTemplate("string", "apple,banana,cherry,durian,elderberry"),
+                DELIMITER: this.fieldParamTemplate("string", ",")
+              }
+            },
+            {
+              opcode: "joinTempListToString",
+              blockType: Scratch.BlockType.REPORTER,
+              text: Scratch.translate("join [SCOPE] list [LIST] by [DELIMITER]"),
+              arguments: {
+                SCOPE: this.fieldParamTemplate("menu", "scope"),
+                LIST: this.fieldParamTemplate("string", "list"),
+                DELIMITER: this.fieldParamTemplate("string", ",")
+              }
+            },
+            {
               opcode: "setTempListToArray",
               blockType: Scratch.BlockType.COMMAND,
               text: Scratch.translate("set [SCOPE] list [LIST] to array [ARRAY]"),
@@ -276,7 +297,7 @@
               arguments: {
                 SCOPE: this.fieldParamTemplate("menu", "scope"),
                 LIST: this.fieldParamTemplate("string", "list"),
-                ARRAY: this.fieldParamTemplate("string", '["apple","banana", ["cranberry", "durian", ["elderberry"]]]'),
+                ARRAY: this.fieldParamTemplate("string", '["apple","banana", ["cherry", "durian", ["elderberry"]]]'),
               },
             },
             {
@@ -729,6 +750,18 @@
         let list1 = this.getListEnvironment(args, util)
         const list2 = this.getListObjectFromName(Scratch.Cast.toString(args.LISTS), util);
         list1.splice(0, list1.length, ...(list2?.value || []));
+      }
+      splitStringToTempList(args, util) {
+        let list = this.getListEnvironment(args, util);
+        list.splice(0, list.length, ...args.STRING.split(args.DELIMITER));
+      }
+      joinTempListToString(args, util) {
+        if (this.isListInEnvironment(args, util)) {
+          let list = this.getListEnvironment(args, util);
+          return list.join(args.DELIMITER);
+        } else {
+          return ""
+        }
       }
       setTempListToArray(args, util) {
         let list = this.getListEnvironment(args, util), array;
