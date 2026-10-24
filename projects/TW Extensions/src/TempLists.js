@@ -809,6 +809,8 @@
     }
     const TempLists = new TemporaryLists();
     Scratch.extensions.register(TempLists);
+    if (!(Scratch?.vm?.runtime?.extensionStorage ?? false)) Scratch.vm.runtime.extensionStorage = Object.create(null);
+    Scratch.vm.runtime.extensionStorage[TempLists.getInfo().id] = TempLists
     requestAnimationFrame(() => {
       if (TempLists.isDependencyNotLoaded()) {
         console.warn('Install "Temporary Variables" (by LilyMakesThings) to access iteration loops');
