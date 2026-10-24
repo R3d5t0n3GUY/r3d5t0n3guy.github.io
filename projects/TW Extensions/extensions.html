@@ -18,11 +18,19 @@
       const links = [
         { src: "ProjectFullscreen", text: "Project Fullscreen (my first)" },
         { src: "lPlusRatio", text: "L+ Ratio (some Math constants)" },
-        { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' <em>Temporary Variables</em>)" },
+        { src: "TempLists", text: "Temporary Lists (an addon for LilyMakesThings' <em>Temporary Variables</em>)", docs: "'Temporary Lists' Documentation" },
         { src: "WebStorage", text: "A simple extension for using the localStorage API." },
       ]
       links.forEach(i => {
-        text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a></li>\n`
+        if (typeof(i) === "string") {
+          text += `<li>${i}</li>\n`
+        } else {
+          text += `<li><a href="src/${i.src}.js" target="_blank">${i.text}</a>`
+          if ("docs" in i) {
+            text += `\n<br><small><a href="docs/${i.docs}.sb3" target="_blank">DOCUMENTATION</a></small>\n`
+          }
+          text += `</li>\n`
+        }
       })
       document.getElementById('extension-list').innerHTML = text
     </script>
