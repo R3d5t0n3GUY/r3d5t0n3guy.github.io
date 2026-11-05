@@ -39,8 +39,9 @@
         let iconURI = {
           arrow: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0yMy4zIDExYy0uMy42LS45IDEtMS41IDFoLTEuNmMtLjEgMS4zLS41IDIuNS0xLjEgMy42LS45IDEuNy0yLjMgMy4yLTQuMSA0LjEtMS43LjktMy42IDEuMi01LjUuOS0xLjgtLjMtMy41LTEuMS00LjktMi4zLS43LS43LS43LTEuOSAwLTIuNi42LS42IDEuNi0uNyAyLjMtLjJIN2MuOS42IDEuOS45IDIuOS45czEuOS0uMyAyLjctLjljMS4xLS44IDEuOC0yLjEgMS44LTMuNWgtMS41Yy0uOSAwLTEuNy0uNy0xLjctMS43IDAtLjQuMi0uOS41LTEuMmw0LjQtNC40Yy43LS42IDEuNy0uNiAyLjQgMEwyMyA5LjJjLjUuNS42IDEuMi4zIDEuOHoiIHN0eWxlPSJmaWxsOiMwMDAzIi8+PHBhdGggZD0iTTIxLjggMTFoLTIuNmMwIDEuNS0uMyAyLjktMSA0LjItLjggMS42LTIuMSAyLjgtMy43IDMuNi0xLjUuOC0zLjMgMS4xLTQuOS44LTEuNi0uMi0zLjItMS00LjQtMi4xLS40LS4zLS40LS45LS4xLTEuMi4zLS40LjktLjQgMS4yLS4xIDEgLjcgMi4yIDEuMSAzLjQgMS4xczIuMy0uMyAzLjMtMWMuOS0uNiAxLjYtMS41IDItMi42LjMtLjkuNC0xLjguMi0yLjhoLTIuNGMtLjQgMC0uNy0uMy0uNy0uNyAwLS4yLjEtLjMuMi0uNGw0LjQtNC40Yy4zLS4zLjctLjMuOSAwTDIyIDkuOGMuMy4zLjQuNi4zLjlzLS4zLjMtLjUuM3oiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4="
         }
-        let stringThing = this.fieldParamTemplate("string", "thing");
+        let string = (thing = "thing") => this.fieldParamTemplate("string", thing);
         let index = (i) => this.fieldParamTemplate("index", i);
+        let scopeMenu = this.fieldParamTemplate("menu", "scope");
         let blockInfo = {
           id: "r3d5t0n3guyTempLists",
           name: Scratch.translate("Temporary Lists"),
@@ -48,42 +49,42 @@
           color3: "#ff1d00",
           blocks: [
             this.fieldParamTemplate("label", "Basic"),
-            this.blockBuilder("addToTempList", "COMMAND", "add [ITEM] to [scopeList]", true, {}, stringThing),
+            this.blockBuilder("addToTempList", "COMMAND", "add [ITEM] to [scopeList]", true, {}, string()),
             this.blockBuilder("deleteFromTempList", "COMMAND", "delete [IDX] of [scopeList]", true, {}, index(1)),
             this.blockBuilder("deleteAllOfTempList", "COMMAND", "delete all of [scopeList]", true),
-            this.blockBuilder("insertIntoTempList", "COMMAND", "insert [ITEM] at [IDX] of [scopeList]", true, {}, stringThing, index(1)),
-            this.blockBuilder("replaceItemOfTempList", "COMMAND", "replace item [IDX] of [scopeList] with [ITEM]", true, {}, index(1), stringThing),
+            this.blockBuilder("insertIntoTempList", "COMMAND", "insert [ITEM] at [IDX] of [scopeList]", true, {}, string(), index(1)),
+            this.blockBuilder("replaceItemOfTempList", "COMMAND", "replace item [IDX] of [scopeList] with [ITEM]", true, {}, index(1), string()),
             this.blockBuilder("itemOfTempList", "REPORTER", "item [IDX] of [scopeList]", true, {}, index(1)),
-            this.blockBuilder("indexInTempList", "REPORTER", "index of [ITEM] in [scopeList]", true, {}, stringThing),
+            this.blockBuilder("indexInTempList", "REPORTER", "index of [ITEM] in [scopeList]", true, {}, string()),
             this.blockBuilder("lengthOfTempList", "REPORTER", "length of [scopeList]", true),
-            this.blockBuilder("tempListContains", "BOOLEAN", "[scopeList] contains [ITEM] ?", true, {}, stringThing),
+            this.blockBuilder("tempListContains", "BOOLEAN", "[scopeList] contains [ITEM] ?", true, {}, string()),
 
             "---",
             this.fieldParamTemplate("label", "Advanced"),
             this.blockBuilder("deleteItemsFromTempList", "COMMAND", "delete items [IDX1] to [IDX2] from [scopeList]", true, {}, index(1), index(3)),
-            this.blockBuilder("deleteAllInstancesFromTempList", "COMMAND", "delete all instances of [ITEM] in [scopeList]", true, {}, stringThing),
-            this.blockBuilder("replaceAllInstancesInTempList", "COMMAND", "replace all [ITEM1] with [ITEM2] in [scopeList]", true, {}, this.fieldParamTemplate("string", "apple"), this.fieldParamTemplate("string", "banana")),
+            this.blockBuilder("deleteAllInstancesFromTempList", "COMMAND", "delete all instances of [ITEM] in [scopeList]", true, {}, string()),
+            this.blockBuilder("replaceAllInstancesInTempList", "COMMAND", "replace all [ITEM1] with [ITEM2] in [scopeList]", true, {}, string("apple"), string("banana")),
             this.blockBuilder("sortTempList", "COMMAND", "sort [scopeList] by [METHOD]", true, {}, this.fieldParamTemplate("menu", "sortMethod")),
             this.blockBuilder("deleteTempList", "COMMAND", "delete [scopeList]", true),
-            this.blockBuilder("deleteAllTempLists", "COMMAND", "delete all [SCOPE] lists", false, {}, this.fieldParamTemplate("menu", "scope")),
+            this.blockBuilder("deleteAllTempLists", "COMMAND", "delete all [SCOPE] lists", false, {}, scopeMenu),
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
-            this.blockBuilder("forOfLoop", "LOOP", "for each value [ITEM] of [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, stringThing),
-            this.blockBuilder("forInLoop", "LOOP", "for each # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, this.fieldParamTemplate("string", "index")),
-            this.blockBuilder("forEachLoop", "LOOP", "for each value [ITEM] # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, stringThing, this.fieldParamTemplate("string", "index")),
+            this.blockBuilder("forOfLoop", "LOOP", "for each value [ITEM] of [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, string()),
+            this.blockBuilder("forInLoop", "LOOP", "for each # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, string("index")),
+            this.blockBuilder("forEachLoop", "LOOP", "for each value [ITEM] # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, string(), string("index")),
             this.blockBuilder("loopFlowControl", "COMMAND", "[MODE] [ICON]", false, { hideFromPalette: this.isDependencyNotLoaded(), isTerminal: true }, this.fieldParamTemplate("menu", "loopFlowControl"), this.fieldParamTemplate("image", iconURI.arrow)),
 
             "---",
             this.fieldParamTemplate("label", "Misc"),
-            this.blockBuilder("setTempList1ToTempList2", "COMMAND", "set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]", false, {}, this.fieldParamTemplate("menu", "scope"), this.fieldParamTemplate("menu", "scope"), this.fieldParamTemplate("string", "list1"), this.fieldParamTemplate("string", "list2")),
+            this.blockBuilder("setTempList1ToTempList2", "COMMAND", "set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]", false, {}, scopeMenu, string("list1"), scopeMenu, string("list2")),
             this.blockBuilder("setTempListToList", "COMMAND", "set [scopeList] to [LISTS]", true, {}, this.fieldParamTemplate("menu", "lists")),
-            this.blockBuilder("splitStringToTempList", "COMMAND", "set [scopeList] to [STRING] split by [DELIMITER]", true, {}, this.fieldParamTemplate("string", "apple,banana,cherry,durian,elderberry"), this.fieldParamTemplate("string", ",")),
-            this.blockBuilder("joinTempListToString", "REPORTER", "join [scopeList] by [DELIMITER]", true, {}, this.fieldParamTemplate("string", ",")),
-            this.blockBuilder("setTempListToArray", "COMMAND", "set [scopeList] to array [ARRAY]", true, {}, this.fieldParamTemplate("string", '["apple","banana", ["cherry", "durian", ["elderberry"]]]')),
+            this.blockBuilder("splitStringToTempList", "COMMAND", "set [scopeList] to [STRING] split by [DELIMITER]", true, {}, string("apple,banana,cherry,durian,elderberry"), string(",")),
+            this.blockBuilder("joinTempListToString", "REPORTER", "join [scopeList] by [DELIMITER]", true, {}, string(",")),
+            this.blockBuilder("setTempListToArray", "COMMAND", "set [scopeList] to array [ARRAY]", true, {}, string('["apple","banana", ["cherry", "durian", ["elderberry"]]]')),
             this.blockBuilder("getTempListAsArray", "REPORTER", "[scopeList] as array", true),
             this.blockBuilder("tempListExists", "BOOLEAN", "[scopeList] exists?", true), //can't just use 'isListInEnvironment' here
-            this.blockBuilder("listTempLists", "REPORTER", "active [SCOPE] lists", false, {}, this.fieldParamTemplate("menu", "scope")),
+            this.blockBuilder("listTempLists", "REPORTER", "active [SCOPE] lists", false, { disableMonitor: true }, scopeMenu),
           ].filter((i) => i),
           menus: {
             loopFlowControl: {
