@@ -58,7 +58,6 @@
             this.blockBuilder("lengthOfTempList", "REPORTER", "length of [scopeList]", true),
             this.blockBuilder("tempListContains", "BOOLEAN", "[scopeList] contains [ITEM] ?", true, {}, stringThing),
 
-
             "---",
             this.fieldParamTemplate("label", "Advanced"),
             this.blockBuilder("deleteItemsFromTempList", "COMMAND", "delete items [IDX1] to [IDX2] from [scopeList]", true, {}, index(1), index(3)),
