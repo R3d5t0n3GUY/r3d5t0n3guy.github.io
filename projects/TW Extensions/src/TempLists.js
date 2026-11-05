@@ -34,8 +34,44 @@
           delete this.scopedLists[id]
         })
       }
-      
+
       getInfo() {
+        let iconURI = {
+          arrow: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0yMy4zIDExYy0uMy42LS45IDEtMS41IDFoLTEuNmMtLjEgMS4zLS41IDIuNS0xLjEgMy42LS45IDEuNy0yLjMgMy4yLTQuMSA0LjEtMS43LjktMy42IDEuMi01LjUuOS0xLjgtLjMtMy41LTEuMS00LjktMi4zLS43LS43LS43LTEuOSAwLTIuNi42LS42IDEuNi0uNyAyLjMtLjJIN2MuOS42IDEuOS45IDIuOS45czEuOS0uMyAyLjctLjljMS4xLS44IDEuOC0yLjEgMS44LTMuNWgtMS41Yy0uOSAwLTEuNy0uNy0xLjctMS43IDAtLjQuMi0uOS41LTEuMmw0LjQtNC40Yy43LS42IDEuNy0uNiAyLjQgMEwyMyA5LjJjLjUuNS42IDEuMi4zIDEuOHoiIHN0eWxlPSJmaWxsOiMwMDAzIi8+PHBhdGggZD0iTTIxLjggMTFoLTIuNmMwIDEuNS0uMyAyLjktMSA0LjItLjggMS42LTIuMSAyLjgtMy43IDMuNi0xLjUuOC0zLjMgMS4xLTQuOS44LTEuNi0uMi0zLjItMS00LjQtMi4xLS40LS4zLS40LS45LS4xLTEuMi4zLS40LjktLjQgMS4yLS4xIDEgLjcgMi4yIDEuMSAzLjQgMS4xczIuMy0uMyAzLjMtMWMuOS0uNiAxLjYtMS41IDItMi42LjMtLjkuNC0xLjguMi0yLjhoLTIuNGMtLjQgMC0uNy0uMy0uNy0uNyAwLS4yLjEtLjMuMi0uNGw0LjQtNC40Yy4zLS4zLjctLjMuOSAwTDIyIDkuOGMuMy4zLjQuNi4zLjlzLS4zLjMtLjUuM3oiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4="
+        }
+        let stringThing = this.fieldParamTemplate("string", "thing");
+        let index = (i) => this.fieldParamTemplate("index", i);
+        const blockBuilder = (opcode, type, text, scopeListArgs, properties, ...args) => {
+          let display = Object.assign({ hideFromPalette: false, disableMonitor: false, isTerminal: false }, Object(properties))
+          let argNames = String(text).match(/\[\s*[^(\[\])]+\s*\]/g)?.valueOf()?.filter(i => (i !== "[scopeList]" || !scopeListArgs)) ?? [];
+          if (Boolean(scopeListArgs)) {
+            text = String(text).replace("[scopeList]", "[SCOPE] list [LIST]");
+          }
+          let newBlock = {
+            opcode: String(opcode),
+            blockType: Scratch.BlockType[type],
+            text: Scratch.translate(text),
+            hideFromPalette: Boolean(display?.hideFromPalette ?? false),
+            disableMonitor: Boolean(display?.disableMonitor ?? false),
+            isTerminal: Boolean(display?.isTerminal ?? false),
+          }
+          if (args) {
+            if (args.length > 0 || scopeListArgs) {
+              newBlock.arguments = Object.create(null);
+            }
+            if (args.length > 0) {
+              argNames.forEach((i, j) => {
+                newBlock.arguments[i.slice(1, -1)] = args[j]
+              })
+            }
+          }
+          if (scopeListArgs) {
+            if (!(newBlock?.arguments ?? false)) newBlock.arguments = Object.create(null);
+            newBlock.arguments.SCOPE = this.fieldParamTemplate("menu", "scope");
+            newBlock.arguments.LIST = this.fieldParamTemplate("string", "list");
+          }
+          return newBlock;
+        }
         let blockInfo = {
           id: "r3d5t0n3guyTempLists",
           name: Scratch.translate("Temporary Lists"),
@@ -43,259 +79,43 @@
           color3: "#ff1d00",
           blocks: [
             this.fieldParamTemplate("label", "Basic"),
-            {
-              opcode: "addToTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("add [ITEM] to [SCOPE] list [LIST]"),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-                SCOPE: this.fieldParamTemplate("menu", "scope"),
-                LIST: this.fieldParamTemplate("string", "list"),
-              },
-            },
-            {
-              opcode: "deleteFromTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete [IDX] of [SCOPE] list [LIST]"),
-              arguments: {
-                IDX: this.fieldParamTemplate("index", 1),
-              },
-              scopeListArgs: true,
-            },
-            {
-              opcode: "deleteAllOfTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete all of [SCOPE] list [LIST]"),
-              scopeListArgs: true,
-            },
-            {
-              opcode: "insertIntoTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("insert [ITEM] at [IDX] of [SCOPE] list [LIST]"),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-                IDX: this.fieldParamTemplate("index", 1),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "replaceItemOfTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("replace item [IDX] of [SCOPE] list [LIST] with [ITEM]"),
-              arguments: {
-                IDX: this.fieldParamTemplate("index", 1),
-                ITEM: this.fieldParamTemplate("string", "thing"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "itemOfTempList",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("item [IDX] of [SCOPE] list [LIST]"),
-              arguments: {
-                IDX: this.fieldParamTemplate("index", 1),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "indexInTempList",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("index of [ITEM] in [SCOPE] list [LIST]"),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "lengthOfTempList",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("length of [SCOPE] list [LIST]"),
-              scopeListArgs: true
-            },
-            {
-              opcode: "tempListContains",
-              blockType: Scratch.BlockType.BOOLEAN,
-              text: Scratch.translate("[SCOPE] list [LIST] contains [ITEM] ?"),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-              },
-              scopeListArgs: true
-            },
+            blockBuilder("addToTempList", "COMMAND", "add [ITEM] to [scopeList]", true, {}, stringThing),
+            blockBuilder("deleteFromTempList", "COMMAND", "delete [IDX] of [scopeList]", true, {}, index(1)),
+            blockBuilder("deleteAllOfTempList", "COMMAND", "delete all of [scopeList]", true),
+            blockBuilder("insertIntoTempList", "COMMAND", "insert [ITEM] at [IDX] of [scopeList]", true, {}, stringThing, index(1)),
+            blockBuilder("replaceItemOfTempList", "COMMAND", "replace item [IDX] of [scopeList] with [ITEM]", true, {}, index(1), stringThing),
+            blockBuilder("itemOfTempList", "REPORTER", "item [IDX] of [scopeList]", true, {}, index(1)),
+            blockBuilder("indexInTempList", "REPORTER", "index of [ITEM] in [scopeList]", true, {}, stringThing),
+            blockBuilder("lengthOfTempList", "REPORTER", "length of [scopeList]", true),
+            blockBuilder("tempListContains", "BOOLEAN", "[scopeList] contains [ITEM] ?", true, {}, stringThing),
+
 
             "---",
             this.fieldParamTemplate("label", "Advanced"),
-
-            {
-              opcode: "deleteItemsFromTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete items [IDX1] to [IDX2] from [SCOPE] list [LIST]"),
-              arguments: {
-                IDX1: this.fieldParamTemplate("index", 1),
-                IDX2: this.fieldParamTemplate("index", 3),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "deleteAllInstancesFromTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete all instances of [ITEM] in [SCOPE] list [LIST]"),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "replaceAllInstancesInTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("replace all [ITEM1] with [ITEM2] in [SCOPE] list [LIST]"),
-              arguments: {
-                ITEM1: this.fieldParamTemplate("string", "apple"),
-                ITEM2: this.fieldParamTemplate("string", "banana"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "sortTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("sort [SCOPE] list [LIST] by [METHOD]"),
-              arguments: {
-                METHOD: this.fieldParamTemplate("menu", "sortMethod")
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "deleteTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete [SCOPE] list [LIST]"),
-              scopeListArgs: true
-            },
-            {
-              opcode: "deleteAllTempLists",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("delete all [SCOPE] lists"),
-              arguments: {
-                SCOPE: this.fieldParamTemplate("menu", "scope"),
-              },
-            },
+            blockBuilder("deleteItemsFromTempList", "COMMAND", "delete items [IDX1] to [IDX2] from [scopeList]", true, {}, index(1), index(3)),
+            blockBuilder("deleteAllInstancesFromTempList", "COMMAND", "delete all instances of [ITEM] in [scopeList]", true, {}, stringThing),
+            blockBuilder("replaceAllInstancesInTempList", "COMMAND", "replace all [ITEM1] with [ITEM2] in [scopeList]", true, {}, this.fieldParamTemplate("string", "apple"), this.fieldParamTemplate("string", "banana")),
+            blockBuilder("sortTempList", "COMMAND", "sort [scopeList] by [METHOD]", true, {}, this.fieldParamTemplate("menu", "sortMethod")),
+            blockBuilder("deleteTempList", "COMMAND", "delete [scopeList]", true),
+            blockBuilder("deleteAllTempLists", "COMMAND", "delete all [SCOPE] lists", false, {}, this.fieldParamTemplate("menu", "scope")),
 
             this.fieldParamTemplate("separator", "", this.isDependencyNotLoaded()),
             this.fieldParamTemplate("label", "Iteration loops", this.isDependencyNotLoaded()),
-            {
-              opcode: "forOfLoop",
-              blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each value [ITEM] of [SCOPE] list [LIST]"),
-              hideFromPalette: this.isDependencyNotLoaded(),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "forInLoop",
-              blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each # [IDX] in [SCOPE] list [LIST]"),
-              hideFromPalette: this.isDependencyNotLoaded(),
-              arguments: {
-                IDX: this.fieldParamTemplate("string", "index"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "forEachLoop",
-              blockType: Scratch.BlockType.LOOP,
-              text: Scratch.translate("for each value [ITEM] # [IDX] in [SCOPE] list [LIST]"),
-              hideFromPalette: this.isDependencyNotLoaded(),
-              arguments: {
-                ITEM: this.fieldParamTemplate("string", "thing"),
-                IDX: this.fieldParamTemplate("string", "index"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "loopFlowControl",
-              blockType: Scratch.BlockType.COMMAND,
-              isTerminal: true,
-              text: Scratch.translate("[MODE] [ICON]"),
-              hideFromPalette: this.isDependencyNotLoaded(),
-              arguments: {
-                MODE: this.fieldParamTemplate("menu", "loopFlowControl"),
-                ICON: this.fieldParamTemplate("image", "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0yMy4zIDExYy0uMy42LS45IDEtMS41IDFoLTEuNmMtLjEgMS4zLS41IDIuNS0xLjEgMy42LS45IDEuNy0yLjMgMy4yLTQuMSA0LjEtMS43LjktMy42IDEuMi01LjUuOS0xLjgtLjMtMy41LTEuMS00LjktMi4zLS43LS43LS43LTEuOSAwLTIuNi42LS42IDEuNi0uNyAyLjMtLjJIN2MuOS42IDEuOS45IDIuOS45czEuOS0uMyAyLjctLjljMS4xLS44IDEuOC0yLjEgMS44LTMuNWgtMS41Yy0uOSAwLTEuNy0uNy0xLjctMS43IDAtLjQuMi0uOS41LTEuMmw0LjQtNC40Yy43LS42IDEuNy0uNiAyLjQgMEwyMyA5LjJjLjUuNS42IDEuMi4zIDEuOHoiIHN0eWxlPSJmaWxsOiMwMDAzIi8+PHBhdGggZD0iTTIxLjggMTFoLTIuNmMwIDEuNS0uMyAyLjktMSA0LjItLjggMS42LTIuMSAyLjgtMy43IDMuNi0xLjUuOC0zLjMgMS4xLTQuOS44LTEuNi0uMi0zLjItMS00LjQtMi4xLS40LS4zLS40LS45LS4xLTEuMi4zLS40LjktLjQgMS4yLS4xIDEgLjcgMi4yIDEuMSAzLjQgMS4xczIuMy0uMyAzLjMtMWMuOS0uNiAxLjYtMS41IDItMi42LjMtLjkuNC0xLjguMi0yLjhoLTIuNGMtLjQgMC0uNy0uMy0uNy0uNyAwLS4yLjEtLjMuMi0uNGw0LjQtNC40Yy4zLS4zLjctLjMuOSAwTDIyIDkuOGMuMy4zLjQuNi4zLjlzLS4zLjMtLjUuM3oiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4="),
-              }
-            },
+            blockBuilder("forOfLoop", "LOOP", "for each value [ITEM] of [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, stringThing),
+            blockBuilder("forInLoop", "LOOP", "for each # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, this.fieldParamTemplate("string", "index")),
+            blockBuilder("forEachLoop", "LOOP", "for each value [ITEM] # [IDX] in [scopeList]", true, { hideFromPalette: this.isDependencyNotLoaded() }, stringThing, this.fieldParamTemplate("string", "index")),
+            blockBuilder("loopFlowControl", "COMMAND", "[MODE] [ICON]", false, { hideFromPalette: this.isDependencyNotLoaded(), isTerminal: true }, this.fieldParamTemplate("menu", "loopFlowControl"), this.fieldParamTemplate("image", iconURI.arrow)),
 
             "---",
             this.fieldParamTemplate("label", "Misc"),
-            {
-              opcode: "setTempList1ToTempList2",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]"),
-              arguments: {
-                SCOPE1: this.fieldParamTemplate("menu", "scope"),
-                SCOPE2: this.fieldParamTemplate("menu", "scope"),
-                LIST1: this.fieldParamTemplate("string", "list1"),
-                LIST2: this.fieldParamTemplate("string", "list2"),
-              }
-            },
-            {
-              opcode: "setTempListToList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE] list [LIST] to [LISTS]"),
-              arguments: {
-                LISTS: this.fieldParamTemplate("menu", "lists"),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "splitStringToTempList",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE] list [LIST] to [STRING] split by [DELIMITER]"),
-              arguments: {
-                STRING: this.fieldParamTemplate("string", "apple,banana,cherry,durian,elderberry"),
-                DELIMITER: this.fieldParamTemplate("string", ",")
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "joinTempListToString",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("join [SCOPE] list [LIST] by [DELIMITER]"),
-              arguments: {
-                DELIMITER: this.fieldParamTemplate("string", ",")
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "setTempListToArray",
-              blockType: Scratch.BlockType.COMMAND,
-              text: Scratch.translate("set [SCOPE] list [LIST] to array [ARRAY]"),
-              disableMonitor: true,
-              arguments: {
-                ARRAY: this.fieldParamTemplate("string", '["apple","banana", ["cherry", "durian", ["elderberry"]]]'),
-              },
-              scopeListArgs: true
-            },
-            {
-              opcode: "getTempListAsArray",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("[SCOPE] list [LIST] as array"),
-              disableMonitor: true,
-              scopeListArgs: true
-            },
-            {
-              opcode: "tempListExists", //can't just use 'isListInEnvironment' here
-              blockType: Scratch.BlockType.BOOLEAN,
-              text: Scratch.translate("[SCOPE] list [LIST] exists?"),
-              scopeListArgs: true
-            },
-            {
-              opcode: "listTempLists",
-              blockType: Scratch.BlockType.REPORTER,
-              text: Scratch.translate("active [SCOPE] lists"),
-              arguments: {
-                SCOPE: this.fieldParamTemplate("menu", "scope"),
-              },
-              disableMonitor: true,
-            },
+            blockBuilder("setTempList1ToTempList2", "COMMAND", "set [SCOPE1] list [LIST1] to [SCOPE2] list [LIST2]", false, {}, this.fieldParamTemplate("menu", "scope"), this.fieldParamTemplate("menu", "scope"), this.fieldParamTemplate("string", "list1"), this.fieldParamTemplate("string", "list2")),
+            blockBuilder("setTempListToList", "COMMAND", "set [scopeList] to [LISTS]", true, {}, this.fieldParamTemplate("menu", "lists")),
+            blockBuilder("splitStringToTempList", "COMMAND", "set [scopeList] to [STRING] split by [DELIMITER]", true, {}, this.fieldParamTemplate("string", "apple,banana,cherry,durian,elderberry"), this.fieldParamTemplate("string", ",")),
+            blockBuilder("joinTempListToString", "REPORTER", "join [scopeList] by [DELIMITER]", true, {}, this.fieldParamTemplate("string", ",")),
+            blockBuilder("setTempListToArray", "COMMAND", "set [scopeList] to array [ARRAY]", true, {}, this.fieldParamTemplate("string", '["apple","banana", ["cherry", "durian", ["elderberry"]]]')),
+            blockBuilder("getTempListAsArray", "REPORTER", "[scopeList] as array", true),
+            blockBuilder("tempListExists", "BOOLEAN", "[scopeList] exists?", true), //can't just use 'isListInEnvironment' here
+            blockBuilder("listTempLists", "REPORTER", "active [SCOPE] lists", false, {}, this.fieldParamTemplate("menu", "scope")),
           ].filter((i) => i),
           menus: {
             loopFlowControl: {
@@ -326,14 +146,6 @@
             lists: { acceptReporters: true, items: "_getLists" },
           },
         };
-        blockInfo.blocks.forEach((i) => {
-          if ((i && i?.scopeListArgs && (typeof(i) == "object")) || false) { //rules out "---" and null
-            if (!(i?.arguments ?? false)) i.arguments = Object.create(null);
-            i.arguments.SCOPE = this.fieldParamTemplate("menu", "scope");
-            i.arguments.LIST = this.fieldParamTemplate("string", "list");
-          }
-          delete i.scopeListArgs;
-        })
         return blockInfo;
       }
 
@@ -562,49 +374,49 @@
         }
       }
       sortTempList(args, util) {
-       if (this.isListInEnvironment) {
-        let list = this.getListEnvironment(args, util)
-        let newList = list.valueOf()
-        let freqs = {}
-        switch (args.METHOD) {
-          case "A-Z": 
-            newList.sort();
-            break;
-          case "Z-A":
-            newList.sort();
-            newList.reverse();
-            break;
-          case "rarest first":
-            for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
-            newList.sort((a,b) => {
-              if (freqs[a] !== freqs[b]) {
-                return freqs[a] - freqs[b];
-              }
-              return (`${a}`).localeCompare(`${b}`);
-            });
-            break;
-          case "popular first":
-            for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
-            newList.sort((a,b) => {
-              if (freqs[b] !== freqs[a]) {
-                return freqs[b] - freqs[a];
-              }
-              return (`${a}`).localeCompare(`${b}`);
-            });
-            break;
-          case "reverse":
-            newList.reverse()
-            break;
-          case "shuffle":
-            for (let i = newList.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [newList[i], newList[j]] = [newList[j], newList[i]];
-            };
-            break;
-          default: break;
+        if (this.isListInEnvironment) {
+          let list = this.getListEnvironment(args, util);
+          let newList = list.valueOf();
+          let freqs = {}
+          switch (args.METHOD) {
+            case "A-Z": 
+              newList.sort();
+              break;
+            case "Z-A":
+              newList.sort();
+              newList.reverse();
+              break;
+            case "rarest first":
+              for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
+              newList.sort((a,b) => {
+                if (freqs[a] !== freqs[b]) {
+                  return freqs[a] - freqs[b];
+                }
+                return (`${a}`).localeCompare(`${b}`);
+              });
+              break;
+            case "popular first":
+              for (let i of newList) { freqs[i] = (freqs?.[i] ?? 0) + 1 }
+              newList.sort((a,b) => {
+                if (freqs[b] !== freqs[a]) {
+                  return freqs[b] - freqs[a];
+                }
+                return (`${a}`).localeCompare(`${b}`);
+              });
+              break;
+            case "reverse":
+              newList.reverse()
+              break;
+            case "shuffle":
+              for (let i = newList.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newList[i], newList[j]] = [newList[j], newList[i]];
+              };
+              break;
+            default: break;
+          }
+          list.splice(0, list.length, ...newList);
         }
-        list.splice(0, list.length, ...newList);
-       }
       }
       deleteTempList(args, util) {
         if (this.isListInEnvironment(args, util)) {
@@ -640,7 +452,7 @@
           default: break;
         }
       }
-      
+
       // ITERATION LOOPS
       forOfLoop(args, util) {
         return this.iterateOverTempList(args, util, "forOf");
