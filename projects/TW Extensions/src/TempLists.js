@@ -225,10 +225,10 @@
             return {};
         }
       }
-      blockBuilder(opcode, type, text, scopeListArgs, properties, ...args) {
+      blockBuilder(opcode, type, text, scopeListArgs = false, properties, ...args) {
         let display = Object.assign({ hideFromPalette: false, disableMonitor: false, isTerminal: false }, Object(properties))
         let argNames = String(text).match(/\[\s*[^\u005B\u005D]+\s*\]/g)?.valueOf()?.filter(i => (i !== "[scopeList]" || !scopeListArgs)) ?? [];
-        if (Boolean(scopeListArgs)) {
+        if (scopeListArgs) {
           text = String(text).replace("[scopeList]", "[SCOPE] list [LIST]");
         }
         let newBlock = {
